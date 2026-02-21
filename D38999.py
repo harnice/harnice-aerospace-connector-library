@@ -1,44 +1,65 @@
 import re
 
-def find_mating_connector(part_number: str, override_finish: str = None) -> str:
+
+def find_mating_connector(
+    part_number,
+    override_shell_style = None,
+    override_finish = None,
+    override_insert_arrangement = None,
+    override_gender = None,
+    override_keyway = None,
+    return_divider = None
+    ):
     """
     Given a MIL-DTL-38999 part number, returns the mating connector part number
     as a string in D38999_ format.
 
-    Supports prefixes: M38999/, MS38999/, D38999/, D38999_
+    Supports a number of prefixes.
     Supports Series I, II, III, and IV style codes.
 
     D38999 Series III part number structure (after the style code):
       [Shell Style 1] [Contact Style 1] [Insert Arrangement 2-3] [Shell Material 1] [Key 1]
-      e.g. /26 F G 16 S N
-                ^  ^  ^^ ^ ^
-                |  |  |  | └─ Key/finish (preserved or overridden)
-                |  |  |  └─── Shell material
-                |  |  └────── Insert arrangement (2-3 digits)
-                |  └───────── Contact style / gender (A=pin, B=socket)
-                └──────────── Shell style
+      e.g. /26 F G16 S N
+            ^  ^  ^^ ^ ^
+            |  |  |  | └─ Master keyway arrangement
+            |  |  |  └─── Pins or Sockets
+            |  |  └────── Insert arrangement (2-3 digits)
+            |  └───────── Finish
+            └──────────── Shell style
 
     Args:
-      part_number:     The MIL-DTL-38999 part number string.
-      override_finish: Optional 1-letter key/finish code to apply to the mating
-                       connector instead of preserving the input's key.
+      part_number:                      The MIL-DTL-38999 part number string.
+      override_shell_style:             Assert a shell style. 
+      override_finish:                  Assert a finish.
+      override_insert_arrangement:      Assert an insert arrangement.
+      override_gender:                  Assert pins/sockets.
+      override_keyway:                  Assert a master keyway.
+      return_divider:                   By default, Harnice will return an underscore D38999_xxxxxx. You can change that here. 
 
     Returns:
       Mating part number string in D38999_ format.
     """
 
-    series_mating = {
+    mating_shell_styles = {  # given a shell size in the input, what shell size should be returned
         # Series I
-        "01": "13", "03": "15", "05": "17",
-        "13": "01", "15": "03", "17": "05",
+        "01": "13",
+        "03": "15",
+        "05": "17",
+        "13": "01",
+        "15": "03",
+        "17": "05",
         # Series II
-        "11": "33", "33": "11",
+        "11": "33",
+        "33": "11",
         # Series III
-        "20": "26", "24": "26",
+        "20": "26",
+        "24": "26",
         "26": "24",
         # Series IV
-        "41": "53", "43": "55",
-        "53": "41", "55": "43",
+        "41": "53",
+        "43": "55",
+        "53": "41",
+        "55": "43",
     }
 
     valid_finishes = {
@@ -57,66 +78,74 @@ def find_mating_connector(part_number: str, override_finish: str = None) -> str:
         "Z": "Zinc-nickel black",
     }
 
-    # Normalize
-    pn = part_number.strip().upper().replace(" ", "").replace("-", "")
-    pn = re.sub(r'^MS38999', 'M38999', pn)
-    pn = re.sub(r'^D38999[/_]', 'M38999/', pn)
-    pn = re.sub(r'^D38999', 'M38999', pn)
+    valid_genders = {"P": "S", "S": "P"}
 
-    match = re.match(r'^M38999/(\d{2})([A-Z])([A-Z])(\d{2,3})([A-Z])([A-Z])$', pn)
+    # Normalize - accept various input formats
+    pn = (
+        part_number.strip().upper().replace(" ", "")
+    )  # force input to caps, remove spaces
+    pn = pn.replace("_", "/").replace("-", "/") # allow underscore or dash in leading name
+    pn = pn.replace("MS38999", "D38999")  # allow MS38999
+    pn = pn.replace("MIL-DTL-38999", "D38999") # allow MIL-DTL-38999
+
+    match = re.match(r"^D38999/(\d{2})([A-Z])([A-Z])(\d{1,2})([A-Z])([A-Z])$", pn)
     if not match:
         raise ValueError(
             f"Could not parse '{part_number}' as a MIL-DTL-38999 part number. "
-            "Expected format: M38999/XX[shell_style][contact][insert][material][key] "
-            "(e.g. M38999/26FG16SN)."
+            "Expected format: D38999/XX[shell_style][contact][insert][material][key] "
+            "(e.g. D38999/26FG16SN)."
         )
 
-    suffix        = match.group(1)  # e.g. "26"
-    shell_style   = match.group(2)  # e.g. "F"
-    contact       = match.group(3)  # e.g. "G" (gender: A=pin, B=socket... or other)
-    insert        = match.group(4)  # e.g. "16"
-    material      = match.group(5)  # e.g. "S"
-    key           = match.group(6)  # e.g. "N"
+    shell_style = match.group(1)  # e.g. "26"
+    finish = match.group(2)  # e.g. "F"
+    shell_size = match.group(3)  # e.g. "G" (gender: A=pin, B=socket... or other)
+    insert_arrangement_suffix = match.group(4)  # e.g. "16"
+    insert_arrangement = f"{shell_size}{insert_arrangement_suffix}"
+    gender = match.group(5)  # e.g. "S"
+    key = match.group(6)  # e.g. "N"
 
-    if suffix not in series_mating:
+    if shell_style not in mating_shell_styles:
         raise ValueError(
-            f"Unknown series/style suffix '{suffix}'. "
-            f"Supported suffixes: {sorted(series_mating.keys())}"
+            f"Unknown shell style '{shell_style}'. "
+            f"Supported shell styles: {sorted(mating_shell_styles.keys())}"
         )
+    mating_shell_style = mating_shell_styles.get(shell_style)
+    if override_shell_style:
+        mating_shell_style = override_shell_style
+
+    # Preserve finish
+    if finish not in valid_finishes:
+        raise ValueError(
+            f"Unknown shell style '{shell_style}'. "
+            f"Supported shell styles: {sorted(mating_shell_styles.keys())}"
+        )
+    mating_finish = finish
+    if override_finish:
+        mating_finish = override_finish
+
+    # Preserve insert arrangement
+    mating_insert_arrangement = insert_arrangement
+    if override_insert_arrangement:
+        mating_insert_arrangement = override_insert_arrangement
 
     # Flip contact gender
-    gender_flip = {"A": "B", "B": "A"}
-    mating_contact = gender_flip.get(contact, contact)
+    if gender not in valid_genders:
+        raise ValueError(
+            f"Unknown gender '{shell_style}'. "
+            f"Supported genders: {sorted(mating_shell_styles.keys())}"
+        )
+    mating_gender = valid_genders.get(gender)
+    if override_gender:
+        mating_gender = override_gender
 
+    # Preserve key
     mating_key = key
+    if override_keyway:
+        mating_key = override_keyway
 
-    # Apply finish/material override if provided
-    mating_material = material
-    if override_finish is not None:
-        override_finish = override_finish.strip().upper()
-        if override_finish not in valid_finishes:
-            raise ValueError(
-                f"Unknown finish code '{override_finish}'. "
-                f"Valid codes: {sorted(valid_finishes.keys())}"
-            )
-        mating_material = override_finish
+    if return_divider:
+        divider = return_divider
+    else:
+        divider = "_"
 
-    mating_suffix = series_mating[suffix]
-    return f"D38999_{mating_suffix}{shell_style}{mating_contact}{insert}{mating_material}{mating_key}"
-
-
-# ── Example usage ─────────────────────────────────────────────────────────────
-if __name__ == "__main__":
-    tests = [
-        ("D38999/26FG16SN",  None),    # your test case
-        ("M38999/20WA35SN",  None),
-        ("D38999/22WA9PN",   None),
-        ("D38999_28WB9PN",   None),
-        ("D38999/20WA35SN",  "W"),     # finish override
-    ]
-
-    for pn, finish in tests:
-        result = find_mating_connector(pn, override_finish=finish)
-        print(f"Input:  {pn}")
-        print(f"Mating: {result}")
-        print()
+    return f"D38999{divider}{mating_shell_style}{mating_finish}{mating_insert_arrangement}{mating_gender}{mating_key}"
