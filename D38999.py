@@ -28,13 +28,13 @@ def find_mating_connector(
             └──────────── Shell style
 
     Args:
-      part_number:                      The MIL-DTL-38999 part number string.
-      override_shell_style:             Assert a shell style. 
-      override_finish:                  Assert a finish.
-      override_insert_arrangement:      Assert an insert arrangement.
-      override_gender:                  Assert pins/sockets.
-      override_keyway:                  Assert a master keyway.
-      return_divider:                   By default, Harnice will return an underscore D38999_xxxxxx. You can change that here. 
+      part_number:                      The MIL-DTL-38999 part number string you want a match to.
+      override_shell_style:             Assert a shell style. See the lookup table for the complete set but if yours is a 26, you'll get a 24 or if it's a 20 or 24 you'll get a 26.
+      override_finish:                  Assert a finish. Default will stay the same as yours.
+      override_insert_arrangement:      Assert an insert arrangement. Default will stay the same as yours.
+      override_gender:                  Assert pins/sockets. Default will reverse yours.
+      override_keyway:                  Assert a master keyway. Default will stay the same as yours.
+      return_divider:                   By default, Harnice will return an underscore D38999_xxxxxx. Change that here. 
 
     Returns:
       Mating part number string in D38999_ format.
