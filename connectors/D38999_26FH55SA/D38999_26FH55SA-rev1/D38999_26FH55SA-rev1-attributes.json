@@ -1,0 +1,366 @@
+{
+  "tools": [
+    "M22520/2-01 crimp tool",
+    "M81969/14-05 extraction tool"
+  ],
+  "build_notes": [],
+  "csys_children": {
+    "flagnote-1": {
+      "angle": 0,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-1-leader_dest": {
+      "angle": 0,
+      "distance": 1,
+      "rotation": 0
+    },
+    "flagnote-2": {
+      "angle": 15,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-2-leader_dest": {
+      "angle": 15,
+      "distance": 1.03,
+      "rotation": 0
+    },
+    "flagnote-3": {
+      "angle": -15,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-3-leader_dest": {
+      "angle": -15,
+      "distance": 1.03,
+      "rotation": 0
+    },
+    "flagnote-4": {
+      "angle": 30,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-4-leader_dest": {
+      "angle": 30,
+      "distance": 1,
+      "rotation": 0
+    },
+    "flagnote-5": {
+      "angle": -30,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-5-leader_dest": {
+      "angle": -30,
+      "distance": 1,
+      "rotation": 0
+    },
+    "flagnote-6": {
+      "angle": 45,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-6-leader_dest": {
+      "angle": 45,
+      "distance": 0.72,
+      "rotation": 0
+    },
+    "flagnote-7": {
+      "angle": -45,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-7-leader_dest": {
+      "angle": -45,
+      "distance": 0.72,
+      "rotation": 0
+    },
+    "flagnote-8": {
+      "angle": 60,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-8-leader_dest": {
+      "angle": 60,
+      "distance": 0.58,
+      "rotation": 0
+    },
+    "flagnote-9": {
+      "angle": -60,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-9-leader_dest": {
+      "angle": -60,
+      "distance": 0.58,
+      "rotation": 0
+    },
+    "flagnote-10": {
+      "angle": -75,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-10-leader_dest": {
+      "angle": -75,
+      "distance": 0.52,
+      "rotation": 0
+    },
+    "flagnote-11": {
+      "angle": 75,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-11-leader_dest": {
+      "angle": 75,
+      "distance": 0.52,
+      "rotation": 0
+    },
+    "flagnote-12": {
+      "angle": -90,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-12-leader_dest": {
+      "angle": -90,
+      "distance": 0.52,
+      "rotation": 0
+    },
+    "flagnote-13": {
+      "angle": 90,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-13-leader_dest": {
+      "angle": 90,
+      "distance": 0.5,
+      "rotation": 0
+    }
+  },
+  "contacts": [
+    {
+      "name": "A",
+      "size": "20"
+    },
+    {
+      "name": "B",
+      "size": "20"
+    },
+    {
+      "name": "C",
+      "size": "20"
+    },
+    {
+      "name": "D",
+      "size": "20"
+    },
+    {
+      "name": "E",
+      "size": "20"
+    },
+    {
+      "name": "F",
+      "size": "20"
+    },
+    {
+      "name": "G",
+      "size": "20"
+    },
+    {
+      "name": "H",
+      "size": "20"
+    },
+    {
+      "name": "J",
+      "size": "20"
+    },
+    {
+      "name": "K",
+      "size": "20"
+    },
+    {
+      "name": "L",
+      "size": "20"
+    },
+    {
+      "name": "M",
+      "size": "20"
+    },
+    {
+      "name": "N",
+      "size": "20"
+    },
+    {
+      "name": "P",
+      "size": "20"
+    },
+    {
+      "name": "R",
+      "size": "20"
+    },
+    {
+      "name": "S",
+      "size": "20"
+    },
+    {
+      "name": "T",
+      "size": "20"
+    },
+    {
+      "name": "U",
+      "size": "20"
+    },
+    {
+      "name": "V",
+      "size": "20"
+    },
+    {
+      "name": "W",
+      "size": "20"
+    },
+    {
+      "name": "X",
+      "size": "20"
+    },
+    {
+      "name": "Y",
+      "size": "20"
+    },
+    {
+      "name": "Z",
+      "size": "20"
+    },
+    {
+      "name": "a",
+      "size": "20"
+    },
+    {
+      "name": "b",
+      "size": "20"
+    },
+    {
+      "name": "c",
+      "size": "20"
+    },
+    {
+      "name": "d",
+      "size": "20"
+    },
+    {
+      "name": "e",
+      "size": "20"
+    },
+    {
+      "name": "f",
+      "size": "20"
+    },
+    {
+      "name": "g",
+      "size": "20"
+    },
+    {
+      "name": "h",
+      "size": "20"
+    },
+    {
+      "name": "i",
+      "size": "20"
+    },
+    {
+      "name": "j",
+      "size": "20"
+    },
+    {
+      "name": "j",
+      "size": "20"
+    },
+    {
+      "name": "k",
+      "size": "20"
+    },
+    {
+      "name": "l",
+      "size": "20"
+    },
+    {
+      "name": "m",
+      "size": "20"
+    },
+    {
+      "name": "n",
+      "size": "20"
+    },
+    {
+      "name": "p",
+      "size": "20"
+    },
+    {
+      "name": "r",
+      "size": "20"
+    },
+    {
+      "name": "s",
+      "size": "20"
+    },
+    {
+      "name": "t",
+      "size": "20"
+    },
+    {
+      "name": "u",
+      "size": "20"
+    },
+    {
+      "name": "v",
+      "size": "20"
+    },
+    {
+      "name": "w",
+      "size": "20"
+    },
+    {
+      "name": "x",
+      "size": "20"
+    },
+    {
+      "name": "y",
+      "size": "20"
+    },
+    {
+      "name": "z",
+      "size": "20"
+    },
+    {
+      "name": "AA",
+      "size": "20"
+    },
+    {
+      "name": "BB",
+      "size": "20"
+    },
+    {
+      "name": "CC",
+      "size": "20"
+    },
+    {
+      "name": "DD",
+      "size": "20"
+    },
+    {
+      "name": "EE",
+      "size": "20"
+    },
+    {
+      "name": "FF",
+      "size": "20"
+    },
+    {
+      "name": "GG",
+      "size": "20"
+    },
+    {
+      "name": "HH",
+      "size": "20"
+    }
+  ],
+  "shell_size": "H"
+}

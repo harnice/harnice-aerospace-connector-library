@@ -1,0 +1,2 @@
+product	mfg	pn	desc	rev	status	releaseticket	library_repo	library_subpath	datestarted	datemodified	datereleased	git_hash_of_harnice_src	drawnby	checkedby	revisionupdates	affectedinstances
+part	mil spec	D38999_26WA35PC		1			https://github.com/harnice/d38999	Connector	2/3/26	2/4/26		7158db3a37e9d62dd6da693535b5cdfcd4966b01	K SHUTT			
