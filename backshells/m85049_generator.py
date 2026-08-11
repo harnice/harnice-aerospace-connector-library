@@ -175,6 +175,7 @@ SHELL_DATA = {
 
 # TABLE II — aluminum finish codes (composite codes omitted from family gen)
 FINISHES = {
+    "F": "Stainless Steel",
     "G": "Electroless Nickel (Space Grade)",
     "N": "Electroless Nickel",
     "P": "Cadmium Olive Drab over Electroless Nickel, Selective Plating",

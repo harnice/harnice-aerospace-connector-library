@@ -211,7 +211,7 @@ def find_backshell(
         "C": "Z",   # Zinc-nickel olive drab → Zinc nickel
         "D": "N",   # Electroless nickel → Electroless nickel
         "E": "N",   # Anodized → Electroless nickel (nearest common)
-        "F": "F",   # Black anodized → F
+        "F": "F",   # → Stainless steel
         "G": "X",   # Nickel PTFE → Nickel fluorocarbon polymer
         "H": "N",   # Hard anodized → Electroless nickel
         "K": "N",   # Common Series III code treated as electroless nickel family
