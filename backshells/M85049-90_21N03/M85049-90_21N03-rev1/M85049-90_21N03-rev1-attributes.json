@@ -1,0 +1,163 @@
+{
+  "tools": [
+    "AS85049/128 band"
+  ],
+  "build_notes": [
+    "Banding backshell with self-locking coupling for MIL-DTL-38999 Series III/IV (designator H)."
+  ],
+  "csys_children": {
+    "connector": {
+      "x": 1.796,
+      "y": 1.938,
+      "angle": 0,
+      "rotation": 90
+    },
+    "flagnote-1-leader_dest": {
+      "angle": 0,
+      "distance": 2.616,
+      "rotation": 0
+    },
+    "flagnote-1": {
+      "angle": 0,
+      "distance": 5.0207,
+      "rotation": 0
+    },
+    "flagnote-2-leader_dest": {
+      "angle": 15,
+      "distance": 2.7083,
+      "rotation": 0
+    },
+    "flagnote-2": {
+      "angle": 15,
+      "distance": 5.0207,
+      "rotation": 0
+    },
+    "flagnote-3-leader_dest": {
+      "angle": -15,
+      "distance": 1.8778,
+      "rotation": 0
+    },
+    "flagnote-3": {
+      "angle": -15,
+      "distance": 5.0207,
+      "rotation": 0
+    },
+    "flagnote-4-leader_dest": {
+      "angle": 30,
+      "distance": 3.0207,
+      "rotation": 0
+    },
+    "flagnote-4": {
+      "angle": 30,
+      "distance": 5.0207,
+      "rotation": 0
+    },
+    "flagnote-5-leader_dest": {
+      "angle": -30,
+      "distance": 0.972,
+      "rotation": 0
+    },
+    "flagnote-5": {
+      "angle": -30,
+      "distance": 5.0207,
+      "rotation": 0
+    },
+    "flagnote-6-leader_dest": {
+      "angle": 45,
+      "distance": 1.3803,
+      "rotation": 0
+    },
+    "flagnote-6": {
+      "angle": 45,
+      "distance": 5.0207,
+      "rotation": 0
+    },
+    "flagnote-7-leader_dest": {
+      "angle": -45,
+      "distance": 0.6873,
+      "rotation": 0
+    },
+    "flagnote-7": {
+      "angle": -45,
+      "distance": 5.0207,
+      "rotation": 0
+    },
+    "flagnote-8-leader_dest": {
+      "angle": 60,
+      "distance": 1.952,
+      "rotation": 0
+    },
+    "flagnote-8": {
+      "angle": 60,
+      "distance": 5.0207,
+      "rotation": 0
+    },
+    "flagnote-9-leader_dest": {
+      "angle": -60,
+      "distance": 0.5612,
+      "rotation": 0
+    },
+    "flagnote-9": {
+      "angle": -60,
+      "distance": 5.0207,
+      "rotation": 0
+    },
+    "flagnote-10-leader_dest": {
+      "angle": -75,
+      "distance": 0.5031,
+      "rotation": 0
+    },
+    "flagnote-10": {
+      "angle": -75,
+      "distance": 5.0207,
+      "rotation": 0
+    },
+    "flagnote-11-leader_dest": {
+      "angle": 75,
+      "distance": 0.5031,
+      "rotation": 0
+    },
+    "flagnote-11": {
+      "angle": 75,
+      "distance": 5.0207,
+      "rotation": 0
+    },
+    "flagnote-12-leader_dest": {
+      "angle": -90,
+      "distance": 0.486,
+      "rotation": 0
+    },
+    "flagnote-12": {
+      "angle": -90,
+      "distance": 5.0207,
+      "rotation": 0
+    },
+    "flagnote-13-leader_dest": {
+      "angle": 90,
+      "distance": 0.486,
+      "rotation": 0
+    },
+    "flagnote-13": {
+      "angle": 90,
+      "distance": 5.0207,
+      "rotation": 0
+    }
+  },
+  "item_type": "backshell",
+  "connector_designator": "H",
+  "orientation": "90",
+  "shell_size": 21,
+  "entry_size": "03",
+  "finish": "N",
+  "finish_description": "Electroless Nickel",
+  "detent": "detented",
+  "a_thread": "M31 X 1 - 6H",
+  "c_dia_in": 1.64,
+  "c_dia_mm": 41.7,
+  "e_dia_in": 0.812,
+  "e_dia_mm": 20.6,
+  "f_max_in": 1.15,
+  "g_max_in": 1.3,
+  "h_max_in": 1.938,
+  "j_max_in": 1.796
+}

@@ -1,0 +1,163 @@
+{
+  "tools": [
+    "AS85049/128 band"
+  ],
+  "build_notes": [
+    "Banding backshell with self-locking coupling for MIL-DTL-38999 Series III/IV (designator H)."
+  ],
+  "csys_children": {
+    "connector": {
+      "x": 1.919,
+      "y": 2.125,
+      "angle": 0,
+      "rotation": 90
+    },
+    "flagnote-1-leader_dest": {
+      "angle": 0,
+      "distance": 2.864,
+      "rotation": 0
+    },
+    "flagnote-1": {
+      "angle": 0,
+      "distance": 5.3071,
+      "rotation": 0
+    },
+    "flagnote-2-leader_dest": {
+      "angle": 15,
+      "distance": 2.965,
+      "rotation": 0
+    },
+    "flagnote-2": {
+      "angle": 15,
+      "distance": 5.3071,
+      "rotation": 0
+    },
+    "flagnote-3-leader_dest": {
+      "angle": -15,
+      "distance": 1.758,
+      "rotation": 0
+    },
+    "flagnote-3": {
+      "angle": -15,
+      "distance": 5.3071,
+      "rotation": 0
+    },
+    "flagnote-4-leader_dest": {
+      "angle": 30,
+      "distance": 3.3071,
+      "rotation": 0
+    },
+    "flagnote-4": {
+      "angle": 30,
+      "distance": 5.3071,
+      "rotation": 0
+    },
+    "flagnote-5-leader_dest": {
+      "angle": -30,
+      "distance": 0.91,
+      "rotation": 0
+    },
+    "flagnote-5": {
+      "angle": -30,
+      "distance": 5.3071,
+      "rotation": 0
+    },
+    "flagnote-6-leader_dest": {
+      "angle": 45,
+      "distance": 1.3774,
+      "rotation": 0
+    },
+    "flagnote-6": {
+      "angle": 45,
+      "distance": 5.3071,
+      "rotation": 0
+    },
+    "flagnote-7-leader_dest": {
+      "angle": -45,
+      "distance": 0.6435,
+      "rotation": 0
+    },
+    "flagnote-7": {
+      "angle": -45,
+      "distance": 5.3071,
+      "rotation": 0
+    },
+    "flagnote-8-leader_dest": {
+      "angle": 60,
+      "distance": 1.948,
+      "rotation": 0
+    },
+    "flagnote-8": {
+      "angle": 60,
+      "distance": 5.3071,
+      "rotation": 0
+    },
+    "flagnote-9-leader_dest": {
+      "angle": -60,
+      "distance": 0.5254,
+      "rotation": 0
+    },
+    "flagnote-9": {
+      "angle": -60,
+      "distance": 5.3071,
+      "rotation": 0
+    },
+    "flagnote-10-leader_dest": {
+      "angle": -75,
+      "distance": 0.4711,
+      "rotation": 0
+    },
+    "flagnote-10": {
+      "angle": -75,
+      "distance": 5.3071,
+      "rotation": 0
+    },
+    "flagnote-11-leader_dest": {
+      "angle": 75,
+      "distance": 0.4711,
+      "rotation": 0
+    },
+    "flagnote-11": {
+      "angle": 75,
+      "distance": 5.3071,
+      "rotation": 0
+    },
+    "flagnote-12-leader_dest": {
+      "angle": -90,
+      "distance": 0.455,
+      "rotation": 0
+    },
+    "flagnote-12": {
+      "angle": -90,
+      "distance": 5.3071,
+      "rotation": 0
+    },
+    "flagnote-13-leader_dest": {
+      "angle": 90,
+      "distance": 0.455,
+      "rotation": 0
+    },
+    "flagnote-13": {
+      "angle": 90,
+      "distance": 5.3071,
+      "rotation": 0
+    }
+  },
+  "item_type": "backshell",
+  "connector_designator": "H",
+  "orientation": "90",
+  "shell_size": 25,
+  "entry_size": "02",
+  "finish": "ZP",
+  "finish_description": "Zinc Nickel, Selective Plating",
+  "detent": "detented",
+  "a_thread": "M37 X 1 - 6H",
+  "c_dia_in": 1.89,
+  "c_dia_mm": 48.0,
+  "e_dia_in": 0.75,
+  "e_dia_mm": 19.1,
+  "f_max_in": 1.2,
+  "g_max_in": 1.35,
+  "h_max_in": 2.125,
+  "j_max_in": 1.919
+}
