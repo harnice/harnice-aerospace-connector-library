@@ -9,15 +9,39 @@ from harnice.lists import rev_history
 REVISION = "1"
 DATE_STARTED = "8/7/26"
 
+# ---------------------------------------------------------------------------
+# Datasheet / catalog sources (traceability)
+# ---------------------------------------------------------------------------
+# Primary (dimensions, finishes, how-to-order, designator H):
+#   Glenair AS85049/88, /89, /90 — Straight, 45° and 90° Banding Backshells
+#   with Self-Locking Coupling (U.S. CAGE 06324; sheet Rev. 06.28.23)
+#   https://www.glenair.com/mil-spec/as85049-qualified-backshells-and-connector-accessories/pdf/as85049-88-and-as85049-89-and-as85049-90.pdf
+#
+# Straight body length L Max corroboration (1.35 in / 34.3 mm):
+#   Milnec M85049/88 Type Banding Backshell datasheet
+#   https://www.milnec.com/m85049/m85049-88-datasheet.pdf
+#
+# Assembly torque (not on Glenair /88–90 sheet) — SAE-AS85049 coupling thread
+# strength, as published by Amphenol backshell catalogs:
+#   https://www.amphenol.co.jp/military/catalog/pdf_howtoselectbackshell/Torque.pdf
+#
+# Circular backshell assembly wrench dash numbers:
+#   Glenair 600-006 (std Al), 600-079 (anti-decoupling Al), 600-102 (std SS)
+#   https://cdn.glenair.com/tools/pdf/a/600-006.pdf
+# ---------------------------------------------------------------------------
+
 # SVG px per inch — must match harnice part.py csys rendering (96 px/in)
 PX_PER_IN = 96.0
 
-# Straight (/88) body length callout from Glenair drawing: 1.35 (34.3) Max
-# to the start of the banding platform. Banding platform length is not tabulated.
+# Straight (/88) body length to start of banding platform: Glenair drawing /
+# Milnec L Max = 1.35 (34.3). Banding platform length is not tabulated on the
+# Glenair /88–90 sheet; 0.35 in is an estimate for drawing/csys silhouette only.
 STRAIGHT_BODY_IN = 1.35
 BAND_PLATFORM_IN = 0.35
 
-# TABLE I — inches (mm). E entry 02/03; F/G for 45°; H/J for 90°.
+# TABLE I — Shell Size, Cable Entry and Backshell Dimensions (inches / mm).
+# Source: Glenair AS85049/88–90 PDF, Table I (link in header above).
+# E entry 02/03; F/G for 45° (/89); H/J for 90° (/90). Entry 02 is N/A on 9 & 11.
 SHELL_DATA = {
     9: {
         "a_thread": "M12 X 1 - 6H",
@@ -174,7 +198,10 @@ SHELL_DATA = {
     },
 }
 
-# TABLE II — aluminum finish codes (composite codes omitted from family gen)
+# TABLE II — Finish and Material (Glenair AS85049/88–90 PDF, Table II).
+# Aluminum letter codes only; composite aliases (M, L, J, XC, YL, ZC, ZL) omitted.
+# Finish F (Stainless Steel) is NOT on that aluminum Table II — retained for
+# D38999 stainless/black-anodize pairing via find_backshell.
 FINISHES = {
     "F": "Stainless Steel",
     "G": "Electroless Nickel (Space Grade)",
@@ -187,15 +214,17 @@ FINISHES = {
     "ZP": "Zinc Nickel, Selective Plating",
 }
 
+# Basic part number → geometry. Glenair how-to-order: /88 straight, /89 45°, /90 90°.
 ORIENTATIONS = {
     "88": "straight",
     "89": "45",
     "90": "90",
 }
 
-# Assembly torque to connector (in-lbs), per SAE-AS85049 coupling thread strength.
-# The Glenair /88–90 drawing does not list torque; AS85049 family catalogs publish
-# these values for M85049 adapter/backshell installation by connector shell size.
+# Assembly torque to connector (in-lbs) by connector shell size.
+# Not listed on the Glenair /88–90 drawing. Values follow SAE-AS85049 coupling
+# thread strength as tabulated by Amphenol (see Torque.pdf link in header):
+# shells 8–19 → 40 in-lbs; 20–25 → 80 in-lbs (we map 38999 sizes 9–19 / 21–25).
 TORQUE_IN_LBS = {
     9: 40,
     11: 40,
@@ -208,10 +237,11 @@ TORQUE_IN_LBS = {
     25: 80,
 }
 
-# Glenair circular backshell assembly wrenches (600-006 / 600-079 / 600-102).
-# /88–90 are self-locking → use anti-decoupling 600-079 for aluminum;
-# stainless (finish F) uses 600-102.
-WRENCH_DASH_STANDARD = {  # 600-006 / 600-102
+# Glenair circular backshell assembly wrenches — dash ↔ shell size from
+# https://cdn.glenair.com/tools/pdf/a/600-006.pdf
+# /88–90 are self-locking → anti-decoupling 600-079 for aluminum finishes;
+# stainless (finish F) uses standard stainless wrench 600-102.
+WRENCH_DASH_STANDARD = {  # 600-006 / 600-102 (dash 08→08/09 … 24→24/25)
     9: "08",
     11: "10",
     13: "12",
@@ -222,7 +252,7 @@ WRENCH_DASH_STANDARD = {  # 600-006 / 600-102
     23: "22",
     25: "24",
 }
-WRENCH_DASH_ANTI_DECOUPLING = {  # 600-079
+WRENCH_DASH_ANTI_DECOUPLING = {  # 600-079 (dash 01→08/09 … 10→24/25)
     9: "01",
     11: "02",
     13: "03",
