@@ -474,6 +474,14 @@ def _poly(points, fill="#C0C0C0", stroke=STROKE_COLOR, stroke_width=STROKE_WIDTH
     )
 
 
+def _weld_line(x1, y1, x2, y2):
+    """Faint miter/weld across a 45° or 90° elbow."""
+    return (
+        f'<line x1="{x1:.2f}" y1="{y1:.2f}" x2="{x2:.2f}" y2="{y2:.2f}" '
+        f'stroke="#000000" stroke-width="1" opacity="0.05"/>'
+    )
+
+
 def banding_ribs(x0, y_top, y_bot, length, count=5):
     """Kept for call-site compatibility; knurl patterns replace these marks."""
     return ""
@@ -633,6 +641,7 @@ def fortyfive_backshell_svg(part_number, shell_size, entry_size, finish=None):
         _poly(nut_knurl_pts, fill=fills["diamond_nut"], stroke=None, extra='opacity="0.55"'),
         _rect(-band_len, -half_e, band_len, e_od, fill=fills["band"], stroke=None) if fills["selective"] else "",
         _rect(-band_len + lip, -half_e, band_len - lip, e_od, fill=fills["diamond"], stroke=None, extra='opacity="0.55"'),
+        _weld_line(*offset_point(*c1, 1, 0, w1), *offset_point(*c1, 1, 0, -w1)),
         _poly(outline, fill="none"),
     ]
 
@@ -705,6 +714,7 @@ def ninety_backshell_svg(part_number, shell_size, entry_size, finish=None):
         ),
         _rect(-band_len, -half_e, band_len, e_od, fill=fills["band"], stroke=None) if fills["selective"] else "",
         _rect(-band_len + lip, -half_e, band_len - lip, e_od, fill=fills["diamond"], stroke=None, extra='opacity="0.55"'),
+        _weld_line(x_bend - half_c, -half_e, x_bend + half_c, half_e),
         _poly(outline, fill="none"),
     ]
 

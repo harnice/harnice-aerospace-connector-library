@@ -19,6 +19,7 @@
 <rect x="59.90" y="-147.38" width="122.88" height="34.01" fill="url(#M85049-90_15YP02-knurl-diamond-nut)" stroke="none" opacity="0.55"/>
 <rect x="-33.60" y="-28.70" width="33.60" height="57.41" fill="#C5CAD0" stroke="none"/>
 <rect x="-29.57" y="-28.70" width="29.57" height="57.41" fill="url(#M85049-90_15YP02-knurl-diamond)" stroke="none" opacity="0.55"/>
+<line x1="59.90" y1="-28.70" x2="182.78" y2="28.70" stroke="#000000" stroke-width="1" opacity="0.05"/>
 <polygon points="-33.60,-28.70 59.90,-28.70 59.90,-161.95 182.78,-161.95 182.78,28.70 -33.60,28.70" fill="none" stroke="#222222" stroke-width="1.5"/>
 </g>
 <g id="M85049-90_15YP02-drawing-contents-end">

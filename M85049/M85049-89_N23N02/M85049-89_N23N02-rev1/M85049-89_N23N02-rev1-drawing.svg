@@ -17,6 +17,7 @@
 <polygon points="205.78,8.45 233.58,-19.35 113.43,-139.50 85.63,-111.70" fill="#6E757C" stroke="none"/>
 <polygon points="205.78,8.45 225.79,-11.56 105.64,-131.71 85.63,-111.70" fill="url(#M85049-89_N23N02-knurl-diamond-nut)" stroke="none" opacity="0.55"/>
 <rect x="-29.57" y="-40.70" width="29.57" height="81.41" fill="url(#M85049-89_N23N02-knurl-diamond)" stroke="none" opacity="0.55"/>
+<line x1="94.08" y1="62.83" x2="94.08" y2="-62.83" stroke="#000000" stroke-width="1" opacity="0.05"/>
 <polygon points="-33.60,40.70 94.08,62.83 205.78,8.45 233.58,-19.35 113.43,-139.50 85.63,-111.70 94.08,-62.83 -33.60,-40.70" fill="none" stroke="#222222" stroke-width="1.5"/>
 </g>
 <g id="M85049-89_N23N02-drawing-contents-end">
