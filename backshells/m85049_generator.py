@@ -192,6 +192,47 @@ ORIENTATIONS = {
     "90": "90",
 }
 
+# Assembly torque to connector (in-lbs), per SAE-AS85049 coupling thread strength.
+# The Glenair /88–90 drawing does not list torque; AS85049 family catalogs publish
+# these values for M85049 adapter/backshell installation by connector shell size.
+TORQUE_IN_LBS = {
+    9: 40,
+    11: 40,
+    13: 40,
+    15: 40,
+    17: 40,
+    19: 40,
+    21: 80,
+    23: 80,
+    25: 80,
+}
+
+# Glenair circular backshell assembly wrenches (600-006 / 600-079 / 600-102).
+# /88–90 are self-locking → use anti-decoupling 600-079 for aluminum;
+# stainless (finish F) uses 600-102.
+WRENCH_DASH_STANDARD = {  # 600-006 / 600-102
+    9: "08",
+    11: "10",
+    13: "12",
+    15: "14",
+    17: "16",
+    19: "18",
+    21: "20",
+    23: "22",
+    25: "24",
+}
+WRENCH_DASH_ANTI_DECOUPLING = {  # 600-079
+    9: "01",
+    11: "02",
+    13: "03",
+    15: "04",
+    17: "05",
+    19: "06",
+    21: "07",
+    23: "08",
+    25: "10",
+}
+
 # Polar flagnotes: same ray from origin through leader_dest and flagnote.
 # Angles match the original every-15° layout (degrees, math +Y up).
 FLAGNOTE_ANGLES_DEG = [0, 15, -15, 30, -30, 45, -45, 60, -60, -75, 75, -90, 90]
@@ -337,12 +378,16 @@ def fortyfive_backshell_svg(part_number, shell_size, entry_size):
     top = [
         offset_point(*c0, 1, 0, w0),
         offset_point(*c1, 1, 0, w1),
-        offset_point(c2[0] - nut_len * cos_a, c2[1] + nut_len * sin_a, cos_a, -sin_a, w2),
+        offset_point(
+            c2[0] - nut_len * cos_a, c2[1] + nut_len * sin_a, cos_a, -sin_a, w2
+        ),
         offset_point(*c2, cos_a, -sin_a, w2),
     ]
     bot = [
         offset_point(*c2, cos_a, -sin_a, -w2),
-        offset_point(c2[0] - nut_len * cos_a, c2[1] + nut_len * sin_a, cos_a, -sin_a, -w2),
+        offset_point(
+            c2[0] - nut_len * cos_a, c2[1] + nut_len * sin_a, cos_a, -sin_a, -w2
+        ),
         offset_point(*c1, 1, 0, -w1),
         offset_point(*c0, 1, 0, -w0),
     ]
@@ -502,6 +547,7 @@ def part_perimeter_inches(orientation, shell_size, entry_size):
         f, g = data["f_in"], data["g_in"]
         a = math.radians(45)
         cos_a, sin_a = math.cos(a), math.sin(a)
+
         # Centerline: (0,0) → (G,0) → (G+F·cos45, F·sin45)
         # Outer offsets roughly at half_e along exit, half_c at connector
         def off(cx, cy, tx, ty, dist):
@@ -572,9 +618,8 @@ def _points_close(a, b, tol=1e-4):
 
 
 def _same_segment(a0, a1, b0, b1, tol=1e-4):
-    return (
-        (_points_close(a0, b0, tol) and _points_close(a1, b1, tol))
-        or (_points_close(a0, b1, tol) and _points_close(a1, b0, tol))
+    return (_points_close(a0, b0, tol) and _points_close(a1, b1, tol)) or (
+        _points_close(a0, b1, tol) and _points_close(a1, b0, tol)
     )
 
 
@@ -654,6 +699,17 @@ def flagnote_csys_children(orientation, shell_size, entry_size):
     return children
 
 
+def circular_backshell_assembly_wrench_part_number(shell_size, finish):
+    """Glenair 600-series circular backshell assembly wrench for this shell/finish."""
+    if finish == "F":
+        # Stainless steel — standard coupling wrench 600-102
+        dash = WRENCH_DASH_STANDARD[shell_size]
+        return f"600-102-{dash}"
+    # Aluminum self-locking (/88–90) — anti-decoupling wrench 600-079
+    dash = WRENCH_DASH_ANTI_DECOUPLING[shell_size]
+    return f"600-079-{dash}"
+
+
 def compile_part_attributes(part_configuration):
     shell_size = part_configuration["shell_size"]
     entry_size = part_configuration["entry_size"]
@@ -669,10 +725,18 @@ def compile_part_attributes(part_configuration):
     }
     csys.update(flagnote_csys_children(orientation, shell_size, entry_size))
 
+    torque = TORQUE_IN_LBS[shell_size]
+    wrench = circular_backshell_assembly_wrench_part_number(shell_size, finish)
+
     attributes = {
-        "tools": ["AS85049/128 band"],
+        "tools": [
+            "Band-it clamp tool",
+            "Torque wrench",
+            f"{wrench} circular backshell assembly wrench",
+            "Torque-stripe marker",
+        ],
         "build_notes": [
-            "Banding backshell with self-locking coupling for MIL-DTL-38999 Series III/IV (designator H).",
+            f"Torque to {torque} in-lbs",
         ],
         "csys_children": csys,
         "item_type": "backshell",
@@ -683,6 +747,8 @@ def compile_part_attributes(part_configuration):
         "finish": finish,
         "finish_description": FINISHES[finish],
         "detent": "non-detented" if detent == "N" else "detented",
+        "torque_in_lbs": torque,
+        "assembly_wrench": wrench,
         "a_thread": data["a_thread"],
         "c_dia_in": data["c_in"],
         "c_dia_mm": data["c_mm"],

@@ -1,9 +1,12 @@
 {
   "tools": [
-    "AS85049/128 band"
+    "Band-it clamp tool",
+    "Torque wrench",
+    "600-079-01 circular backshell assembly wrench",
+    "Torque-stripe marker"
   ],
   "build_notes": [
-    "Banding backshell with self-locking coupling for MIL-DTL-38999 Series III/IV (designator H)."
+    "Torque to 40 in-lbs"
   ],
   "csys_children": {
     "connector": {
@@ -151,6 +154,8 @@
   "finish": "W",
   "finish_description": "Cadmium Olive Drab",
   "detent": "detented",
+  "torque_in_lbs": 40,
+  "assembly_wrench": "600-079-01",
   "a_thread": "M12 X 1 - 6H",
   "c_dia_in": 0.86,
   "c_dia_mm": 21.8,
