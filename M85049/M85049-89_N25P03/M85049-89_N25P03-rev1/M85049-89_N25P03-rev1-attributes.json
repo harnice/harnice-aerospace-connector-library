@@ -130,24 +130,5 @@
       "y": 0.1618,
       "rotation": 0
     }
-  },
-  "item_type": "backshell",
-  "connector_designator": "H",
-  "orientation": "45",
-  "shell_size": 25,
-  "entry_size": "03",
-  "finish": "P",
-  "finish_description": "Cadmium Olive Drab over Electroless Nickel, Selective Plating",
-  "detent": "non-detented",
-  "torque_in_lbs": 80,
-  "assembly_wrench": "Glenair 600-079-10",
-  "a_thread": "M37 X 1 - 6H",
-  "c_dia_in": 1.89,
-  "c_dia_mm": 48.0,
-  "e_dia_in": 1.0,
-  "e_dia_mm": 25.4,
-  "f_max_in": 1.2,
-  "g_max_in": 1.35,
-  "h_max_in": 2.125,
-  "j_max_in": 1.919
+  }
 }

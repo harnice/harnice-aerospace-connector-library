@@ -974,7 +974,7 @@ def circular_backshell_assembly_wrench_part_number(shell_size, finish):
     if finish == "F":
         # Stainless steel — standard coupling wrench 600-102
         dash = WRENCH_DASH_STANDARD[shell_size]
-        return f"600-102-{dash}"
+        return f"Glenair 600-102-{dash}"
     # Aluminum self-locking (/88–90) — anti-decoupling wrench 600-079
     dash = WRENCH_DASH_ANTI_DECOUPLING[shell_size]
     return f"Glenair 600-079-{dash}"
@@ -985,9 +985,6 @@ def compile_part_attributes(part_configuration):
     entry_size = part_configuration["entry_size"]
     orientation = ORIENTATIONS[part_configuration["basic"]]
     finish = part_configuration["finish"]
-    detent = part_configuration["detent"]
-    data = SHELL_DATA[shell_size]
-    e_in, e_mm = entry_dia(shell_size, entry_size)
 
     csys = {
         # Origin = cable entry; cable −X; body +X (then up for angled)
@@ -1009,25 +1006,6 @@ def compile_part_attributes(part_configuration):
             f"Torque to {torque} in-lbs",
         ],
         "csys_children": csys,
-        "item_type": "backshell",
-        "connector_designator": "H",
-        "orientation": orientation,
-        "shell_size": shell_size,
-        "entry_size": entry_size,
-        "finish": finish,
-        "finish_description": FINISHES[finish],
-        "detent": "non-detented" if detent == "N" else "detented",
-        "torque_in_lbs": torque,
-        "assembly_wrench": wrench,
-        "a_thread": data["a_thread"],
-        "c_dia_in": data["c_in"],
-        "c_dia_mm": data["c_mm"],
-        "e_dia_in": e_in,
-        "e_dia_mm": e_mm,
-        "f_max_in": data["f_in"],
-        "g_max_in": data["g_in"],
-        "h_max_in": data["h_in"],
-        "j_max_in": data["j_in"],
     }
     return attributes
 

@@ -2,7 +2,7 @@
   "tools": [
     "Band-it clamp tool",
     "Torque wrench",
-    "600-102-12 circular backshell assembly wrench",
+    "Glenair 600-102-12 circular backshell assembly wrench",
     "Torque-stripe marker"
   ],
   "build_notes": [
@@ -130,24 +130,5 @@
       "y": 0.1842,
       "rotation": 0
     }
-  },
-  "item_type": "backshell",
-  "connector_designator": "H",
-  "orientation": "45",
-  "shell_size": 13,
-  "entry_size": "03",
-  "finish": "F",
-  "finish_description": "Stainless Steel",
-  "detent": "detented",
-  "torque_in_lbs": 40,
-  "assembly_wrench": "600-102-12",
-  "a_thread": "M18 X 1 - 6H",
-  "c_dia_in": 1.16,
-  "c_dia_mm": 29.5,
-  "e_dia_in": 0.438,
-  "e_dia_mm": 11.1,
-  "f_max_in": 1.06,
-  "g_max_in": 1.21,
-  "h_max_in": 1.562,
-  "j_max_in": 1.553
+  }
 }

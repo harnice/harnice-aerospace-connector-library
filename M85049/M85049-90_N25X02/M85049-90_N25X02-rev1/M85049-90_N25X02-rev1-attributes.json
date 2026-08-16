@@ -150,24 +150,5 @@
       "y": 3.286,
       "rotation": 0
     }
-  },
-  "item_type": "backshell",
-  "connector_designator": "H",
-  "orientation": "90",
-  "shell_size": 25,
-  "entry_size": "02",
-  "finish": "X",
-  "finish_description": "Nickel Fluorocarbon Polymer",
-  "detent": "non-detented",
-  "torque_in_lbs": 80,
-  "assembly_wrench": "Glenair 600-079-10",
-  "a_thread": "M37 X 1 - 6H",
-  "c_dia_in": 1.89,
-  "c_dia_mm": 48.0,
-  "e_dia_in": 0.75,
-  "e_dia_mm": 19.1,
-  "f_max_in": 1.2,
-  "g_max_in": 1.35,
-  "h_max_in": 2.125,
-  "j_max_in": 1.919
+  }
 }
