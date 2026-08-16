@@ -1,0 +1,223 @@
+{
+  "tools": [
+    "Band-it clamp tool",
+    "Torque wrench",
+    "600-102-08 circular backshell assembly wrench",
+    "Torque-stripe marker"
+  ],
+  "build_notes": [
+    "Torque to 40 in-lbs"
+  ],
+  "csys_children": {
+    "connector": {
+      "x": 1.7000000000000002,
+      "y": 0,
+      "angle": 0,
+      "rotation": 0
+    },
+    "leader_center": {
+      "x": 0.9601,
+      "y": 0.0,
+      "rotation": 0
+    },
+    "flagnote-1-leader_dest": {
+      "x": 0.9601,
+      "y": 0.3175,
+      "rotation": 0
+    },
+    "flagnote-1": {
+      "x": 0.9601,
+      "y": 2.7921,
+      "rotation": 0
+    },
+    "flagnote-2-leader_dest": {
+      "x": 1.0451,
+      "y": 0.3175,
+      "rotation": 0
+    },
+    "flagnote-2": {
+      "x": 1.6827,
+      "y": 2.6969,
+      "rotation": 0
+    },
+    "flagnote-3-leader_dest": {
+      "x": 0.875,
+      "y": 0.3175,
+      "rotation": 0
+    },
+    "flagnote-3": {
+      "x": 0.2374,
+      "y": 2.6969,
+      "rotation": 0
+    },
+    "flagnote-4-leader_dest": {
+      "x": 1.1434,
+      "y": 0.3175,
+      "rotation": 0
+    },
+    "flagnote-4": {
+      "x": 2.3561,
+      "y": 2.418,
+      "rotation": 0
+    },
+    "flagnote-5-leader_dest": {
+      "x": 0.7768,
+      "y": 0.3175,
+      "rotation": 0
+    },
+    "flagnote-5": {
+      "x": -0.436,
+      "y": 2.418,
+      "rotation": 0
+    },
+    "flagnote-6-leader_dest": {
+      "x": 1.3901,
+      "y": 0.43,
+      "rotation": 0
+    },
+    "flagnote-6": {
+      "x": 2.9343,
+      "y": 1.9743,
+      "rotation": 0
+    },
+    "flagnote-7-leader_dest": {
+      "x": 0.6426,
+      "y": 0.3175,
+      "rotation": 0
+    },
+    "flagnote-7": {
+      "x": -1.0142,
+      "y": 1.9743,
+      "rotation": 0
+    },
+    "flagnote-8-leader_dest": {
+      "x": 1.3901,
+      "y": -0.43,
+      "rotation": 0
+    },
+    "flagnote-8": {
+      "x": 2.9343,
+      "y": -1.9743,
+      "rotation": 0
+    },
+    "flagnote-9-leader_dest": {
+      "x": 0.4658,
+      "y": 0.2854,
+      "rotation": 0
+    },
+    "flagnote-9": {
+      "x": -1.4579,
+      "y": 1.396,
+      "rotation": 0
+    },
+    "flagnote-10-leader_dest": {
+      "x": 1.1434,
+      "y": -0.3175,
+      "rotation": 0
+    },
+    "flagnote-10": {
+      "x": 2.3561,
+      "y": -2.418,
+      "rotation": 0
+    },
+    "flagnote-11-leader_dest": {
+      "x": 0.195,
+      "y": 0.205,
+      "rotation": 0
+    },
+    "flagnote-11": {
+      "x": -1.7369,
+      "y": 0.7226,
+      "rotation": 0
+    },
+    "flagnote-12-leader_dest": {
+      "x": 1.0451,
+      "y": -0.3175,
+      "rotation": 0
+    },
+    "flagnote-12": {
+      "x": 1.6827,
+      "y": -2.6969,
+      "rotation": 0
+    },
+    "flagnote-13-leader_dest": {
+      "x": 0.195,
+      "y": -0.205,
+      "rotation": 0
+    },
+    "flagnote-13": {
+      "x": -1.7369,
+      "y": -0.7226,
+      "rotation": 0
+    },
+    "flagnote-14-leader_dest": {
+      "x": 0.4658,
+      "y": -0.2854,
+      "rotation": 0
+    },
+    "flagnote-14": {
+      "x": -1.4579,
+      "y": -1.396,
+      "rotation": 0
+    },
+    "flagnote-15-leader_dest": {
+      "x": 0.6426,
+      "y": -0.3175,
+      "rotation": 0
+    },
+    "flagnote-15": {
+      "x": -1.0142,
+      "y": -1.9743,
+      "rotation": 0
+    },
+    "flagnote-16-leader_dest": {
+      "x": 0.7768,
+      "y": -0.3175,
+      "rotation": 0
+    },
+    "flagnote-16": {
+      "x": -0.436,
+      "y": -2.418,
+      "rotation": 0
+    },
+    "flagnote-17-leader_dest": {
+      "x": 0.875,
+      "y": -0.3175,
+      "rotation": 0
+    },
+    "flagnote-17": {
+      "x": 0.2374,
+      "y": -2.6969,
+      "rotation": 0
+    },
+    "flagnote-18-leader_dest": {
+      "x": 0.9601,
+      "y": -0.3175,
+      "rotation": 0
+    },
+    "flagnote-18": {
+      "x": 0.9601,
+      "y": -2.7921,
+      "rotation": 0
+    }
+  },
+  "item_type": "backshell",
+  "connector_designator": "H",
+  "orientation": "straight",
+  "shell_size": 9,
+  "entry_size": "03",
+  "finish": "F",
+  "finish_description": "Stainless Steel",
+  "detent": "non-detented",
+  "torque_in_lbs": 40,
+  "assembly_wrench": "600-102-08",
+  "a_thread": "M12 X 1 - 6H",
+  "c_dia_in": 0.86,
+  "c_dia_mm": 21.8,
+  "e_dia_in": 0.25,
+  "e_dia_mm": 6.4,
+  "f_max_in": 1.01,
+  "g_max_in": 1.16,
+  "h_max_in": 1.375,
+  "j_max_in": 1.417
+}

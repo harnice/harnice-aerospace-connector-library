@@ -1,0 +1,203 @@
+{
+  "tools": [
+    "Band-it clamp tool",
+    "Torque wrench",
+    "Glenair 600-079-03 circular backshell assembly wrench",
+    "Torque-stripe marker"
+  ],
+  "build_notes": [
+    "Torque to 40 in-lbs"
+  ],
+  "csys_children": {
+    "connector": {
+      "x": 1.7000000000000002,
+      "y": 0,
+      "angle": 0,
+      "rotation": 0
+    },
+    "leader_center": {
+      "x": 0.9492,
+      "y": -0.0,
+      "rotation": 0
+    },
+    "flagnote-1-leader_dest": {
+      "x": 0.9492,
+      "y": 0.4395,
+      "rotation": 0
+    },
+    "flagnote-1": {
+      "x": 0.9492,
+      "y": 2.8202,
+      "rotation": 0
+    },
+    "flagnote-2-leader_dest": {
+      "x": 1.067,
+      "y": 0.4395,
+      "rotation": 0
+    },
+    "flagnote-2": {
+      "x": 1.6791,
+      "y": 2.7241,
+      "rotation": 0
+    },
+    "flagnote-3-leader_dest": {
+      "x": 0.8314,
+      "y": 0.4395,
+      "rotation": 0
+    },
+    "flagnote-3": {
+      "x": 0.2193,
+      "y": 2.7241,
+      "rotation": 0
+    },
+    "flagnote-4-leader_dest": {
+      "x": 1.2029,
+      "y": 0.4395,
+      "rotation": 0
+    },
+    "flagnote-4": {
+      "x": 2.3593,
+      "y": 2.4424,
+      "rotation": 0
+    },
+    "flagnote-5-leader_dest": {
+      "x": 0.6954,
+      "y": 0.4395,
+      "rotation": 0
+    },
+    "flagnote-5": {
+      "x": -0.4609,
+      "y": 2.4424,
+      "rotation": 0
+    },
+    "flagnote-6-leader_dest": {
+      "x": 1.5292,
+      "y": 0.58,
+      "rotation": 0
+    },
+    "flagnote-6": {
+      "x": 2.9434,
+      "y": 1.9942,
+      "rotation": 0
+    },
+    "flagnote-7-leader_dest": {
+      "x": 0.5108,
+      "y": 0.4384,
+      "rotation": 0
+    },
+    "flagnote-7": {
+      "x": -1.045,
+      "y": 1.9942,
+      "rotation": 0
+    },
+    "flagnote-8-leader_dest": {
+      "x": 1.5292,
+      "y": -0.58,
+      "rotation": 0
+    },
+    "flagnote-8": {
+      "x": 2.9434,
+      "y": -1.9942,
+      "rotation": 0
+    },
+    "flagnote-9-leader_dest": {
+      "x": 0.3825,
+      "y": 0.3272,
+      "rotation": 0
+    },
+    "flagnote-9": {
+      "x": -1.4932,
+      "y": 1.4101,
+      "rotation": 0
+    },
+    "flagnote-10-leader_dest": {
+      "x": 1.2029,
+      "y": -0.4395,
+      "rotation": 0
+    },
+    "flagnote-10": {
+      "x": 2.3593,
+      "y": -2.4424,
+      "rotation": 0
+    },
+    "flagnote-11-leader_dest": {
+      "x": 0.3825,
+      "y": -0.3272,
+      "rotation": 0
+    },
+    "flagnote-11": {
+      "x": -1.4932,
+      "y": -1.4101,
+      "rotation": 0
+    },
+    "flagnote-12-leader_dest": {
+      "x": 1.067,
+      "y": -0.4395,
+      "rotation": 0
+    },
+    "flagnote-12": {
+      "x": 1.6791,
+      "y": -2.7241,
+      "rotation": 0
+    },
+    "flagnote-13-leader_dest": {
+      "x": 0.5108,
+      "y": -0.4384,
+      "rotation": 0
+    },
+    "flagnote-13": {
+      "x": -1.045,
+      "y": -1.9942,
+      "rotation": 0
+    },
+    "flagnote-14-leader_dest": {
+      "x": 0.6954,
+      "y": -0.4395,
+      "rotation": 0
+    },
+    "flagnote-14": {
+      "x": -0.4609,
+      "y": -2.4424,
+      "rotation": 0
+    },
+    "flagnote-15-leader_dest": {
+      "x": 0.8314,
+      "y": -0.4395,
+      "rotation": 0
+    },
+    "flagnote-15": {
+      "x": 0.2193,
+      "y": -2.7241,
+      "rotation": 0
+    },
+    "flagnote-16-leader_dest": {
+      "x": 0.9492,
+      "y": -0.4395,
+      "rotation": 0
+    },
+    "flagnote-16": {
+      "x": 0.9492,
+      "y": -2.8202,
+      "rotation": 0
+    }
+  },
+  "item_type": "backshell",
+  "connector_designator": "H",
+  "orientation": "straight",
+  "shell_size": 13,
+  "entry_size": "03",
+  "finish": "YP",
+  "finish_description": "Pure Dense Electrodeposited Aluminum, Selective Plating",
+  "detent": "non-detented",
+  "torque_in_lbs": 40,
+  "assembly_wrench": "Glenair 600-079-03",
+  "a_thread": "M18 X 1 - 6H",
+  "c_dia_in": 1.16,
+  "c_dia_mm": 29.5,
+  "e_dia_in": 0.438,
+  "e_dia_mm": 11.1,
+  "f_max_in": 1.06,
+  "g_max_in": 1.21,
+  "h_max_in": 1.562,
+  "j_max_in": 1.553
+}

@@ -1,0 +1,173 @@
+{
+  "tools": [
+    "Band-it clamp tool",
+    "Torque wrench",
+    "Glenair 600-079-04 circular backshell assembly wrench",
+    "Torque-stripe marker"
+  ],
+  "build_notes": [
+    "Torque to 40 in-lbs"
+  ],
+  "csys_children": {
+    "connector": {
+      "x": 1.614,
+      "y": 1.687,
+      "angle": 0,
+      "rotation": 90
+    },
+    "leader_center": {
+      "x": 1.3756,
+      "y": 0.5228,
+      "rotation": 0
+    },
+    "flagnote-1-leader_dest": {
+      "x": 2.254,
+      "y": -0.3556,
+      "rotation": 0
+    },
+    "flagnote-1": {
+      "x": 3.6736,
+      "y": -1.7752,
+      "rotation": 0
+    },
+    "flagnote-2-leader_dest": {
+      "x": 1.8859,
+      "y": -0.361,
+      "rotation": 0
+    },
+    "flagnote-2": {
+      "x": 3.0005,
+      "y": -2.2917,
+      "rotation": 0
+    },
+    "flagnote-3-leader_dest": {
+      "x": 2.254,
+      "y": 0.0156,
+      "rotation": 0
+    },
+    "flagnote-3": {
+      "x": 4.1901,
+      "y": -1.1022,
+      "rotation": 0
+    },
+    "flagnote-4-leader_dest": {
+      "x": 1.6124,
+      "y": -0.361,
+      "rotation": 0
+    },
+    "flagnote-4": {
+      "x": 2.2167,
+      "y": -2.6163,
+      "rotation": 0
+    },
+    "flagnote-5-leader_dest": {
+      "x": 2.254,
+      "y": 0.2874,
+      "rotation": 0
+    },
+    "flagnote-5": {
+      "x": 4.5147,
+      "y": -0.3184,
+      "rotation": 0
+    },
+    "flagnote-6-leader_dest": {
+      "x": 1.3756,
+      "y": -0.361,
+      "rotation": 0
+    },
+    "flagnote-6": {
+      "x": 1.3756,
+      "y": -2.7271,
+      "rotation": 0
+    },
+    "flagnote-7-leader_dest": {
+      "x": 2.254,
+      "y": 0.5228,
+      "rotation": 0
+    },
+    "flagnote-7": {
+      "x": 4.6254,
+      "y": 0.5228,
+      "rotation": 0
+    },
+    "flagnote-8-leader_dest": {
+      "x": 1.1388,
+      "y": -0.361,
+      "rotation": 0
+    },
+    "flagnote-8": {
+      "x": 0.5345,
+      "y": -2.6163,
+      "rotation": 0
+    },
+    "flagnote-9-leader_dest": {
+      "x": 2.254,
+      "y": 0.7581,
+      "rotation": 0
+    },
+    "flagnote-9": {
+      "x": 4.5147,
+      "y": 1.3639,
+      "rotation": 0
+    },
+    "flagnote-10-leader_dest": {
+      "x": 0.8654,
+      "y": -0.361,
+      "rotation": 0
+    },
+    "flagnote-10": {
+      "x": -0.2493,
+      "y": -2.2917,
+      "rotation": 0
+    },
+    "flagnote-11-leader_dest": {
+      "x": 2.254,
+      "y": 1.0299,
+      "rotation": 0
+    },
+    "flagnote-11": {
+      "x": 4.1901,
+      "y": 2.1477,
+      "rotation": 0
+    },
+    "flagnote-12-leader_dest": {
+      "x": 0.4919,
+      "y": -0.361,
+      "rotation": 0
+    },
+    "flagnote-12": {
+      "x": -0.9224,
+      "y": -1.7752,
+      "rotation": 0
+    },
+    "flagnote-13-leader_dest": {
+      "x": 2.254,
+      "y": 1.4011,
+      "rotation": 0
+    },
+    "flagnote-13": {
+      "x": 3.6736,
+      "y": 2.8207,
+      "rotation": 0
+    }
+  },
+  "item_type": "backshell",
+  "connector_designator": "H",
+  "orientation": "90",
+  "shell_size": 15,
+  "entry_size": "03",
+  "finish": "ZP",
+  "finish_description": "Zinc Nickel, Selective Plating",
+  "detent": "detented",
+  "torque_in_lbs": 40,
+  "assembly_wrench": "Glenair 600-079-04",
+  "a_thread": "M22 X 1 - 6H",
+  "c_dia_in": 1.28,
+  "c_dia_mm": 32.5,
+  "e_dia_in": 0.562,
+  "e_dia_mm": 14.3,
+  "f_max_in": 1.08,
+  "g_max_in": 1.24,
+  "h_max_in": 1.687,
+  "j_max_in": 1.614
+}
