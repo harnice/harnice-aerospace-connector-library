@@ -974,7 +974,7 @@ def circular_backshell_assembly_wrench_part_number(shell_size, finish):
     if finish == "F":
         # Stainless steel — standard coupling wrench 600-102
         dash = WRENCH_DASH_STANDARD[shell_size]
-        return f"600-102-{dash}"
+        return f"Glenair 600-102-{dash}"
     # Aluminum self-locking (/88–90) — anti-decoupling wrench 600-079
     dash = WRENCH_DASH_ANTI_DECOUPLING[shell_size]
     return f"Glenair 600-079-{dash}"
@@ -1006,8 +1006,6 @@ def compile_part_attributes(part_configuration):
             f"Torque to {torque} in-lbs",
         ],
         "csys_children": csys,
-        "orientation": orientation,
-        "assembly_wrench": wrench,
     }
     return attributes
 

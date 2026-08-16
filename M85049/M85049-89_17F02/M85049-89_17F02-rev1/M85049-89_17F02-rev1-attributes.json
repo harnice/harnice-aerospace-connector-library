@@ -2,7 +2,7 @@
   "tools": [
     "Band-it clamp tool",
     "Torque wrench",
-    "600-102-16 circular backshell assembly wrench",
+    "Glenair 600-102-16 circular backshell assembly wrench",
     "Torque-stripe marker"
   ],
   "build_notes": [
@@ -130,7 +130,5 @@
       "y": 0.1898,
       "rotation": 0
     }
-  },
-  "orientation": "45",
-  "assembly_wrench": "600-102-16"
+  }
 }
