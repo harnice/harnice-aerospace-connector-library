@@ -1083,14 +1083,22 @@ def list_variants():
 # ---------------------------------------------------------------------------
 # Part family generator (same pipeline as D38999/d38999_generator.py)
 # ---------------------------------------------------------------------------
-# PIN: M24308-{slash}_{dash}{finish}  e.g. M24308-2_3F
-#   slash 1 = solder-cup receptacle (socket), Class D/G
-#   slash 2 = crimp receptacle (socket), Class D/G
-#   slash 3 = solder-cup plug (pin), Class D/G
-#   slash 4 = crimp plug (pin), Class D/G
+# Official PIN: M24308/{slash}-{dash}{finish}  e.g. M24308/2-3F
+# Library PN:   M24308_{slash}-{dash}{finish}  e.g. M24308_2-3F
+#   (slash after the spec name becomes underscore, same as D38999_)
+#
+#   slash 1 = solder-cup receptacle (socket), Class G
+#   slash 2 = crimp receptacle (socket), Class G
+#   slash 3 = solder-cup plug (pin), Class G
+#   slash 4 = crimp plug (pin), Class G
 #   dash   = shell_no for Standard density; shell_no+10 for High density
 #            (Class G, no float mount — Amphenol Pcd 2018 QPL listing)
-#   finish F = cadmium YP, Z = zinc YP, K = zinc-nickel black
+#   finish letters from MIL-DTL-24308 Class G:
+#     A = pure electrodeposited aluminum
+#     F = cadmium
+#     K = zinc nickel
+#     T = nickel fluorocarbon polymer
+#     Z = zinc
 # ---------------------------------------------------------------------------
 
 REVISION = "1"
@@ -1110,7 +1118,14 @@ SLASH_SHEETS = {
     ("Crimp", "Plug"): "4",
 }
 
-FINISHES = ["F", "Z", "K"]
+# MIL-DTL-24308 Class G finish suffixes (P is Class N only).
+FINISHES = {
+    "A": "pure electrodeposited aluminum",
+    "F": "cadmium",
+    "K": "zinc nickel",
+    "T": "nickel fluorocarbon polymer",
+    "Z": "zinc",
+}
 
 CONTACT_SIZES = {
     "20": {
@@ -1201,7 +1216,7 @@ def make_part_number(part_configuration):
     dash = dash_number(
         part_configuration["density"], part_configuration["shell_no"]
     )
-    return f"M24308-{slash}_{dash}{part_configuration['finish']}"
+    return f"M24308_{slash}-{dash}{part_configuration['finish']}"
 
 
 def variant_from_configuration(part_configuration):
@@ -1222,34 +1237,38 @@ def connector_depth_mm(variant):
 
 def dsub_connector_svg(part_number, variant):
     """
-    Side silhouette along the mating axis (origin at the mating face, +X
-    toward the cable), using midpoints of D, E, F / MAX_total_depth.
+    Top/edge silhouette: origin at the mating face, +X toward the cable.
+
+    Vertical is A (overall length along the pin row, including mounting
+    ears). The body step is B (same axis, ears excluded). Depth is F /
+    MAX_total_depth. D/E (short-axis face height) is into the page and
+    is not drawn.
     """
-    d = _mid(variant.dims["D"])
-    e = _mid(variant.dims["E"])
+    a = _mid(variant.dims["A"])
+    b = _mid(variant.dims["B"])
     depth = connector_depth_mm(variant)
 
     depth_px = _px_mm(depth)
-    half_e = _px_mm(e) / 2.0
-    half_d = _px_mm(d) / 2.0
+    half_a = _px_mm(a) / 2.0
+    half_b = _px_mm(b) / 2.0
     flange_px = min(_px_mm(FLANGE_THICKNESS_MM), depth_px * 0.2)
 
     outline = [
-        (0.0, -half_e),
-        (flange_px, -half_e),
-        (flange_px, -half_d),
-        (depth_px, -half_d),
-        (depth_px, half_d),
-        (flange_px, half_d),
-        (flange_px, half_e),
-        (0.0, half_e),
+        (0.0, -half_a),
+        (flange_px, -half_a),
+        (flange_px, -half_b),
+        (depth_px, -half_b),
+        (depth_px, half_b),
+        (flange_px, half_b),
+        (flange_px, half_a),
+        (0.0, half_a),
     ]
 
     insulator_x = flange_px
     insulator_w = max(depth_px - flange_px, 0.0)
     insulator = (
-        f'<rect x="{insulator_x:.2f}" y="{-half_d:.2f}" '
-        f'width="{insulator_w:.2f}" height="{2 * half_d:.2f}" '
+        f'<rect x="{insulator_x:.2f}" y="{-half_b:.2f}" '
+        f'width="{insulator_w:.2f}" height="{2 * half_b:.2f}" '
         f'fill="#2C2C2C" stroke="black" stroke-width="1"/>'
     )
 
@@ -1280,10 +1299,14 @@ def compile_part_attributes(part_configuration):
     else:
         tools = ["Soldering iron"]
 
+    finish = part_configuration["finish"]
+    finish_name = FINISHES[finish]
+    official_pin = f"M24308/{slash}-{dash_number(variant.density, variant.shell_no)}{finish}"
+
     attributes = {
         "tools": tools,
         "build_notes": [
-            f"MIL-DTL-24308/{slash} Class G, no float mount",
+            f"{official_pin} Class G, no float mount, {finish_name} finish",
         ],
         "csys_children": STANDARD_CSYS_CHILDREN,
         "contacts": contacts,
@@ -1292,6 +1315,7 @@ def compile_part_attributes(part_configuration):
         "density": variant.density,
         "gender": variant.gender,
         "connector_type": variant.connector_type,
+        "finish": finish,
     }
     return attributes
 

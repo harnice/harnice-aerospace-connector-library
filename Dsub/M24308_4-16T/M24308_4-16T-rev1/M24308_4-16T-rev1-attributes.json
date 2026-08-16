@@ -1,0 +1,565 @@
+{
+  "tools": [
+    "M22520/2-01 crimp tool",
+    "M81969/39-01 extraction tool"
+  ],
+  "build_notes": [
+    "M24308/4-16T Class G, no float mount, nickel fluorocarbon polymer finish"
+  ],
+  "csys_children": {
+    "flagnote-1": {
+      "angle": 0,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-1-leader_dest": {
+      "angle": 0,
+      "distance": 1,
+      "rotation": 0
+    },
+    "flagnote-2": {
+      "angle": 15,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-2-leader_dest": {
+      "angle": 15,
+      "distance": 1.03,
+      "rotation": 0
+    },
+    "flagnote-3": {
+      "angle": -15,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-3-leader_dest": {
+      "angle": -15,
+      "distance": 1.03,
+      "rotation": 0
+    },
+    "flagnote-4": {
+      "angle": 30,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-4-leader_dest": {
+      "angle": 30,
+      "distance": 1,
+      "rotation": 0
+    },
+    "flagnote-5": {
+      "angle": -30,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-5-leader_dest": {
+      "angle": -30,
+      "distance": 1,
+      "rotation": 0
+    },
+    "flagnote-6": {
+      "angle": 45,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-6-leader_dest": {
+      "angle": 45,
+      "distance": 0.72,
+      "rotation": 0
+    },
+    "flagnote-7": {
+      "angle": -45,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-7-leader_dest": {
+      "angle": -45,
+      "distance": 0.72,
+      "rotation": 0
+    },
+    "flagnote-8": {
+      "angle": 60,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-8-leader_dest": {
+      "angle": 60,
+      "distance": 0.58,
+      "rotation": 0
+    },
+    "flagnote-9": {
+      "angle": -60,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-9-leader_dest": {
+      "angle": -60,
+      "distance": 0.58,
+      "rotation": 0
+    },
+    "flagnote-10": {
+      "angle": -75,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-10-leader_dest": {
+      "angle": -75,
+      "distance": 0.52,
+      "rotation": 0
+    },
+    "flagnote-11": {
+      "angle": 75,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-11-leader_dest": {
+      "angle": 75,
+      "distance": 0.52,
+      "rotation": 0
+    },
+    "flagnote-12": {
+      "angle": -90,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-12-leader_dest": {
+      "angle": -90,
+      "distance": 0.52,
+      "rotation": 0
+    },
+    "flagnote-13": {
+      "angle": 90,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-13-leader_dest": {
+      "angle": 90,
+      "distance": 0.5,
+      "rotation": 0
+    }
+  },
+  "contacts": [
+    {
+      "name": "1",
+      "size": "22"
+    },
+    {
+      "name": "2",
+      "size": "22"
+    },
+    {
+      "name": "3",
+      "size": "22"
+    },
+    {
+      "name": "4",
+      "size": "22"
+    },
+    {
+      "name": "5",
+      "size": "22"
+    },
+    {
+      "name": "6",
+      "size": "22"
+    },
+    {
+      "name": "7",
+      "size": "22"
+    },
+    {
+      "name": "8",
+      "size": "22"
+    },
+    {
+      "name": "9",
+      "size": "22"
+    },
+    {
+      "name": "10",
+      "size": "22"
+    },
+    {
+      "name": "11",
+      "size": "22"
+    },
+    {
+      "name": "12",
+      "size": "22"
+    },
+    {
+      "name": "13",
+      "size": "22"
+    },
+    {
+      "name": "14",
+      "size": "22"
+    },
+    {
+      "name": "15",
+      "size": "22"
+    },
+    {
+      "name": "16",
+      "size": "22"
+    },
+    {
+      "name": "17",
+      "size": "22"
+    },
+    {
+      "name": "18",
+      "size": "22"
+    },
+    {
+      "name": "19",
+      "size": "22"
+    },
+    {
+      "name": "20",
+      "size": "22"
+    },
+    {
+      "name": "21",
+      "size": "22"
+    },
+    {
+      "name": "22",
+      "size": "22"
+    },
+    {
+      "name": "23",
+      "size": "22"
+    },
+    {
+      "name": "24",
+      "size": "22"
+    },
+    {
+      "name": "25",
+      "size": "22"
+    },
+    {
+      "name": "26",
+      "size": "22"
+    },
+    {
+      "name": "27",
+      "size": "22"
+    },
+    {
+      "name": "28",
+      "size": "22"
+    },
+    {
+      "name": "29",
+      "size": "22"
+    },
+    {
+      "name": "30",
+      "size": "22"
+    },
+    {
+      "name": "31",
+      "size": "22"
+    },
+    {
+      "name": "32",
+      "size": "22"
+    },
+    {
+      "name": "33",
+      "size": "22"
+    },
+    {
+      "name": "34",
+      "size": "22"
+    },
+    {
+      "name": "35",
+      "size": "22"
+    },
+    {
+      "name": "36",
+      "size": "22"
+    },
+    {
+      "name": "37",
+      "size": "22"
+    },
+    {
+      "name": "38",
+      "size": "22"
+    },
+    {
+      "name": "39",
+      "size": "22"
+    },
+    {
+      "name": "40",
+      "size": "22"
+    },
+    {
+      "name": "41",
+      "size": "22"
+    },
+    {
+      "name": "42",
+      "size": "22"
+    },
+    {
+      "name": "43",
+      "size": "22"
+    },
+    {
+      "name": "44",
+      "size": "22"
+    },
+    {
+      "name": "45",
+      "size": "22"
+    },
+    {
+      "name": "46",
+      "size": "22"
+    },
+    {
+      "name": "47",
+      "size": "22"
+    },
+    {
+      "name": "48",
+      "size": "22"
+    },
+    {
+      "name": "49",
+      "size": "22"
+    },
+    {
+      "name": "50",
+      "size": "22"
+    },
+    {
+      "name": "51",
+      "size": "22"
+    },
+    {
+      "name": "52",
+      "size": "22"
+    },
+    {
+      "name": "53",
+      "size": "22"
+    },
+    {
+      "name": "54",
+      "size": "22"
+    },
+    {
+      "name": "55",
+      "size": "22"
+    },
+    {
+      "name": "56",
+      "size": "22"
+    },
+    {
+      "name": "57",
+      "size": "22"
+    },
+    {
+      "name": "58",
+      "size": "22"
+    },
+    {
+      "name": "59",
+      "size": "22"
+    },
+    {
+      "name": "60",
+      "size": "22"
+    },
+    {
+      "name": "61",
+      "size": "22"
+    },
+    {
+      "name": "62",
+      "size": "22"
+    },
+    {
+      "name": "63",
+      "size": "22"
+    },
+    {
+      "name": "64",
+      "size": "22"
+    },
+    {
+      "name": "65",
+      "size": "22"
+    },
+    {
+      "name": "66",
+      "size": "22"
+    },
+    {
+      "name": "67",
+      "size": "22"
+    },
+    {
+      "name": "68",
+      "size": "22"
+    },
+    {
+      "name": "69",
+      "size": "22"
+    },
+    {
+      "name": "70",
+      "size": "22"
+    },
+    {
+      "name": "71",
+      "size": "22"
+    },
+    {
+      "name": "72",
+      "size": "22"
+    },
+    {
+      "name": "73",
+      "size": "22"
+    },
+    {
+      "name": "74",
+      "size": "22"
+    },
+    {
+      "name": "75",
+      "size": "22"
+    },
+    {
+      "name": "76",
+      "size": "22"
+    },
+    {
+      "name": "77",
+      "size": "22"
+    },
+    {
+      "name": "78",
+      "size": "22"
+    },
+    {
+      "name": "79",
+      "size": "22"
+    },
+    {
+      "name": "80",
+      "size": "22"
+    },
+    {
+      "name": "81",
+      "size": "22"
+    },
+    {
+      "name": "82",
+      "size": "22"
+    },
+    {
+      "name": "83",
+      "size": "22"
+    },
+    {
+      "name": "84",
+      "size": "22"
+    },
+    {
+      "name": "85",
+      "size": "22"
+    },
+    {
+      "name": "86",
+      "size": "22"
+    },
+    {
+      "name": "87",
+      "size": "22"
+    },
+    {
+      "name": "88",
+      "size": "22"
+    },
+    {
+      "name": "89",
+      "size": "22"
+    },
+    {
+      "name": "90",
+      "size": "22"
+    },
+    {
+      "name": "91",
+      "size": "22"
+    },
+    {
+      "name": "92",
+      "size": "22"
+    },
+    {
+      "name": "93",
+      "size": "22"
+    },
+    {
+      "name": "94",
+      "size": "22"
+    },
+    {
+      "name": "95",
+      "size": "22"
+    },
+    {
+      "name": "96",
+      "size": "22"
+    },
+    {
+      "name": "97",
+      "size": "22"
+    },
+    {
+      "name": "98",
+      "size": "22"
+    },
+    {
+      "name": "99",
+      "size": "22"
+    },
+    {
+      "name": "100",
+      "size": "22"
+    },
+    {
+      "name": "101",
+      "size": "22"
+    },
+    {
+      "name": "102",
+      "size": "22"
+    },
+    {
+      "name": "103",
+      "size": "22"
+    },
+    {
+      "name": "104",
+      "size": "22"
+    }
+  ],
+  "shell_size": 6,
+  "pin_count": 104,
+  "density": "High",
+  "gender": "Plug",
+  "connector_type": "Crimp",
+  "finish": "T"
+}

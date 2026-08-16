@@ -1,0 +1,548 @@
+{
+  "tools": [],
+  "build_notes": [
+    "M83513/03-H11A metal shell, pure electrodeposited aluminum finish",
+    "Factory pigtail: M22759/33-26-X, 18 in, 10-color repeating",
+    "Mounting hardware ordered separately (MIL-DTL-83513/5)",
+    "B corrected from OCR '15.72mm' to 45.72mm (=1.800in x 25.4) -- an obvious dropped leading digit; 15.72mm would make the largest shell's width smaller than every other shell size's, which isn't physically plausible."
+  ],
+  "csys_children": {
+    "flagnote-1": {
+      "angle": 0,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-1-leader_dest": {
+      "angle": 0,
+      "distance": 1,
+      "rotation": 0
+    },
+    "flagnote-2": {
+      "angle": 15,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-2-leader_dest": {
+      "angle": 15,
+      "distance": 1.03,
+      "rotation": 0
+    },
+    "flagnote-3": {
+      "angle": -15,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-3-leader_dest": {
+      "angle": -15,
+      "distance": 1.03,
+      "rotation": 0
+    },
+    "flagnote-4": {
+      "angle": 30,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-4-leader_dest": {
+      "angle": 30,
+      "distance": 1,
+      "rotation": 0
+    },
+    "flagnote-5": {
+      "angle": -30,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-5-leader_dest": {
+      "angle": -30,
+      "distance": 1,
+      "rotation": 0
+    },
+    "flagnote-6": {
+      "angle": 45,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-6-leader_dest": {
+      "angle": 45,
+      "distance": 0.72,
+      "rotation": 0
+    },
+    "flagnote-7": {
+      "angle": -45,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-7-leader_dest": {
+      "angle": -45,
+      "distance": 0.72,
+      "rotation": 0
+    },
+    "flagnote-8": {
+      "angle": 60,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-8-leader_dest": {
+      "angle": 60,
+      "distance": 0.58,
+      "rotation": 0
+    },
+    "flagnote-9": {
+      "angle": -60,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-9-leader_dest": {
+      "angle": -60,
+      "distance": 0.58,
+      "rotation": 0
+    },
+    "flagnote-10": {
+      "angle": -75,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-10-leader_dest": {
+      "angle": -75,
+      "distance": 0.52,
+      "rotation": 0
+    },
+    "flagnote-11": {
+      "angle": 75,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-11-leader_dest": {
+      "angle": 75,
+      "distance": 0.52,
+      "rotation": 0
+    },
+    "flagnote-12": {
+      "angle": -90,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-12-leader_dest": {
+      "angle": -90,
+      "distance": 0.52,
+      "rotation": 0
+    },
+    "flagnote-13": {
+      "angle": 90,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-13-leader_dest": {
+      "angle": 90,
+      "distance": 0.5,
+      "rotation": 0
+    }
+  },
+  "contacts": [
+    {
+      "name": "1",
+      "size": "24"
+    },
+    {
+      "name": "2",
+      "size": "24"
+    },
+    {
+      "name": "3",
+      "size": "24"
+    },
+    {
+      "name": "4",
+      "size": "24"
+    },
+    {
+      "name": "5",
+      "size": "24"
+    },
+    {
+      "name": "6",
+      "size": "24"
+    },
+    {
+      "name": "7",
+      "size": "24"
+    },
+    {
+      "name": "8",
+      "size": "24"
+    },
+    {
+      "name": "9",
+      "size": "24"
+    },
+    {
+      "name": "10",
+      "size": "24"
+    },
+    {
+      "name": "11",
+      "size": "24"
+    },
+    {
+      "name": "12",
+      "size": "24"
+    },
+    {
+      "name": "13",
+      "size": "24"
+    },
+    {
+      "name": "14",
+      "size": "24"
+    },
+    {
+      "name": "15",
+      "size": "24"
+    },
+    {
+      "name": "16",
+      "size": "24"
+    },
+    {
+      "name": "17",
+      "size": "24"
+    },
+    {
+      "name": "18",
+      "size": "24"
+    },
+    {
+      "name": "19",
+      "size": "24"
+    },
+    {
+      "name": "20",
+      "size": "24"
+    },
+    {
+      "name": "21",
+      "size": "24"
+    },
+    {
+      "name": "22",
+      "size": "24"
+    },
+    {
+      "name": "23",
+      "size": "24"
+    },
+    {
+      "name": "24",
+      "size": "24"
+    },
+    {
+      "name": "25",
+      "size": "24"
+    },
+    {
+      "name": "26",
+      "size": "24"
+    },
+    {
+      "name": "27",
+      "size": "24"
+    },
+    {
+      "name": "28",
+      "size": "24"
+    },
+    {
+      "name": "29",
+      "size": "24"
+    },
+    {
+      "name": "30",
+      "size": "24"
+    },
+    {
+      "name": "31",
+      "size": "24"
+    },
+    {
+      "name": "32",
+      "size": "24"
+    },
+    {
+      "name": "33",
+      "size": "24"
+    },
+    {
+      "name": "34",
+      "size": "24"
+    },
+    {
+      "name": "35",
+      "size": "24"
+    },
+    {
+      "name": "36",
+      "size": "24"
+    },
+    {
+      "name": "37",
+      "size": "24"
+    },
+    {
+      "name": "38",
+      "size": "24"
+    },
+    {
+      "name": "39",
+      "size": "24"
+    },
+    {
+      "name": "40",
+      "size": "24"
+    },
+    {
+      "name": "41",
+      "size": "24"
+    },
+    {
+      "name": "42",
+      "size": "24"
+    },
+    {
+      "name": "43",
+      "size": "24"
+    },
+    {
+      "name": "44",
+      "size": "24"
+    },
+    {
+      "name": "45",
+      "size": "24"
+    },
+    {
+      "name": "46",
+      "size": "24"
+    },
+    {
+      "name": "47",
+      "size": "24"
+    },
+    {
+      "name": "48",
+      "size": "24"
+    },
+    {
+      "name": "49",
+      "size": "24"
+    },
+    {
+      "name": "50",
+      "size": "24"
+    },
+    {
+      "name": "51",
+      "size": "24"
+    },
+    {
+      "name": "52",
+      "size": "24"
+    },
+    {
+      "name": "53",
+      "size": "24"
+    },
+    {
+      "name": "54",
+      "size": "24"
+    },
+    {
+      "name": "55",
+      "size": "24"
+    },
+    {
+      "name": "56",
+      "size": "24"
+    },
+    {
+      "name": "57",
+      "size": "24"
+    },
+    {
+      "name": "58",
+      "size": "24"
+    },
+    {
+      "name": "59",
+      "size": "24"
+    },
+    {
+      "name": "60",
+      "size": "24"
+    },
+    {
+      "name": "61",
+      "size": "24"
+    },
+    {
+      "name": "62",
+      "size": "24"
+    },
+    {
+      "name": "63",
+      "size": "24"
+    },
+    {
+      "name": "64",
+      "size": "24"
+    },
+    {
+      "name": "65",
+      "size": "24"
+    },
+    {
+      "name": "66",
+      "size": "24"
+    },
+    {
+      "name": "67",
+      "size": "24"
+    },
+    {
+      "name": "68",
+      "size": "24"
+    },
+    {
+      "name": "69",
+      "size": "24"
+    },
+    {
+      "name": "70",
+      "size": "24"
+    },
+    {
+      "name": "71",
+      "size": "24"
+    },
+    {
+      "name": "72",
+      "size": "24"
+    },
+    {
+      "name": "73",
+      "size": "24"
+    },
+    {
+      "name": "74",
+      "size": "24"
+    },
+    {
+      "name": "75",
+      "size": "24"
+    },
+    {
+      "name": "76",
+      "size": "24"
+    },
+    {
+      "name": "77",
+      "size": "24"
+    },
+    {
+      "name": "78",
+      "size": "24"
+    },
+    {
+      "name": "79",
+      "size": "24"
+    },
+    {
+      "name": "80",
+      "size": "24"
+    },
+    {
+      "name": "81",
+      "size": "24"
+    },
+    {
+      "name": "82",
+      "size": "24"
+    },
+    {
+      "name": "83",
+      "size": "24"
+    },
+    {
+      "name": "84",
+      "size": "24"
+    },
+    {
+      "name": "85",
+      "size": "24"
+    },
+    {
+      "name": "86",
+      "size": "24"
+    },
+    {
+      "name": "87",
+      "size": "24"
+    },
+    {
+      "name": "88",
+      "size": "24"
+    },
+    {
+      "name": "89",
+      "size": "24"
+    },
+    {
+      "name": "90",
+      "size": "24"
+    },
+    {
+      "name": "91",
+      "size": "24"
+    },
+    {
+      "name": "92",
+      "size": "24"
+    },
+    {
+      "name": "93",
+      "size": "24"
+    },
+    {
+      "name": "94",
+      "size": "24"
+    },
+    {
+      "name": "95",
+      "size": "24"
+    },
+    {
+      "name": "96",
+      "size": "24"
+    },
+    {
+      "name": "97",
+      "size": "24"
+    },
+    {
+      "name": "98",
+      "size": "24"
+    },
+    {
+      "name": "99",
+      "size": "24"
+    },
+    {
+      "name": "100",
+      "size": "24"
+    }
+  ],
+  "shell_size": "H",
+  "pin_count": 100,
+  "gender": "Plug",
+  "connector_type": "Pigtail",
+  "finish": "A"
+}
