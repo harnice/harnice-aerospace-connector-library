@@ -34,9 +34,11 @@ delete_pngs = True
 # SVG px per inch — must match harnice part.py csys rendering (96 px/in)
 PX_PER_IN = 96.0
 
-# Straight (/88) body length to start of banding platform: Glenair drawing /
-# Milnec L Max = 1.35 (34.3). Banding platform length is not tabulated on the
-# Glenair /88–90 sheet; 0.35 in is an estimate for drawing/csys silhouette only.
+# Origin is the right end of the banding knurl. The knurl itself extends −X
+# so a terminated cable segment overlaps it. Straight (/88) body length from
+# that origin to the connector face: Glenair drawing / Milnec L Max = 1.35
+# (34.3 mm). Banding platform length is not tabulated on the Glenair /88–90
+# sheet; 0.35 in is an estimate for drawing/csys silhouette only.
 STRAIGHT_BODY_IN = 1.35
 BAND_PLATFORM_IN = 0.35
 
@@ -215,6 +217,109 @@ FINISHES = {
     "ZP": "Zinc Nickel, Selective Plating",
 }
 
+# Approximate drawing colors. Visual appearance of shared D38999 / M85049
+# finishes (electroless nickel, space-grade nickel, olive drab cadmium,
+# stainless, black zinc nickel) is taken from:
+# https://d38999.federalconnectors.com/
+# M85049-only codes (N, P, X, YP, ZP) use the closest matching finish photo.
+FINISH_DRAWING_COLORS = {
+    "F": {  # Stainless steel — match D38999 class K
+        "body": "#A3A4A0",
+        "light": "#C8C9C5",
+        "dark": "#6E6F6C",
+        "specular": "#E8E9E6",
+        "rim": "#4A4B48",
+        "knurl": "#5C5D5A",
+        "metallic": True,
+    },
+    "G": {  # Space-grade electroless nickel — satin silver
+        "body": "#B4B9BE",
+        "light": "#D8DCE0",
+        "dark": "#7A8086",
+        "specular": "#F2F4F6",
+        "rim": "#555B61",
+        "knurl": "#5E646A",
+        "metallic": True,
+    },
+    "N": {  # Electroless nickel — bright chrome-like silver (D38999 F)
+        "body": "#C5CAD0",
+        "light": "#E8ECF0",
+        "dark": "#6E757C",
+        "specular": "#FBFCFF",
+        "rim": "#4A5056",
+        "knurl": "#5A6168",
+        "metallic": True,
+    },
+    "P": {  # Cadmium olive drab, selective — khaki / greenish-bronze
+        "body": "#6B6C38",
+        "light": "#8E8F52",
+        "dark": "#3E3F22",
+        "specular": "#B8B86A",
+        "rim": "#2C2D18",
+        "knurl": "#2E2F16",
+        "metallic": False,
+    },
+    "W": {  # Cadmium olive drab
+        "body": "#6B6C38",
+        "light": "#8E8F52",
+        "dark": "#3E3F22",
+        "specular": "#B8B86A",
+        "rim": "#2C2D18",
+        "knurl": "#2E2F16",
+        "metallic": False,
+    },
+    "X": {  # Nickel fluorocarbon polymer — duller grey (D38999 T)
+        "body": "#9B9E9A",
+        "light": "#B8BBB7",
+        "dark": "#5E615D",
+        "specular": "#D0D3CF",
+        "rim": "#454844",
+        "knurl": "#4E514D",
+        "metallic": False,
+    },
+    "YP": {  # Pure dense electrodeposited aluminum
+        "body": "#C0C4C8",
+        "light": "#E0E4E8",
+        "dark": "#7A7F83",
+        "specular": "#F5F7F9",
+        "rim": "#555A5E",
+        "knurl": "#5E6367",
+        "metallic": True,
+    },
+    "Z": {  # Zinc nickel — deep charcoal (D38999 Z)
+        "body": "#3D3E40",
+        "light": "#5A5B5D",
+        "dark": "#1E1F21",
+        "specular": "#7A7B7D",
+        "rim": "#141516",
+        "knurl": "#6A6B6D",
+        "metallic": False,
+    },
+    "ZP": {  # Zinc nickel, selective
+        "body": "#3D3E40",
+        "light": "#5A5B5D",
+        "dark": "#1E1F21",
+        "specular": "#7A7B7D",
+        "rim": "#141516",
+        "knurl": "#6A6B6D",
+        "metallic": False,
+    },
+}
+_DEFAULT_FINISH_COLORS = {
+    "body": "#C0C0C0",
+    "light": "#D8D8D8",
+    "dark": "#A8A8A8",
+    "specular": "#F0F0F0",
+    "rim": "#444444",
+    "knurl": "#555555",
+    "metallic": True,
+}
+# P / YP / ZP leave the banding platform electroless nickel (selective plating),
+# as on typical /88–/90 hardware photos.
+SELECTIVE_FINISHES = {"P", "YP", "ZP"}
+STROKE_COLOR = "#222222"
+STROKE_WIDTH = 1.5
+
 # Basic part number → geometry. Glenair how-to-order: /88 straight, /89 45°, /90 90°.
 ORIENTATIONS = {
     "88": "straight",
@@ -297,31 +402,89 @@ def px_in(inches):
     return inches * PX_PER_IN
 
 
-def _rect(x, y, w, h, fill="#C0C0C0"):
+def finish_palette(finish):
+    p = FINISH_DRAWING_COLORS.get((finish or "").upper(), _DEFAULT_FINISH_COLORS)
+    return {**_DEFAULT_FINISH_COLORS, **p}
+
+
+def _diamond_pattern(pid, color):
     return (
-        f'<rect x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h:.2f}" '
-        f'fill="{fill}" stroke="black" stroke-width="2"/>'
+        f'<pattern id="{pid}" width="8" height="8" patternUnits="userSpaceOnUse">\n'
+        f'  <path d="M0,8 L8,0 M-2,2 L2,-2 M6,10 L10,6" '
+        f'stroke="{color}" stroke-width="0.85" fill="none"/>\n'
+        f'  <path d="M0,0 L8,8 M-2,6 L2,10 M6,-2 L10,2" '
+        f'stroke="{color}" stroke-width="0.85" fill="none"/>\n'
+        f"</pattern>"
     )
 
 
-def _poly(points, fill="#C0C0C0"):
+def finish_svg_defs(part_number, finish):
+    """Knurl patterns only. Finish hues from federalconnectors.com;
+    knurl / nut / band layout from typical M85049/88 /89 /90 hardware photos.
+    """
+    body = finish_palette(finish)
+    selective = (finish or "").upper() in SELECTIVE_FINISHES
+    band = finish_palette("N") if selective else body
+    return "\n".join(
+        [
+            "<!-- Finish colors approximated from https://d38999.federalconnectors.com/ -->",
+            "<!-- Knurl and section details from typical M85049/88 /89 /90 hardware -->",
+            "<defs>",
+            _diamond_pattern(f"{part_number}-knurl-diamond", band["knurl"]),
+            _diamond_pattern(f"{part_number}-knurl-diamond-nut", body["knurl"]),
+            "</defs>",
+        ]
+    )
+
+
+def finish_fills(part_number, finish):
+    body = finish_palette(finish)
+    band = finish_palette("N") if (finish or "").upper() in SELECTIVE_FINISHES else body
+    return {
+        "body": body["body"],
+        "nut": body["dark"],
+        "band": band["body"],
+        "diamond": f"url(#{part_number}-knurl-diamond)",
+        "diamond_nut": f"url(#{part_number}-knurl-diamond-nut)",
+        "rim": body["rim"],
+        "selective": (finish or "").upper() in SELECTIVE_FINISHES,
+    }
+
+
+def _stroke_attr(stroke, stroke_width):
+    if stroke is None:
+        return ' stroke="none"'
+    return f' stroke="{stroke}" stroke-width="{stroke_width}"'
+
+
+def _rect(x, y, w, h, fill="#C0C0C0", stroke=STROKE_COLOR, stroke_width=STROKE_WIDTH, extra=""):
+    extra_attr = f" {extra}" if extra else ""
+    return (
+        f'<rect x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h:.2f}" '
+        f'fill="{fill}"{_stroke_attr(stroke, stroke_width)}{extra_attr}/>'
+    )
+
+
+def _poly(points, fill="#C0C0C0", stroke=STROKE_COLOR, stroke_width=STROKE_WIDTH, extra=""):
     pts = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
-    return f'<polygon points="{pts}" fill="{fill}" stroke="black" stroke-width="2"/>'
+    extra_attr = f" {extra}" if extra else ""
+    return (
+        f'<polygon points="{pts}" fill="{fill}"'
+        f'{_stroke_attr(stroke, stroke_width)}{extra_attr}/>'
+    )
+
+
+def _weld_line(x1, y1, x2, y2):
+    """Faint miter/weld across a 45° or 90° elbow."""
+    return (
+        f'<line x1="{x1:.2f}" y1="{y1:.2f}" x2="{x2:.2f}" y2="{y2:.2f}" '
+        f'stroke="#000000" stroke-width="1" opacity="0.05"/>'
+    )
 
 
 def banding_ribs(x0, y_top, y_bot, length, count=5):
-    """Short vertical rib marks on the banding platform."""
-    if length <= 0 or count < 1:
-        return ""
-    step = length / (count + 1)
-    lines = []
-    for i in range(1, count + 1):
-        x = x0 + i * step
-        lines.append(
-            f'<line x1="{x:.2f}" y1="{y_top:.2f}" x2="{x:.2f}" y2="{y_bot:.2f}" '
-            f'stroke="black" stroke-width="1"/>'
-        )
-    return "\n".join(lines)
+    """Kept for call-site compatibility; knurl patterns replace these marks."""
+    return ""
 
 
 def platform_od_in(shell_size, entry_size):
@@ -331,9 +494,10 @@ def platform_od_in(shell_size, entry_size):
     return max(e_in + 0.16, c_in * 0.45)
 
 
-def straight_backshell_svg(part_number, shell_size, entry_size):
-    """Cable −X from origin; body inline with cable extends +X to connector."""
+def straight_backshell_svg(part_number, shell_size, entry_size, finish=None):
+    """Knurl in −X under the cable; origin at right end of knurl; body +X to connector."""
     data = SHELL_DATA[shell_size]
+    fills = finish_fills(part_number, finish)
 
     c = px_in(data["c_in"])
     e_od = px_in(platform_od_in(shell_size, entry_size))
@@ -347,12 +511,12 @@ def straight_backshell_svg(part_number, shell_size, entry_size):
     half_e = e_od / 2
     half_mid = (half_c + half_e) / 2
 
-    # x=0 at cable entry face; body +X; cable extends −X
-    x0 = 0.0
-    x1 = band_len
-    x2 = band_len + taper_len
-    x3 = band_len + taper_len + mid_len
-    x4 = band_len + body_len
+    # Origin at right end of knurl; cable-side platform extends −X
+    x0 = -band_len
+    x1 = 0.0
+    x2 = taper_len
+    x3 = taper_len + mid_len
+    x4 = body_len
 
     outline = [
         (x0, -half_e),
@@ -369,28 +533,40 @@ def straight_backshell_svg(part_number, shell_size, entry_size):
         (x0, half_e),
     ]
 
-    ribs = banding_ribs(x0, -half_e, half_e, band_len)
+    lip = max(3.0, band_len * 0.12)
+    knurl_w = band_len - lip
+    nut_knurl_w = nut_len * 0.70
+
+    parts = [
+        finish_svg_defs(part_number, finish),
+        _poly(outline, fill=fills["body"]),
+        _rect(x3, -half_c, nut_len, c, fill=fills["nut"], stroke=None),
+        _rect(x3, -half_c, nut_knurl_w, c, fill=fills["diamond_nut"], stroke=None, extra='opacity="0.55"'),
+        _rect(x0, -half_e, band_len, e_od, fill=fills["band"], stroke=None) if fills["selective"] else "",
+        _rect(x0 + lip, -half_e, knurl_w, e_od, fill=fills["diamond"], stroke=None, extra='opacity="0.55"'),
+        _poly(outline, fill="none"),
+    ]
 
     return f'''<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="400">
 <g id="{part_number}-drawing-contents-start">
-{_poly(outline)}
-{_rect(x3, -half_c, nut_len, c, fill="#A8A8A8")}
-{ribs}
+{chr(10).join(p for p in parts if p)}
 </g>
 <g id="{part_number}-drawing-contents-end">
 </g>
 </svg>'''
 
 
-def fortyfive_backshell_svg(part_number, shell_size, entry_size):
-    """Cable −X from origin; body +X along G, then 45° up along F to connector."""
+def fortyfive_backshell_svg(part_number, shell_size, entry_size, finish=None):
+    """Knurl in −X under the cable; origin at right end of knurl; body +X then 45° to connector."""
     data = SHELL_DATA[shell_size]
+    fills = finish_fills(part_number, finish)
 
     c = px_in(data["c_in"])
     e_od = px_in(platform_od_in(shell_size, entry_size))
     f = px_in(data["f_in"])
     g = px_in(data["g_in"])
+    band_len = px_in(BAND_PLATFORM_IN)
     nut_len = f * 0.35
 
     half_c = c / 2
@@ -403,10 +579,10 @@ def fortyfive_backshell_svg(part_number, shell_size, entry_size):
         nx, ny = -ty, tx
         return cx + nx * dist, cy + ny * dist
 
-    # Centerline: cable (0,0) → +X by G → 45° up-right by F to connector
-    c0 = (0.0, 0.0)
-    c1 = (g, 0.0)
-    c2 = (g + f * cos_a, -f * sin_a)
+    # Centerline: cable entry (−band, 0) → origin (0,0) → +X by G−band → 45° to connector
+    c0 = (-band_len, 0.0)
+    c1 = (g - band_len, 0.0)
+    c2 = (g - band_len + f * cos_a, -f * sin_a)
 
     w0, w1, w2 = half_e, (half_c + half_e) / 2, half_c
 
@@ -428,128 +604,160 @@ def fortyfive_backshell_svg(part_number, shell_size, entry_size):
     ]
     outline = top + bot
 
-    rib_lines = []
-    for i in range(1, 5):
-        t = i * 0.04
-        cx = g * t
-        p1 = offset_point(cx, 0.0, 1, 0, w0)
-        p2 = offset_point(cx, 0.0, 1, 0, -w0)
-        rib_lines.append(
-            f'<line x1="{p1[0]:.2f}" y1="{p1[1]:.2f}" x2="{p2[0]:.2f}" y2="{p2[1]:.2f}" '
-            f'stroke="black" stroke-width="1"/>'
-        )
-
     nut_x = c2[0] - nut_len * cos_a
     nut_y = c2[1] + nut_len * sin_a
-    # Approximate nut as a rect aligned to the 45° exit (axis-aligned bbox of nut segment)
     nut_pts = [
         offset_point(nut_x, nut_y, cos_a, -sin_a, half_c),
         offset_point(*c2, cos_a, -sin_a, half_c),
         offset_point(*c2, cos_a, -sin_a, -half_c),
         offset_point(nut_x, nut_y, cos_a, -sin_a, -half_c),
     ]
+    knurl_frac = 0.72
+    nut_knurl_pts = [
+        offset_point(nut_x, nut_y, cos_a, -sin_a, half_c),
+        offset_point(
+            nut_x + nut_len * knurl_frac * cos_a,
+            nut_y - nut_len * knurl_frac * sin_a,
+            cos_a,
+            -sin_a,
+            half_c,
+        ),
+        offset_point(
+            nut_x + nut_len * knurl_frac * cos_a,
+            nut_y - nut_len * knurl_frac * sin_a,
+            cos_a,
+            -sin_a,
+            -half_c,
+        ),
+        offset_point(nut_x, nut_y, cos_a, -sin_a, -half_c),
+    ]
+
+    lip = max(3.0, band_len * 0.12)
+
+    parts = [
+        finish_svg_defs(part_number, finish),
+        _poly(outline, fill=fills["body"]),
+        _poly(nut_pts, fill=fills["nut"], stroke=None),
+        _poly(nut_knurl_pts, fill=fills["diamond_nut"], stroke=None, extra='opacity="0.55"'),
+        _rect(-band_len, -half_e, band_len, e_od, fill=fills["band"], stroke=None) if fills["selective"] else "",
+        _rect(-band_len + lip, -half_e, band_len - lip, e_od, fill=fills["diamond"], stroke=None, extra='opacity="0.55"'),
+        _weld_line(*offset_point(*c1, 1, 0, w1), *offset_point(*c1, 1, 0, -w1)),
+        _poly(outline, fill="none"),
+    ]
 
     return f'''<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="400">
 <g id="{part_number}-drawing-contents-start">
-{_poly(outline)}
-{_poly(nut_pts, fill="#A8A8A8")}
-{chr(10).join(rib_lines)}
+{chr(10).join(p for p in parts if p)}
 </g>
 <g id="{part_number}-drawing-contents-end">
 </g>
 </svg>'''
 
 
-def ninety_backshell_svg(part_number, shell_size, entry_size):
-    """Cable −X from origin; body +X along J, then +Y along H to connector."""
+def ninety_backshell_svg(part_number, shell_size, entry_size, finish=None):
+    """Knurl in −X under the cable; origin at right end of knurl; body +X then +Y to connector."""
     data = SHELL_DATA[shell_size]
+    fills = finish_fills(part_number, finish)
 
     c = px_in(data["c_in"])
     e_od = px_in(platform_od_in(shell_size, entry_size))
     h = px_in(data["h_in"])
     j = px_in(data["j_in"])
+    band_len = px_in(BAND_PLATFORM_IN)
     nut_len = h * 0.30
 
     half_c = c / 2
     half_e = e_od / 2
 
-    # Cable at (0,0); bend at (J, 0); connector face at (J, H) facing +Y
-    x_bend = j
+    # Origin at right of knurl; bend at (J − band, 0); connector face at that x, −H
+    x_bend = j - band_len
     y_conn = -h  # SVG: negative Y is up
 
     outline = [
-        (0.0, -half_e),
+        (-band_len, -half_e),
         (x_bend - half_c, -half_e),
         (x_bend - half_c, y_conn),
         (x_bend + half_c, y_conn),
         (x_bend + half_c, half_e),
-        (0.0, half_e),
+        (-band_len, half_e),
     ]
 
-    inset = min(half_e, half_c) * 0.45
-    inner = [
-        (inset, -half_e + inset),
-        (x_bend - half_c + inset, -half_e + inset),
-        (x_bend - half_c + inset, y_conn + inset),
-        (x_bend + half_c - inset, y_conn + inset),
-        (x_bend + half_c - inset, half_e - inset),
-        (inset, half_e - inset),
-    ]
+    lip = max(3.0, band_len * 0.12)
+    nut_knurl_h = nut_len * 0.70
 
-    rib_lines = []
-    band = px_in(BAND_PLATFORM_IN)
-    for i in range(1, 5):
-        x = i * (band / 5)
-        rib_lines.append(
-            f'<line x1="{x:.2f}" y1="{-half_e:.2f}" '
-            f'x2="{x:.2f}" y2="{half_e:.2f}" stroke="black" stroke-width="1"/>'
-        )
+    horiz = _rect(
+        -band_len, -half_e, x_bend + half_c + band_len, e_od, fill=fills["body"], stroke=None
+    )
+    vert = _rect(
+        x_bend - half_c,
+        y_conn,
+        c,
+        h + half_e,
+        fill=fills["body"],
+        stroke=None,
+    )
+
+    parts = [
+        finish_svg_defs(part_number, finish),
+        horiz,
+        vert,
+        _rect(x_bend - half_c, y_conn, c, nut_len, fill=fills["nut"], stroke=None),
+        _rect(
+            x_bend - half_c,
+            y_conn + nut_len - nut_knurl_h,
+            c,
+            nut_knurl_h,
+            fill=fills["diamond_nut"],
+            stroke=None,
+            extra='opacity="0.55"',
+        ),
+        _rect(-band_len, -half_e, band_len, e_od, fill=fills["band"], stroke=None) if fills["selective"] else "",
+        _rect(-band_len + lip, -half_e, band_len - lip, e_od, fill=fills["diamond"], stroke=None, extra='opacity="0.55"'),
+        _weld_line(x_bend - half_c, -half_e, x_bend + half_c, half_e),
+        _poly(outline, fill="none"),
+    ]
 
     return f'''<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="400">
 <g id="{part_number}-drawing-contents-start">
-{_poly(outline)}
-{_poly(inner, fill="#D8D8D8")}
-{_rect(x_bend - half_c, y_conn, c, nut_len, fill="#A8A8A8")}
-{chr(10).join(rib_lines)}
+{chr(10).join(p for p in parts if p)}
 </g>
 <g id="{part_number}-drawing-contents-end">
 </g>
 </svg>'''
 
 
-def backshell_svg(part_number, orientation, shell_size, entry_size):
+def backshell_svg(part_number, orientation, shell_size, entry_size, finish=None):
     if orientation == "straight":
-        return straight_backshell_svg(part_number, shell_size, entry_size)
+        return straight_backshell_svg(part_number, shell_size, entry_size, finish)
     if orientation == "45":
-        return fortyfive_backshell_svg(part_number, shell_size, entry_size)
+        return fortyfive_backshell_svg(part_number, shell_size, entry_size, finish)
     if orientation == "90":
-        return ninety_backshell_svg(part_number, shell_size, entry_size)
+        return ninety_backshell_svg(part_number, shell_size, entry_size, finish)
     raise ValueError(f"Unknown orientation '{orientation}'")
 
 
 def connector_csys(orientation, shell_size):
-    """Connector mating face csys in inches; origin is cable entry.
+    """Connector mating face csys in inches.
 
-    Cable extends −X from origin; body inline with cable extends +X.
+    Origin is the right end of the cable-side knurl. Knurl/cable extend −X;
+    body inline with the cable extends +X (then up for angled parts).
     """
     data = SHELL_DATA[shell_size]
     if orientation == "straight":
-        length_in = STRAIGHT_BODY_IN + BAND_PLATFORM_IN
-        return {"x": length_in, "y": 0, "angle": 0, "rotation": 0}
+        return {"x": STRAIGHT_BODY_IN, "y": 0, "angle": 0, "rotation": 0}
     if orientation == "45":
         f, g = data["f_in"], data["g_in"]
         return {
-            "x": g + f * math.cos(math.radians(45)),
+            "x": (g - BAND_PLATFORM_IN) + f * math.cos(math.radians(45)),
             "y": f * math.sin(math.radians(45)),
             "angle": 0,
             "rotation": 45,
         }
     if orientation == "90":
-        # +X along J (cable-inline), +Y along H to connector face
         return {
-            "x": data["j_in"],
+            "x": data["j_in"] - BAND_PLATFORM_IN,
             "y": data["h_in"],
             "angle": 0,
             "rotation": 90,
@@ -575,11 +783,11 @@ def part_perimeter_inches(orientation, shell_size, entry_size):
         mid = body - nut - taper
         half_mid = (half_c + half_e) / 2
         # Same stepped outline as straight_backshell_svg (inches, +Y up)
-        x0 = 0.0
-        x1 = band
-        x2 = band + taper
-        x3 = band + taper + mid  # = length - nut
-        x4 = band + body
+        x0 = -band
+        x1 = 0.0
+        x2 = taper
+        x3 = taper + mid
+        x4 = body
         pts = [
             (x0, half_e),
             (x1, half_e),
@@ -599,15 +807,14 @@ def part_perimeter_inches(orientation, shell_size, entry_size):
         a = math.radians(45)
         cos_a, sin_a = math.cos(a), math.sin(a)
 
-        # Centerline: (0,0) → (G,0) → (G+F·cos45, F·sin45)
-        # Outer offsets roughly at half_e along exit, half_c at connector
+        # Centerline: (−band,0) → (G−band,0) → connector
         def off(cx, cy, tx, ty, dist):
             nx, ny = -ty, tx
             return (cx + nx * dist, cy + ny * dist)
 
-        c0 = (0.0, 0.0)
-        c1 = (g, 0.0)
-        c2 = (g + f * cos_a, f * sin_a)
+        c0 = (-BAND_PLATFORM_IN, 0.0)
+        c1 = (g - BAND_PLATFORM_IN, 0.0)
+        c2 = (g - BAND_PLATFORM_IN + f * cos_a, f * sin_a)
         w0, w1, w2 = half_e, (half_c + half_e) / 2, half_c
         pts = [
             off(*c0, 1, 0, w0),
@@ -619,14 +826,15 @@ def part_perimeter_inches(orientation, shell_size, entry_size):
         ]
     elif orientation == "90":
         h, j = data["h_in"], data["j_in"]
-        # Cable at (0,0); bend at (J,0); connector at (J,H)
+        band = BAND_PLATFORM_IN
+        # Cable entry at −band; bend at (J−band, 0); connector at (J−band, H)
         pts = [
-            (0.0, half_e),
-            (j - half_c, half_e),
-            (j - half_c, h),
-            (j + half_c, h),
-            (j + half_c, -half_e),
-            (0.0, -half_e),
+            (-band, half_e),
+            (j - band - half_c, half_e),
+            (j - band - half_c, h),
+            (j - band + half_c, h),
+            (j - band + half_c, -half_e),
+            (-band, -half_e),
         ]
     else:
         raise ValueError(f"Unknown orientation '{orientation}'")
@@ -642,14 +850,13 @@ def connector_mating_face_inches(orientation, shell_size, entry_size):
     half_c = data["c_in"] / 2
 
     if orientation == "straight":
-        length = STRAIGHT_BODY_IN + BAND_PLATFORM_IN
-        return (length, half_c), (length, -half_c)
+        return (STRAIGHT_BODY_IN, half_c), (STRAIGHT_BODY_IN, -half_c)
 
     if orientation == "45":
         f, g = data["f_in"], data["g_in"]
         a = math.radians(45)
         cos_a, sin_a = math.cos(a), math.sin(a)
-        c2 = (g + f * cos_a, f * sin_a)
+        c2 = (g - BAND_PLATFORM_IN + f * cos_a, f * sin_a)
         # Face is perpendicular to the F centerline at the connector end
         nx, ny = -sin_a, cos_a
         return (
@@ -658,7 +865,7 @@ def connector_mating_face_inches(orientation, shell_size, entry_size):
         )
 
     if orientation == "90":
-        h, j = data["h_in"], data["j_in"]
+        h, j = data["h_in"], data["j_in"] - BAND_PLATFORM_IN
         return (j - half_c, h), (j + half_c, h)
 
     raise ValueError(f"Unknown orientation '{orientation}'")
@@ -667,8 +874,8 @@ def connector_mating_face_inches(orientation, shell_size, entry_size):
 def cable_entry_face_inches(orientation, shell_size, entry_size):
     """Endpoints of the cable-entry face segment (inches, +Y up)."""
     half_e = platform_od_in(shell_size, entry_size) / 2
-    # All orientations: cable entry is the vertical face at x=0.
-    return (0.0, half_e), (0.0, -half_e)
+    x = -BAND_PLATFORM_IN
+    return (x, half_e), (x, -half_e)
 
 
 def inside_bend_edges_inches(orientation, shell_size, entry_size):
@@ -685,10 +892,10 @@ def inside_bend_edges_inches(orientation, shell_size, entry_size):
     half_e = platform_od_in(shell_size, entry_size) / 2
 
     if orientation == "90":
-        h, j = data["h_in"], data["j_in"]
-        # Top of horizontal arm + inner face of vertical arm (concave crook).
+        h, j = data["h_in"], data["j_in"] - BAND_PLATFORM_IN
+        band = BAND_PLATFORM_IN
         return [
-            ((0.0, half_e), (j - half_c, half_e)),
+            ((-band, half_e), (j - half_c, half_e)),
             ((j - half_c, half_e), (j - half_c, h)),
         ]
 
@@ -701,9 +908,9 @@ def inside_bend_edges_inches(orientation, shell_size, entry_size):
             nx, ny = -ty, tx
             return (cx + nx * dist, cy + ny * dist)
 
-        c0 = (0.0, 0.0)
-        c1 = (g, 0.0)
-        c2 = (g + f * cos_a, f * sin_a)
+        c0 = (-BAND_PLATFORM_IN, 0.0)
+        c1 = (g - BAND_PLATFORM_IN, 0.0)
+        c2 = (g - BAND_PLATFORM_IN + f * cos_a, f * sin_a)
         w0, w1, w2 = half_e, (half_c + half_e) / 2, half_c
         # +offset side of both arms faces the concave inside of the bend.
         p0 = off(*c0, 1, 0, w0)
@@ -987,7 +1194,7 @@ def compile_part_attributes(part_configuration):
     finish = part_configuration["finish"]
 
     csys = {
-        # Origin = cable entry; cable −X; body +X (then up for angled)
+        # Origin = right end of cable-side knurl; knurl/cable −X; body +X
         "connector": connector_csys(orientation, shell_size),
     }
     csys.update(flagnote_csys_children(orientation, shell_size, entry_size))
@@ -1104,6 +1311,7 @@ def main():
             orientation,
             part_configuration["shell_size"],
             part_configuration["entry_size"],
+            part_configuration["finish"],
         )
         svg_path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-drawing.svg")
         with open(svg_path, "w") as f:
