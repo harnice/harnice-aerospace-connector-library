@@ -34,9 +34,11 @@ delete_pngs = True
 # SVG px per inch — must match harnice part.py csys rendering (96 px/in)
 PX_PER_IN = 96.0
 
-# Straight (/88) body length to start of banding platform: Glenair drawing /
-# Milnec L Max = 1.35 (34.3). Banding platform length is not tabulated on the
-# Glenair /88–90 sheet; 0.35 in is an estimate for drawing/csys silhouette only.
+# Origin is the right end of the banding knurl. The knurl itself extends −X
+# so a terminated cable segment overlaps it. Straight (/88) body length from
+# that origin to the connector face: Glenair drawing / Milnec L Max = 1.35
+# (34.3 mm). Banding platform length is not tabulated on the Glenair /88–90
+# sheet; 0.35 in is an estimate for drawing/csys silhouette only.
 STRAIGHT_BODY_IN = 1.35
 BAND_PLATFORM_IN = 0.35
 
@@ -315,7 +317,6 @@ _DEFAULT_FINISH_COLORS = {
 # P / YP / ZP leave the banding platform electroless nickel (selective plating),
 # as on typical /88–/90 hardware photos.
 SELECTIVE_FINISHES = {"P", "YP", "ZP"}
-O_RING_COLOR = "#C62828"  # coupling-nut interfacial seal, common on these parts
 STROKE_COLOR = "#222222"
 STROKE_WIDTH = 1.5
 
@@ -417,22 +418,6 @@ def _diamond_pattern(pid, color):
     )
 
 
-def _straight_knurl_pattern(pid, color, vertical=True):
-    if vertical:
-        return (
-            f'<pattern id="{pid}" width="3.4" height="8" patternUnits="userSpaceOnUse">\n'
-            f'  <line x1="1.1" y1="0" x2="1.1" y2="8" '
-            f'stroke="{color}" stroke-width="1.15"/>\n'
-            f"</pattern>"
-        )
-    return (
-        f'<pattern id="{pid}" width="8" height="3.4" patternUnits="userSpaceOnUse">\n'
-        f'  <line x1="0" y1="1.1" x2="8" y2="1.1" '
-        f'stroke="{color}" stroke-width="1.15"/>\n'
-        f"</pattern>"
-    )
-
-
 def finish_svg_defs(part_number, finish):
     """Knurl patterns only. Finish hues from federalconnectors.com;
     knurl / nut / band layout from typical M85049/88 /89 /90 hardware photos.
@@ -447,8 +432,6 @@ def finish_svg_defs(part_number, finish):
             "<defs>",
             _diamond_pattern(f"{part_number}-knurl-diamond", band["knurl"]),
             _diamond_pattern(f"{part_number}-knurl-diamond-nut", body["knurl"]),
-            _straight_knurl_pattern(f"{part_number}-knurl-straight", body["knurl"], True),
-            _straight_knurl_pattern(f"{part_number}-knurl-straight-v", body["knurl"], False),
             "</defs>",
         ]
     )
@@ -463,8 +446,6 @@ def finish_fills(part_number, finish):
         "band": band["body"],
         "diamond": f"url(#{part_number}-knurl-diamond)",
         "diamond_nut": f"url(#{part_number}-knurl-diamond-nut)",
-        "straight": f"url(#{part_number}-knurl-straight)",
-        "straight_v": f"url(#{part_number}-knurl-straight-v)",
         "rim": body["rim"],
         "selective": (finish or "").upper() in SELECTIVE_FINISHES,
     }
@@ -493,10 +474,6 @@ def _poly(points, fill="#C0C0C0", stroke=STROKE_COLOR, stroke_width=STROKE_WIDTH
     )
 
 
-def _bore(x, y, w, h, fill):
-    return _rect(x, y, w, h, fill=fill, stroke=None)
-
-
 def banding_ribs(x0, y_top, y_bot, length, count=5):
     """Kept for call-site compatibility; knurl patterns replace these marks."""
     return ""
@@ -510,7 +487,7 @@ def platform_od_in(shell_size, entry_size):
 
 
 def straight_backshell_svg(part_number, shell_size, entry_size, finish=None):
-    """Cable −X from origin; body inline with cable extends +X to connector."""
+    """Knurl in −X under the cable; origin at right end of knurl; body +X to connector."""
     data = SHELL_DATA[shell_size]
     fills = finish_fills(part_number, finish)
 
@@ -526,12 +503,12 @@ def straight_backshell_svg(part_number, shell_size, entry_size, finish=None):
     half_e = e_od / 2
     half_mid = (half_c + half_e) / 2
 
-    # x=0 at cable entry face; body +X; cable extends −X
-    x0 = 0.0
-    x1 = band_len
-    x2 = band_len + taper_len
-    x3 = band_len + taper_len + mid_len
-    x4 = band_len + body_len
+    # Origin at right end of knurl; cable-side platform extends −X
+    x0 = -band_len
+    x1 = 0.0
+    x2 = taper_len
+    x3 = taper_len + mid_len
+    x4 = body_len
 
     outline = [
         (x0, -half_e),
@@ -549,22 +526,16 @@ def straight_backshell_svg(part_number, shell_size, entry_size, finish=None):
     ]
 
     lip = max(3.0, band_len * 0.12)
-    knurl_w = max(8.0, band_len - lip - 4.0)
+    knurl_w = band_len - lip
     nut_knurl_w = nut_len * 0.70
-    bore_e = half_e * 0.55
-    bore_c = half_c * 0.42
-    bore_w = 4.0
 
     parts = [
         finish_svg_defs(part_number, finish),
         _poly(outline, fill=fills["body"]),
         _rect(x3, -half_c, nut_len, c, fill=fills["nut"], stroke=None),
-        _rect(x3, -half_c, nut_knurl_w, c, fill=fills["straight"], stroke=None, extra='opacity="0.55"'),
+        _rect(x3, -half_c, nut_knurl_w, c, fill=fills["diamond_nut"], stroke=None, extra='opacity="0.55"'),
         _rect(x0, -half_e, band_len, e_od, fill=fills["band"], stroke=None) if fills["selective"] else "",
-        _rect(lip, -half_e, knurl_w, e_od, fill=fills["diamond"], stroke=None, extra='opacity="0.55"'),
-        _bore(x0, -bore_e, bore_w, 2 * bore_e, fills["rim"]),
-        _rect(x4 - 5.6, -bore_c * 1.08, 1.6, 2 * bore_c * 1.08, fill=O_RING_COLOR, stroke=None),
-        _bore(x4 - bore_w, -bore_c, bore_w, 2 * bore_c, fills["rim"]),
+        _rect(x0 + lip, -half_e, knurl_w, e_od, fill=fills["diamond"], stroke=None, extra='opacity="0.55"'),
         _poly(outline, fill="none"),
     ]
 
@@ -579,7 +550,7 @@ def straight_backshell_svg(part_number, shell_size, entry_size, finish=None):
 
 
 def fortyfive_backshell_svg(part_number, shell_size, entry_size, finish=None):
-    """Cable −X from origin; body +X along G, then 45° up along F to connector."""
+    """Knurl in −X under the cable; origin at right end of knurl; body +X then 45° to connector."""
     data = SHELL_DATA[shell_size]
     fills = finish_fills(part_number, finish)
 
@@ -587,6 +558,7 @@ def fortyfive_backshell_svg(part_number, shell_size, entry_size, finish=None):
     e_od = px_in(platform_od_in(shell_size, entry_size))
     f = px_in(data["f_in"])
     g = px_in(data["g_in"])
+    band_len = px_in(BAND_PLATFORM_IN)
     nut_len = f * 0.35
 
     half_c = c / 2
@@ -599,10 +571,10 @@ def fortyfive_backshell_svg(part_number, shell_size, entry_size, finish=None):
         nx, ny = -ty, tx
         return cx + nx * dist, cy + ny * dist
 
-    # Centerline: cable (0,0) → +X by G → 45° up-right by F to connector
-    c0 = (0.0, 0.0)
-    c1 = (g, 0.0)
-    c2 = (g + f * cos_a, -f * sin_a)
+    # Centerline: cable entry (−band, 0) → origin (0,0) → +X by G−band → 45° to connector
+    c0 = (-band_len, 0.0)
+    c1 = (g - band_len, 0.0)
+    c2 = (g - band_len + f * cos_a, -f * sin_a)
 
     w0, w1, w2 = half_e, (half_c + half_e) / 2, half_c
 
@@ -632,7 +604,6 @@ def fortyfive_backshell_svg(part_number, shell_size, entry_size, finish=None):
         offset_point(*c2, cos_a, -sin_a, -half_c),
         offset_point(nut_x, nut_y, cos_a, -sin_a, -half_c),
     ]
-    # Diamond knurl on the 45° nut, inset from the mating face
     knurl_frac = 0.72
     nut_knurl_pts = [
         offset_point(nut_x, nut_y, cos_a, -sin_a, half_c),
@@ -653,56 +624,15 @@ def fortyfive_backshell_svg(part_number, shell_size, entry_size, finish=None):
         offset_point(nut_x, nut_y, cos_a, -sin_a, -half_c),
     ]
 
-    band_len = px_in(BAND_PLATFORM_IN)
     lip = max(3.0, band_len * 0.12)
-    knurl_w = max(8.0, band_len - lip - 4.0)
-    bore_e = half_e * 0.55
-    bore_c = half_c * 0.42
-    face_in = 4.0
-    bore_face = [
-        offset_point(
-            c2[0] - face_in * cos_a, c2[1] + face_in * sin_a, cos_a, -sin_a, bore_c
-        ),
-        offset_point(*c2, cos_a, -sin_a, bore_c),
-        offset_point(*c2, cos_a, -sin_a, -bore_c),
-        offset_point(
-            c2[0] - face_in * cos_a, c2[1] + face_in * sin_a, cos_a, -sin_a, -bore_c
-        ),
-    ]
-    ring_in = 5.6
-    o_ring = [
-        offset_point(
-            c2[0] - ring_in * cos_a, c2[1] + ring_in * sin_a, cos_a, -sin_a, bore_c * 1.08
-        ),
-        offset_point(
-            c2[0] - (face_in + 0.4) * cos_a,
-            c2[1] + (face_in + 0.4) * sin_a,
-            cos_a,
-            -sin_a,
-            bore_c * 1.08,
-        ),
-        offset_point(
-            c2[0] - (face_in + 0.4) * cos_a,
-            c2[1] + (face_in + 0.4) * sin_a,
-            cos_a,
-            -sin_a,
-            -bore_c * 1.08,
-        ),
-        offset_point(
-            c2[0] - ring_in * cos_a, c2[1] + ring_in * sin_a, cos_a, -sin_a, -bore_c * 1.08
-        ),
-    ]
 
     parts = [
         finish_svg_defs(part_number, finish),
         _poly(outline, fill=fills["body"]),
         _poly(nut_pts, fill=fills["nut"], stroke=None),
         _poly(nut_knurl_pts, fill=fills["diamond_nut"], stroke=None, extra='opacity="0.55"'),
-        _rect(0.0, -half_e, band_len, e_od, fill=fills["band"], stroke=None) if fills["selective"] else "",
-        _rect(lip, -half_e, knurl_w, e_od, fill=fills["diamond"], stroke=None, extra='opacity="0.55"'),
-        _bore(0.0, -bore_e, 4.0, 2 * bore_e, fills["rim"]),
-        _poly(o_ring, fill=O_RING_COLOR, stroke=None),
-        _poly(bore_face, fill=fills["rim"], stroke=None),
+        _rect(-band_len, -half_e, band_len, e_od, fill=fills["band"], stroke=None) if fills["selective"] else "",
+        _rect(-band_len + lip, -half_e, band_len - lip, e_od, fill=fills["diamond"], stroke=None, extra='opacity="0.55"'),
         _poly(outline, fill="none"),
     ]
 
@@ -717,7 +647,7 @@ def fortyfive_backshell_svg(part_number, shell_size, entry_size, finish=None):
 
 
 def ninety_backshell_svg(part_number, shell_size, entry_size, finish=None):
-    """Cable −X from origin; body +X along J, then +Y along H to connector."""
+    """Knurl in −X under the cable; origin at right end of knurl; body +X then +Y to connector."""
     data = SHELL_DATA[shell_size]
     fills = finish_fills(part_number, finish)
 
@@ -725,34 +655,30 @@ def ninety_backshell_svg(part_number, shell_size, entry_size, finish=None):
     e_od = px_in(platform_od_in(shell_size, entry_size))
     h = px_in(data["h_in"])
     j = px_in(data["j_in"])
+    band_len = px_in(BAND_PLATFORM_IN)
     nut_len = h * 0.30
 
     half_c = c / 2
     half_e = e_od / 2
 
-    # Cable at (0,0); bend at (J, 0); connector face at (J, H) facing +Y
-    x_bend = j
+    # Origin at right of knurl; bend at (J − band, 0); connector face at that x, −H
+    x_bend = j - band_len
     y_conn = -h  # SVG: negative Y is up
 
     outline = [
-        (0.0, -half_e),
+        (-band_len, -half_e),
         (x_bend - half_c, -half_e),
         (x_bend - half_c, y_conn),
         (x_bend + half_c, y_conn),
         (x_bend + half_c, half_e),
-        (0.0, half_e),
+        (-band_len, half_e),
     ]
 
-    band_len = px_in(BAND_PLATFORM_IN)
     lip = max(3.0, band_len * 0.12)
-    knurl_w = max(8.0, band_len - lip - 4.0)
     nut_knurl_h = nut_len * 0.70
-    bore_e = half_e * 0.55
-    bore_c = half_c * 0.42
 
-    # Solid L: horizontal arm + vertical arm (no hollow inner cutout).
     horiz = _rect(
-        0.0, -half_e, x_bend + half_c, e_od, fill=fills["body"], stroke=None
+        -band_len, -half_e, x_bend + half_c + band_len, e_od, fill=fills["body"], stroke=None
     )
     vert = _rect(
         x_bend - half_c,
@@ -773,15 +699,12 @@ def ninety_backshell_svg(part_number, shell_size, entry_size, finish=None):
             y_conn + nut_len - nut_knurl_h,
             c,
             nut_knurl_h,
-            fill=fills["straight_v"],
+            fill=fills["diamond_nut"],
             stroke=None,
             extra='opacity="0.55"',
         ),
-        _rect(0.0, -half_e, band_len, e_od, fill=fills["band"], stroke=None) if fills["selective"] else "",
-        _rect(lip, -half_e, knurl_w, e_od, fill=fills["diamond"], stroke=None, extra='opacity="0.55"'),
-        _bore(0.0, -bore_e, 4.0, 2 * bore_e, fills["rim"]),
-        _rect(x_bend - bore_c * 1.08, y_conn + 4.0, 2 * bore_c * 1.08, 1.6, fill=O_RING_COLOR, stroke=None),
-        _bore(x_bend - bore_c, y_conn, 2 * bore_c, 4.0, fills["rim"]),
+        _rect(-band_len, -half_e, band_len, e_od, fill=fills["band"], stroke=None) if fills["selective"] else "",
+        _rect(-band_len + lip, -half_e, band_len - lip, e_od, fill=fills["diamond"], stroke=None, extra='opacity="0.55"'),
         _poly(outline, fill="none"),
     ]
 
@@ -806,26 +729,25 @@ def backshell_svg(part_number, orientation, shell_size, entry_size, finish=None)
 
 
 def connector_csys(orientation, shell_size):
-    """Connector mating face csys in inches; origin is cable entry.
+    """Connector mating face csys in inches.
 
-    Cable extends −X from origin; body inline with cable extends +X.
+    Origin is the right end of the cable-side knurl. Knurl/cable extend −X;
+    body inline with the cable extends +X (then up for angled parts).
     """
     data = SHELL_DATA[shell_size]
     if orientation == "straight":
-        length_in = STRAIGHT_BODY_IN + BAND_PLATFORM_IN
-        return {"x": length_in, "y": 0, "angle": 0, "rotation": 0}
+        return {"x": STRAIGHT_BODY_IN, "y": 0, "angle": 0, "rotation": 0}
     if orientation == "45":
         f, g = data["f_in"], data["g_in"]
         return {
-            "x": g + f * math.cos(math.radians(45)),
+            "x": (g - BAND_PLATFORM_IN) + f * math.cos(math.radians(45)),
             "y": f * math.sin(math.radians(45)),
             "angle": 0,
             "rotation": 45,
         }
     if orientation == "90":
-        # +X along J (cable-inline), +Y along H to connector face
         return {
-            "x": data["j_in"],
+            "x": data["j_in"] - BAND_PLATFORM_IN,
             "y": data["h_in"],
             "angle": 0,
             "rotation": 90,
@@ -851,11 +773,11 @@ def part_perimeter_inches(orientation, shell_size, entry_size):
         mid = body - nut - taper
         half_mid = (half_c + half_e) / 2
         # Same stepped outline as straight_backshell_svg (inches, +Y up)
-        x0 = 0.0
-        x1 = band
-        x2 = band + taper
-        x3 = band + taper + mid  # = length - nut
-        x4 = band + body
+        x0 = -band
+        x1 = 0.0
+        x2 = taper
+        x3 = taper + mid
+        x4 = body
         pts = [
             (x0, half_e),
             (x1, half_e),
@@ -875,15 +797,14 @@ def part_perimeter_inches(orientation, shell_size, entry_size):
         a = math.radians(45)
         cos_a, sin_a = math.cos(a), math.sin(a)
 
-        # Centerline: (0,0) → (G,0) → (G+F·cos45, F·sin45)
-        # Outer offsets roughly at half_e along exit, half_c at connector
+        # Centerline: (−band,0) → (G−band,0) → connector
         def off(cx, cy, tx, ty, dist):
             nx, ny = -ty, tx
             return (cx + nx * dist, cy + ny * dist)
 
-        c0 = (0.0, 0.0)
-        c1 = (g, 0.0)
-        c2 = (g + f * cos_a, f * sin_a)
+        c0 = (-BAND_PLATFORM_IN, 0.0)
+        c1 = (g - BAND_PLATFORM_IN, 0.0)
+        c2 = (g - BAND_PLATFORM_IN + f * cos_a, f * sin_a)
         w0, w1, w2 = half_e, (half_c + half_e) / 2, half_c
         pts = [
             off(*c0, 1, 0, w0),
@@ -895,14 +816,15 @@ def part_perimeter_inches(orientation, shell_size, entry_size):
         ]
     elif orientation == "90":
         h, j = data["h_in"], data["j_in"]
-        # Cable at (0,0); bend at (J,0); connector at (J,H)
+        band = BAND_PLATFORM_IN
+        # Cable entry at −band; bend at (J−band, 0); connector at (J−band, H)
         pts = [
-            (0.0, half_e),
-            (j - half_c, half_e),
-            (j - half_c, h),
-            (j + half_c, h),
-            (j + half_c, -half_e),
-            (0.0, -half_e),
+            (-band, half_e),
+            (j - band - half_c, half_e),
+            (j - band - half_c, h),
+            (j - band + half_c, h),
+            (j - band + half_c, -half_e),
+            (-band, -half_e),
         ]
     else:
         raise ValueError(f"Unknown orientation '{orientation}'")
@@ -918,14 +840,13 @@ def connector_mating_face_inches(orientation, shell_size, entry_size):
     half_c = data["c_in"] / 2
 
     if orientation == "straight":
-        length = STRAIGHT_BODY_IN + BAND_PLATFORM_IN
-        return (length, half_c), (length, -half_c)
+        return (STRAIGHT_BODY_IN, half_c), (STRAIGHT_BODY_IN, -half_c)
 
     if orientation == "45":
         f, g = data["f_in"], data["g_in"]
         a = math.radians(45)
         cos_a, sin_a = math.cos(a), math.sin(a)
-        c2 = (g + f * cos_a, f * sin_a)
+        c2 = (g - BAND_PLATFORM_IN + f * cos_a, f * sin_a)
         # Face is perpendicular to the F centerline at the connector end
         nx, ny = -sin_a, cos_a
         return (
@@ -934,7 +855,7 @@ def connector_mating_face_inches(orientation, shell_size, entry_size):
         )
 
     if orientation == "90":
-        h, j = data["h_in"], data["j_in"]
+        h, j = data["h_in"], data["j_in"] - BAND_PLATFORM_IN
         return (j - half_c, h), (j + half_c, h)
 
     raise ValueError(f"Unknown orientation '{orientation}'")
@@ -943,8 +864,8 @@ def connector_mating_face_inches(orientation, shell_size, entry_size):
 def cable_entry_face_inches(orientation, shell_size, entry_size):
     """Endpoints of the cable-entry face segment (inches, +Y up)."""
     half_e = platform_od_in(shell_size, entry_size) / 2
-    # All orientations: cable entry is the vertical face at x=0.
-    return (0.0, half_e), (0.0, -half_e)
+    x = -BAND_PLATFORM_IN
+    return (x, half_e), (x, -half_e)
 
 
 def inside_bend_edges_inches(orientation, shell_size, entry_size):
@@ -961,10 +882,10 @@ def inside_bend_edges_inches(orientation, shell_size, entry_size):
     half_e = platform_od_in(shell_size, entry_size) / 2
 
     if orientation == "90":
-        h, j = data["h_in"], data["j_in"]
-        # Top of horizontal arm + inner face of vertical arm (concave crook).
+        h, j = data["h_in"], data["j_in"] - BAND_PLATFORM_IN
+        band = BAND_PLATFORM_IN
         return [
-            ((0.0, half_e), (j - half_c, half_e)),
+            ((-band, half_e), (j - half_c, half_e)),
             ((j - half_c, half_e), (j - half_c, h)),
         ]
 
@@ -977,9 +898,9 @@ def inside_bend_edges_inches(orientation, shell_size, entry_size):
             nx, ny = -ty, tx
             return (cx + nx * dist, cy + ny * dist)
 
-        c0 = (0.0, 0.0)
-        c1 = (g, 0.0)
-        c2 = (g + f * cos_a, f * sin_a)
+        c0 = (-BAND_PLATFORM_IN, 0.0)
+        c1 = (g - BAND_PLATFORM_IN, 0.0)
+        c2 = (g - BAND_PLATFORM_IN + f * cos_a, f * sin_a)
         w0, w1, w2 = half_e, (half_c + half_e) / 2, half_c
         # +offset side of both arms faces the concave inside of the bend.
         p0 = off(*c0, 1, 0, w0)
@@ -1263,7 +1184,7 @@ def compile_part_attributes(part_configuration):
     finish = part_configuration["finish"]
 
     csys = {
-        # Origin = cable entry; cable −X; body +X (then up for angled)
+        # Origin = right end of cable-side knurl; knurl/cable −X; body +X
         "connector": connector_csys(orientation, shell_size),
     }
     csys.update(flagnote_csys_children(orientation, shell_size, entry_size))
