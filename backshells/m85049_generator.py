@@ -1,9 +1,10 @@
-import os
 import json
 import math
+import os
 import subprocess
-from harnice.lists import rev_history
+
 from harnice import state
+from harnice.lists import rev_history
 
 REVISION = "1"
 DATE_STARTED = "8/7/26"
@@ -1027,8 +1028,8 @@ def _progress_bar(done, total, width=25):
         filled = width
         pct = 100
     else:
-        filled = min(width, max(0, int(round(width * done / total))))
-        pct = int(round(100.0 * done / total))
+        filled = min(width, max(0, round(width * done / total)))
+        pct = round(100.0 * done / total)
     cells = ["x"] * filled + ["."] * (width - filled)
     return "[ " + " ".join(cells) + f" ] ({pct}%)"
 
