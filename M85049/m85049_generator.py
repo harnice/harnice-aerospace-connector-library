@@ -8,6 +8,7 @@ from harnice.lists import rev_history
 
 REVISION = "1"
 DATE_STARTED = "8/7/26"
+delete_pngs = True
 
 # ---------------------------------------------------------------------------
 # Datasheet / catalog sources (traceability)
@@ -1132,6 +1133,10 @@ def main():
 
         # d38999_generator used `harnice -r`; current CLI builds with -b
         subprocess.run(["harnice", "-b"], cwd=rev_dir, check=True)
+        if delete_pngs:
+            for item in os.listdir(rev_dir):
+                if item.endswith(".png"):
+                    os.remove(os.path.join(rev_dir, item))
 
         print(_progress_bar(i, total))
 

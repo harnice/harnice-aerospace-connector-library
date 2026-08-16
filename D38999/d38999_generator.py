@@ -7,6 +7,7 @@ import harnice.products.part as part
 
 REVISION = "1"
 DATE_STARTED = "2/3/26"
+delete_pngs = True
 
 CONTACT_SIZES = {
     "12": {
@@ -1631,6 +1632,10 @@ def main():
         
         # RENDER THE PART
         subprocess.run(['harnice', '-b'], cwd=rev_dir, check=True)
+        if delete_pngs:
+            for item in os.listdir(rev_dir):
+                if item.endswith(".png"):
+                    os.remove(os.path.join(rev_dir, item))
 
         print(_progress_bar(i, total))
 
