@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="400">
   <g id="M85049-90_19YP02-drawing-contents-start">
-<polygon points="0.00,-37.68 93.41,-37.68 93.41,-180.00 239.33,-180.00 239.33,37.68 0.00,37.68" fill="#C0C0C0" stroke="black" stroke-width="2"/>
-<polygon points="16.96,-20.72 110.36,-20.72 110.36,-163.04 222.37,-163.04 222.37,20.72 16.96,20.72" fill="#D8D8D8" stroke="black" stroke-width="2"/>
-<rect x="93.41" y="-180.00" width="145.92" height="54.00" fill="#A8A8A8" stroke="black" stroke-width="2"/>
-<line x1="6.72" y1="-37.68" x2="6.72" y2="37.68" stroke="black" stroke-width="1"/>
-<line x1="13.44" y1="-37.68" x2="13.44" y2="37.68" stroke="black" stroke-width="1"/>
-<line x1="20.16" y1="-37.68" x2="20.16" y2="37.68" stroke="black" stroke-width="1"/>
-<line x1="26.88" y1="-37.68" x2="26.88" y2="37.68" stroke="black" stroke-width="1"/>
+<!-- Finish colors approximated from https://d38999.federalconnectors.com/ -->
+<!-- Knurl and section details from typical M85049/88 /89 /90 hardware -->
+<defs>
+<pattern id="M85049-90_19YP02-knurl-diamond" width="8" height="8" patternUnits="userSpaceOnUse">
+  <path d="M0,8 L8,0 M-2,2 L2,-2 M6,10 L10,6" stroke="#5A6168" stroke-width="0.85" fill="none"/>
+  <path d="M0,0 L8,8 M-2,6 L2,10 M6,-2 L10,2" stroke="#5A6168" stroke-width="0.85" fill="none"/>
+</pattern>
+<pattern id="M85049-90_19YP02-knurl-diamond-nut" width="8" height="8" patternUnits="userSpaceOnUse">
+  <path d="M0,8 L8,0 M-2,2 L2,-2 M6,10 L10,6" stroke="#5E6367" stroke-width="0.85" fill="none"/>
+  <path d="M0,0 L8,8 M-2,6 L2,10 M6,-2 L10,2" stroke="#5E6367" stroke-width="0.85" fill="none"/>
+</pattern>
+<pattern id="M85049-90_19YP02-knurl-straight" width="3.4" height="8" patternUnits="userSpaceOnUse">
+  <line x1="1.1" y1="0" x2="1.1" y2="8" stroke="#5E6367" stroke-width="1.15"/>
+</pattern>
+<pattern id="M85049-90_19YP02-knurl-straight-v" width="8" height="3.4" patternUnits="userSpaceOnUse">
+  <line x1="0" y1="1.1" x2="8" y2="1.1" stroke="#5E6367" stroke-width="1.15"/>
+</pattern>
+</defs>
+<rect x="0.00" y="-37.68" width="239.33" height="75.36" fill="#C0C4C8" stroke="none"/>
+<rect x="93.41" y="-180.00" width="145.92" height="217.68" fill="#C0C4C8" stroke="none"/>
+<rect x="93.41" y="-180.00" width="145.92" height="54.00" fill="#7A7F83" stroke="none"/>
+<rect x="93.41" y="-163.80" width="145.92" height="37.80" fill="url(#M85049-90_19YP02-knurl-straight-v)" stroke="none" opacity="0.55"/>
+<rect x="0.00" y="-37.68" width="33.60" height="75.36" fill="#C5CAD0" stroke="none"/>
+<rect x="4.03" y="-37.68" width="25.57" height="75.36" fill="url(#M85049-90_19YP02-knurl-diamond)" stroke="none" opacity="0.55"/>
+<rect x="0.00" y="-20.72" width="4.00" height="41.45" fill="#555A5E" stroke="none"/>
+<rect x="133.27" y="-176.00" width="66.19" height="1.60" fill="#C62828" stroke="none"/>
+<rect x="135.72" y="-180.00" width="61.29" height="4.00" fill="#555A5E" stroke="none"/>
+<polygon points="0.00,-37.68 93.41,-37.68 93.41,-180.00 239.33,-180.00 239.33,37.68 0.00,37.68" fill="none" stroke="#222222" stroke-width="1.5"/>
 </g>
 <g id="M85049-90_19YP02-drawing-contents-end">
   </g>

@@ -1,12 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="400">
   <g id="M85049-89_21W02-drawing-contents-start">
-<polygon points="0.00,37.68 124.80,58.20 231.21,4.92 258.53,-22.40 147.20,-133.73 119.88,-106.41 124.80,-58.20 0.00,-37.68" fill="#C0C0C0" stroke="black" stroke-width="2"/>
-<polygon points="231.21,4.92 258.53,-22.40 147.20,-133.73 119.88,-106.41" fill="#A8A8A8" stroke="black" stroke-width="2"/>
-<line x1="4.99" y1="37.68" x2="4.99" y2="-37.68" stroke="black" stroke-width="1"/>
-<line x1="9.98" y1="37.68" x2="9.98" y2="-37.68" stroke="black" stroke-width="1"/>
-<line x1="14.98" y1="37.68" x2="14.98" y2="-37.68" stroke="black" stroke-width="1"/>
-<line x1="19.97" y1="37.68" x2="19.97" y2="-37.68" stroke="black" stroke-width="1"/>
+<!-- Finish colors approximated from https://d38999.federalconnectors.com/ -->
+<!-- Knurl and section details from typical M85049/88 /89 /90 hardware -->
+<defs>
+<pattern id="M85049-89_21W02-knurl-diamond" width="8" height="8" patternUnits="userSpaceOnUse">
+  <path d="M0,8 L8,0 M-2,2 L2,-2 M6,10 L10,6" stroke="#2E2F16" stroke-width="0.85" fill="none"/>
+  <path d="M0,0 L8,8 M-2,6 L2,10 M6,-2 L10,2" stroke="#2E2F16" stroke-width="0.85" fill="none"/>
+</pattern>
+<pattern id="M85049-89_21W02-knurl-diamond-nut" width="8" height="8" patternUnits="userSpaceOnUse">
+  <path d="M0,8 L8,0 M-2,2 L2,-2 M6,10 L10,6" stroke="#2E2F16" stroke-width="0.85" fill="none"/>
+  <path d="M0,0 L8,8 M-2,6 L2,10 M6,-2 L10,2" stroke="#2E2F16" stroke-width="0.85" fill="none"/>
+</pattern>
+<pattern id="M85049-89_21W02-knurl-straight" width="3.4" height="8" patternUnits="userSpaceOnUse">
+  <line x1="1.1" y1="0" x2="1.1" y2="8" stroke="#2E2F16" stroke-width="1.15"/>
+</pattern>
+<pattern id="M85049-89_21W02-knurl-straight-v" width="8" height="3.4" patternUnits="userSpaceOnUse">
+  <line x1="0" y1="1.1" x2="8" y2="1.1" stroke="#2E2F16" stroke-width="1.15"/>
+</pattern>
+</defs>
+<polygon points="0.00,37.68 124.80,58.20 231.21,4.92 258.53,-22.40 147.20,-133.73 119.88,-106.41 124.80,-58.20 0.00,-37.68" fill="#6B6C38" stroke="#222222" stroke-width="1.5"/>
+<polygon points="231.21,4.92 258.53,-22.40 147.20,-133.73 119.88,-106.41" fill="#3E3F22" stroke="none"/>
+<polygon points="231.21,4.92 250.88,-14.75 139.55,-126.08 119.88,-106.41" fill="url(#M85049-89_21W02-knurl-diamond-nut)" stroke="none" opacity="0.55"/>
+<rect x="4.03" y="-37.68" width="25.57" height="75.36" fill="url(#M85049-89_21W02-knurl-diamond)" stroke="none" opacity="0.55"/>
+<rect x="0.00" y="-20.72" width="4.00" height="41.45" fill="#2C2D18" stroke="none"/>
+<polygon points="224.15,-48.86 225.00,-49.70 174.50,-100.20 173.66,-99.35" fill="#C62828" stroke="none"/>
+<polygon points="223.41,-51.86 226.24,-54.69 179.49,-101.44 176.66,-98.61" fill="#2C2D18" stroke="none"/>
+<polygon points="0.00,37.68 124.80,58.20 231.21,4.92 258.53,-22.40 147.20,-133.73 119.88,-106.41 124.80,-58.20 0.00,-37.68" fill="none" stroke="#222222" stroke-width="1.5"/>
 </g>
 <g id="M85049-89_21W02-drawing-contents-end">
   </g>

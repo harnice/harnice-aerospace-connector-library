@@ -215,6 +215,110 @@ FINISHES = {
     "ZP": "Zinc Nickel, Selective Plating",
 }
 
+# Approximate drawing colors. Visual appearance of shared D38999 / M85049
+# finishes (electroless nickel, space-grade nickel, olive drab cadmium,
+# stainless, black zinc nickel) is taken from:
+# https://d38999.federalconnectors.com/
+# M85049-only codes (N, P, X, YP, ZP) use the closest matching finish photo.
+FINISH_DRAWING_COLORS = {
+    "F": {  # Stainless steel — match D38999 class K
+        "body": "#A3A4A0",
+        "light": "#C8C9C5",
+        "dark": "#6E6F6C",
+        "specular": "#E8E9E6",
+        "rim": "#4A4B48",
+        "knurl": "#5C5D5A",
+        "metallic": True,
+    },
+    "G": {  # Space-grade electroless nickel — satin silver
+        "body": "#B4B9BE",
+        "light": "#D8DCE0",
+        "dark": "#7A8086",
+        "specular": "#F2F4F6",
+        "rim": "#555B61",
+        "knurl": "#5E646A",
+        "metallic": True,
+    },
+    "N": {  # Electroless nickel — bright chrome-like silver (D38999 F)
+        "body": "#C5CAD0",
+        "light": "#E8ECF0",
+        "dark": "#6E757C",
+        "specular": "#FBFCFF",
+        "rim": "#4A5056",
+        "knurl": "#5A6168",
+        "metallic": True,
+    },
+    "P": {  # Cadmium olive drab, selective — khaki / greenish-bronze
+        "body": "#6B6C38",
+        "light": "#8E8F52",
+        "dark": "#3E3F22",
+        "specular": "#B8B86A",
+        "rim": "#2C2D18",
+        "knurl": "#2E2F16",
+        "metallic": False,
+    },
+    "W": {  # Cadmium olive drab
+        "body": "#6B6C38",
+        "light": "#8E8F52",
+        "dark": "#3E3F22",
+        "specular": "#B8B86A",
+        "rim": "#2C2D18",
+        "knurl": "#2E2F16",
+        "metallic": False,
+    },
+    "X": {  # Nickel fluorocarbon polymer — duller grey (D38999 T)
+        "body": "#9B9E9A",
+        "light": "#B8BBB7",
+        "dark": "#5E615D",
+        "specular": "#D0D3CF",
+        "rim": "#454844",
+        "knurl": "#4E514D",
+        "metallic": False,
+    },
+    "YP": {  # Pure dense electrodeposited aluminum
+        "body": "#C0C4C8",
+        "light": "#E0E4E8",
+        "dark": "#7A7F83",
+        "specular": "#F5F7F9",
+        "rim": "#555A5E",
+        "knurl": "#5E6367",
+        "metallic": True,
+    },
+    "Z": {  # Zinc nickel — deep charcoal (D38999 Z)
+        "body": "#3D3E40",
+        "light": "#5A5B5D",
+        "dark": "#1E1F21",
+        "specular": "#7A7B7D",
+        "rim": "#141516",
+        "knurl": "#6A6B6D",
+        "metallic": False,
+    },
+    "ZP": {  # Zinc nickel, selective
+        "body": "#3D3E40",
+        "light": "#5A5B5D",
+        "dark": "#1E1F21",
+        "specular": "#7A7B7D",
+        "rim": "#141516",
+        "knurl": "#6A6B6D",
+        "metallic": False,
+    },
+}
+_DEFAULT_FINISH_COLORS = {
+    "body": "#C0C0C0",
+    "light": "#D8D8D8",
+    "dark": "#A8A8A8",
+    "specular": "#F0F0F0",
+    "rim": "#444444",
+    "knurl": "#555555",
+    "metallic": True,
+}
+# P / YP / ZP leave the banding platform electroless nickel (selective plating),
+# as on typical /88–/90 hardware photos.
+SELECTIVE_FINISHES = {"P", "YP", "ZP"}
+O_RING_COLOR = "#C62828"  # coupling-nut interfacial seal, common on these parts
+STROKE_COLOR = "#222222"
+STROKE_WIDTH = 1.5
+
 # Basic part number → geometry. Glenair how-to-order: /88 straight, /89 45°, /90 90°.
 ORIENTATIONS = {
     "88": "straight",
@@ -297,31 +401,105 @@ def px_in(inches):
     return inches * PX_PER_IN
 
 
-def _rect(x, y, w, h, fill="#C0C0C0"):
+def finish_palette(finish):
+    p = FINISH_DRAWING_COLORS.get((finish or "").upper(), _DEFAULT_FINISH_COLORS)
+    return {**_DEFAULT_FINISH_COLORS, **p}
+
+
+def _diamond_pattern(pid, color):
     return (
-        f'<rect x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h:.2f}" '
-        f'fill="{fill}" stroke="black" stroke-width="2"/>'
+        f'<pattern id="{pid}" width="8" height="8" patternUnits="userSpaceOnUse">\n'
+        f'  <path d="M0,8 L8,0 M-2,2 L2,-2 M6,10 L10,6" '
+        f'stroke="{color}" stroke-width="0.85" fill="none"/>\n'
+        f'  <path d="M0,0 L8,8 M-2,6 L2,10 M6,-2 L10,2" '
+        f'stroke="{color}" stroke-width="0.85" fill="none"/>\n'
+        f"</pattern>"
     )
 
 
-def _poly(points, fill="#C0C0C0"):
+def _straight_knurl_pattern(pid, color, vertical=True):
+    if vertical:
+        return (
+            f'<pattern id="{pid}" width="3.4" height="8" patternUnits="userSpaceOnUse">\n'
+            f'  <line x1="1.1" y1="0" x2="1.1" y2="8" '
+            f'stroke="{color}" stroke-width="1.15"/>\n'
+            f"</pattern>"
+        )
+    return (
+        f'<pattern id="{pid}" width="8" height="3.4" patternUnits="userSpaceOnUse">\n'
+        f'  <line x1="0" y1="1.1" x2="8" y2="1.1" '
+        f'stroke="{color}" stroke-width="1.15"/>\n'
+        f"</pattern>"
+    )
+
+
+def finish_svg_defs(part_number, finish):
+    """Knurl patterns only. Finish hues from federalconnectors.com;
+    knurl / nut / band layout from typical M85049/88 /89 /90 hardware photos.
+    """
+    body = finish_palette(finish)
+    selective = (finish or "").upper() in SELECTIVE_FINISHES
+    band = finish_palette("N") if selective else body
+    return "\n".join(
+        [
+            "<!-- Finish colors approximated from https://d38999.federalconnectors.com/ -->",
+            "<!-- Knurl and section details from typical M85049/88 /89 /90 hardware -->",
+            "<defs>",
+            _diamond_pattern(f"{part_number}-knurl-diamond", band["knurl"]),
+            _diamond_pattern(f"{part_number}-knurl-diamond-nut", body["knurl"]),
+            _straight_knurl_pattern(f"{part_number}-knurl-straight", body["knurl"], True),
+            _straight_knurl_pattern(f"{part_number}-knurl-straight-v", body["knurl"], False),
+            "</defs>",
+        ]
+    )
+
+
+def finish_fills(part_number, finish):
+    body = finish_palette(finish)
+    band = finish_palette("N") if (finish or "").upper() in SELECTIVE_FINISHES else body
+    return {
+        "body": body["body"],
+        "nut": body["dark"],
+        "band": band["body"],
+        "diamond": f"url(#{part_number}-knurl-diamond)",
+        "diamond_nut": f"url(#{part_number}-knurl-diamond-nut)",
+        "straight": f"url(#{part_number}-knurl-straight)",
+        "straight_v": f"url(#{part_number}-knurl-straight-v)",
+        "rim": body["rim"],
+        "selective": (finish or "").upper() in SELECTIVE_FINISHES,
+    }
+
+
+def _stroke_attr(stroke, stroke_width):
+    if stroke is None:
+        return ' stroke="none"'
+    return f' stroke="{stroke}" stroke-width="{stroke_width}"'
+
+
+def _rect(x, y, w, h, fill="#C0C0C0", stroke=STROKE_COLOR, stroke_width=STROKE_WIDTH, extra=""):
+    extra_attr = f" {extra}" if extra else ""
+    return (
+        f'<rect x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h:.2f}" '
+        f'fill="{fill}"{_stroke_attr(stroke, stroke_width)}{extra_attr}/>'
+    )
+
+
+def _poly(points, fill="#C0C0C0", stroke=STROKE_COLOR, stroke_width=STROKE_WIDTH, extra=""):
     pts = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
-    return f'<polygon points="{pts}" fill="{fill}" stroke="black" stroke-width="2"/>'
+    extra_attr = f" {extra}" if extra else ""
+    return (
+        f'<polygon points="{pts}" fill="{fill}"'
+        f'{_stroke_attr(stroke, stroke_width)}{extra_attr}/>'
+    )
+
+
+def _bore(x, y, w, h, fill):
+    return _rect(x, y, w, h, fill=fill, stroke=None)
 
 
 def banding_ribs(x0, y_top, y_bot, length, count=5):
-    """Short vertical rib marks on the banding platform."""
-    if length <= 0 or count < 1:
-        return ""
-    step = length / (count + 1)
-    lines = []
-    for i in range(1, count + 1):
-        x = x0 + i * step
-        lines.append(
-            f'<line x1="{x:.2f}" y1="{y_top:.2f}" x2="{x:.2f}" y2="{y_bot:.2f}" '
-            f'stroke="black" stroke-width="1"/>'
-        )
-    return "\n".join(lines)
+    """Kept for call-site compatibility; knurl patterns replace these marks."""
+    return ""
 
 
 def platform_od_in(shell_size, entry_size):
@@ -331,9 +509,10 @@ def platform_od_in(shell_size, entry_size):
     return max(e_in + 0.16, c_in * 0.45)
 
 
-def straight_backshell_svg(part_number, shell_size, entry_size):
+def straight_backshell_svg(part_number, shell_size, entry_size, finish=None):
     """Cable −X from origin; body inline with cable extends +X to connector."""
     data = SHELL_DATA[shell_size]
+    fills = finish_fills(part_number, finish)
 
     c = px_in(data["c_in"])
     e_od = px_in(platform_od_in(shell_size, entry_size))
@@ -369,23 +548,40 @@ def straight_backshell_svg(part_number, shell_size, entry_size):
         (x0, half_e),
     ]
 
-    ribs = banding_ribs(x0, -half_e, half_e, band_len)
+    lip = max(3.0, band_len * 0.12)
+    knurl_w = max(8.0, band_len - lip - 4.0)
+    nut_knurl_w = nut_len * 0.70
+    bore_e = half_e * 0.55
+    bore_c = half_c * 0.42
+    bore_w = 4.0
+
+    parts = [
+        finish_svg_defs(part_number, finish),
+        _poly(outline, fill=fills["body"]),
+        _rect(x3, -half_c, nut_len, c, fill=fills["nut"], stroke=None),
+        _rect(x3, -half_c, nut_knurl_w, c, fill=fills["straight"], stroke=None, extra='opacity="0.55"'),
+        _rect(x0, -half_e, band_len, e_od, fill=fills["band"], stroke=None) if fills["selective"] else "",
+        _rect(lip, -half_e, knurl_w, e_od, fill=fills["diamond"], stroke=None, extra='opacity="0.55"'),
+        _bore(x0, -bore_e, bore_w, 2 * bore_e, fills["rim"]),
+        _rect(x4 - 5.6, -bore_c * 1.08, 1.6, 2 * bore_c * 1.08, fill=O_RING_COLOR, stroke=None),
+        _bore(x4 - bore_w, -bore_c, bore_w, 2 * bore_c, fills["rim"]),
+        _poly(outline, fill="none"),
+    ]
 
     return f'''<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="400">
 <g id="{part_number}-drawing-contents-start">
-{_poly(outline)}
-{_rect(x3, -half_c, nut_len, c, fill="#A8A8A8")}
-{ribs}
+{chr(10).join(p for p in parts if p)}
 </g>
 <g id="{part_number}-drawing-contents-end">
 </g>
 </svg>'''
 
 
-def fortyfive_backshell_svg(part_number, shell_size, entry_size):
+def fortyfive_backshell_svg(part_number, shell_size, entry_size, finish=None):
     """Cable −X from origin; body +X along G, then 45° up along F to connector."""
     data = SHELL_DATA[shell_size]
+    fills = finish_fills(part_number, finish)
 
     c = px_in(data["c_in"])
     e_od = px_in(platform_od_in(shell_size, entry_size))
@@ -428,42 +624,102 @@ def fortyfive_backshell_svg(part_number, shell_size, entry_size):
     ]
     outline = top + bot
 
-    rib_lines = []
-    for i in range(1, 5):
-        t = i * 0.04
-        cx = g * t
-        p1 = offset_point(cx, 0.0, 1, 0, w0)
-        p2 = offset_point(cx, 0.0, 1, 0, -w0)
-        rib_lines.append(
-            f'<line x1="{p1[0]:.2f}" y1="{p1[1]:.2f}" x2="{p2[0]:.2f}" y2="{p2[1]:.2f}" '
-            f'stroke="black" stroke-width="1"/>'
-        )
-
     nut_x = c2[0] - nut_len * cos_a
     nut_y = c2[1] + nut_len * sin_a
-    # Approximate nut as a rect aligned to the 45° exit (axis-aligned bbox of nut segment)
     nut_pts = [
         offset_point(nut_x, nut_y, cos_a, -sin_a, half_c),
         offset_point(*c2, cos_a, -sin_a, half_c),
         offset_point(*c2, cos_a, -sin_a, -half_c),
         offset_point(nut_x, nut_y, cos_a, -sin_a, -half_c),
     ]
+    # Diamond knurl on the 45° nut, inset from the mating face
+    knurl_frac = 0.72
+    nut_knurl_pts = [
+        offset_point(nut_x, nut_y, cos_a, -sin_a, half_c),
+        offset_point(
+            nut_x + nut_len * knurl_frac * cos_a,
+            nut_y - nut_len * knurl_frac * sin_a,
+            cos_a,
+            -sin_a,
+            half_c,
+        ),
+        offset_point(
+            nut_x + nut_len * knurl_frac * cos_a,
+            nut_y - nut_len * knurl_frac * sin_a,
+            cos_a,
+            -sin_a,
+            -half_c,
+        ),
+        offset_point(nut_x, nut_y, cos_a, -sin_a, -half_c),
+    ]
+
+    band_len = px_in(BAND_PLATFORM_IN)
+    lip = max(3.0, band_len * 0.12)
+    knurl_w = max(8.0, band_len - lip - 4.0)
+    bore_e = half_e * 0.55
+    bore_c = half_c * 0.42
+    face_in = 4.0
+    bore_face = [
+        offset_point(
+            c2[0] - face_in * cos_a, c2[1] + face_in * sin_a, cos_a, -sin_a, bore_c
+        ),
+        offset_point(*c2, cos_a, -sin_a, bore_c),
+        offset_point(*c2, cos_a, -sin_a, -bore_c),
+        offset_point(
+            c2[0] - face_in * cos_a, c2[1] + face_in * sin_a, cos_a, -sin_a, -bore_c
+        ),
+    ]
+    ring_in = 5.6
+    o_ring = [
+        offset_point(
+            c2[0] - ring_in * cos_a, c2[1] + ring_in * sin_a, cos_a, -sin_a, bore_c * 1.08
+        ),
+        offset_point(
+            c2[0] - (face_in + 0.4) * cos_a,
+            c2[1] + (face_in + 0.4) * sin_a,
+            cos_a,
+            -sin_a,
+            bore_c * 1.08,
+        ),
+        offset_point(
+            c2[0] - (face_in + 0.4) * cos_a,
+            c2[1] + (face_in + 0.4) * sin_a,
+            cos_a,
+            -sin_a,
+            -bore_c * 1.08,
+        ),
+        offset_point(
+            c2[0] - ring_in * cos_a, c2[1] + ring_in * sin_a, cos_a, -sin_a, -bore_c * 1.08
+        ),
+    ]
+
+    parts = [
+        finish_svg_defs(part_number, finish),
+        _poly(outline, fill=fills["body"]),
+        _poly(nut_pts, fill=fills["nut"], stroke=None),
+        _poly(nut_knurl_pts, fill=fills["diamond_nut"], stroke=None, extra='opacity="0.55"'),
+        _rect(0.0, -half_e, band_len, e_od, fill=fills["band"], stroke=None) if fills["selective"] else "",
+        _rect(lip, -half_e, knurl_w, e_od, fill=fills["diamond"], stroke=None, extra='opacity="0.55"'),
+        _bore(0.0, -bore_e, 4.0, 2 * bore_e, fills["rim"]),
+        _poly(o_ring, fill=O_RING_COLOR, stroke=None),
+        _poly(bore_face, fill=fills["rim"], stroke=None),
+        _poly(outline, fill="none"),
+    ]
 
     return f'''<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="400">
 <g id="{part_number}-drawing-contents-start">
-{_poly(outline)}
-{_poly(nut_pts, fill="#A8A8A8")}
-{chr(10).join(rib_lines)}
+{chr(10).join(p for p in parts if p)}
 </g>
 <g id="{part_number}-drawing-contents-end">
 </g>
 </svg>'''
 
 
-def ninety_backshell_svg(part_number, shell_size, entry_size):
+def ninety_backshell_svg(part_number, shell_size, entry_size, finish=None):
     """Cable −X from origin; body +X along J, then +Y along H to connector."""
     data = SHELL_DATA[shell_size]
+    fills = finish_fills(part_number, finish)
 
     c = px_in(data["c_in"])
     e_od = px_in(platform_od_in(shell_size, entry_size))
@@ -487,45 +743,65 @@ def ninety_backshell_svg(part_number, shell_size, entry_size):
         (0.0, half_e),
     ]
 
-    inset = min(half_e, half_c) * 0.45
-    inner = [
-        (inset, -half_e + inset),
-        (x_bend - half_c + inset, -half_e + inset),
-        (x_bend - half_c + inset, y_conn + inset),
-        (x_bend + half_c - inset, y_conn + inset),
-        (x_bend + half_c - inset, half_e - inset),
-        (inset, half_e - inset),
-    ]
+    band_len = px_in(BAND_PLATFORM_IN)
+    lip = max(3.0, band_len * 0.12)
+    knurl_w = max(8.0, band_len - lip - 4.0)
+    nut_knurl_h = nut_len * 0.70
+    bore_e = half_e * 0.55
+    bore_c = half_c * 0.42
 
-    rib_lines = []
-    band = px_in(BAND_PLATFORM_IN)
-    for i in range(1, 5):
-        x = i * (band / 5)
-        rib_lines.append(
-            f'<line x1="{x:.2f}" y1="{-half_e:.2f}" '
-            f'x2="{x:.2f}" y2="{half_e:.2f}" stroke="black" stroke-width="1"/>'
-        )
+    # Solid L: horizontal arm + vertical arm (no hollow inner cutout).
+    horiz = _rect(
+        0.0, -half_e, x_bend + half_c, e_od, fill=fills["body"], stroke=None
+    )
+    vert = _rect(
+        x_bend - half_c,
+        y_conn,
+        c,
+        h + half_e,
+        fill=fills["body"],
+        stroke=None,
+    )
+
+    parts = [
+        finish_svg_defs(part_number, finish),
+        horiz,
+        vert,
+        _rect(x_bend - half_c, y_conn, c, nut_len, fill=fills["nut"], stroke=None),
+        _rect(
+            x_bend - half_c,
+            y_conn + nut_len - nut_knurl_h,
+            c,
+            nut_knurl_h,
+            fill=fills["straight_v"],
+            stroke=None,
+            extra='opacity="0.55"',
+        ),
+        _rect(0.0, -half_e, band_len, e_od, fill=fills["band"], stroke=None) if fills["selective"] else "",
+        _rect(lip, -half_e, knurl_w, e_od, fill=fills["diamond"], stroke=None, extra='opacity="0.55"'),
+        _bore(0.0, -bore_e, 4.0, 2 * bore_e, fills["rim"]),
+        _rect(x_bend - bore_c * 1.08, y_conn + 4.0, 2 * bore_c * 1.08, 1.6, fill=O_RING_COLOR, stroke=None),
+        _bore(x_bend - bore_c, y_conn, 2 * bore_c, 4.0, fills["rim"]),
+        _poly(outline, fill="none"),
+    ]
 
     return f'''<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="400">
 <g id="{part_number}-drawing-contents-start">
-{_poly(outline)}
-{_poly(inner, fill="#D8D8D8")}
-{_rect(x_bend - half_c, y_conn, c, nut_len, fill="#A8A8A8")}
-{chr(10).join(rib_lines)}
+{chr(10).join(p for p in parts if p)}
 </g>
 <g id="{part_number}-drawing-contents-end">
 </g>
 </svg>'''
 
 
-def backshell_svg(part_number, orientation, shell_size, entry_size):
+def backshell_svg(part_number, orientation, shell_size, entry_size, finish=None):
     if orientation == "straight":
-        return straight_backshell_svg(part_number, shell_size, entry_size)
+        return straight_backshell_svg(part_number, shell_size, entry_size, finish)
     if orientation == "45":
-        return fortyfive_backshell_svg(part_number, shell_size, entry_size)
+        return fortyfive_backshell_svg(part_number, shell_size, entry_size, finish)
     if orientation == "90":
-        return ninety_backshell_svg(part_number, shell_size, entry_size)
+        return ninety_backshell_svg(part_number, shell_size, entry_size, finish)
     raise ValueError(f"Unknown orientation '{orientation}'")
 
 
@@ -1104,6 +1380,7 @@ def main():
             orientation,
             part_configuration["shell_size"],
             part_configuration["entry_size"],
+            part_configuration["finish"],
         )
         svg_path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-drawing.svg")
         with open(svg_path, "w") as f:

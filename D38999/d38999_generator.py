@@ -1408,13 +1408,80 @@ STANDARD_CSYS_CHILDREN = {
     "flagnote-13-leader_dest": {"angle": 90, "distance": 0.5, "rotation": 0},
 }
 
-def series_iii_26_connector_svg(part_number, shell_size):
+# Approximate drawing colors from MIL-DTL-38999 Series III material/finish photos:
+# https://d38999.federalconnectors.com/
+FINISH_DRAWING_COLORS = {
+    "F": {  # Aluminum, electroless nickel — bright chrome-like silver
+        "body": "#C5CAD0",
+        "light": "#E6EAEF",
+        "dark": "#8E959C",
+    },
+    "G": {  # Aluminum, space-grade electroless nickel — satin silver
+        "body": "#B4B9BE",
+        "light": "#D4D8DC",
+        "dark": "#8A9096",
+    },
+    "J": {  # Composite, olive drab cadmium — dark muted olive
+        "body": "#3F412E",
+        "light": "#555740",
+        "dark": "#2A2C1E",
+    },
+    "K": {  # Stainless steel, passivated — flatter medium grey
+        "body": "#A3A4A0",
+        "light": "#C0C1BD",
+        "dark": "#7A7B77",
+    },
+    "L": {  # Stainless steel, electrodeposited nickel
+        "body": "#C0C4C8",
+        "light": "#DEE2E6",
+        "dark": "#8C9196",
+    },
+    "M": {  # Composite, electroless nickel — similar to F
+        "body": "#C5CAD0",
+        "light": "#E6EAEF",
+        "dark": "#8E959C",
+    },
+    "S": {  # Stainless steel, nickel plated
+        "body": "#C0C4C8",
+        "light": "#DEE2E6",
+        "dark": "#8C9196",
+    },
+    "T": {  # Aluminum, nickel PTFE — duller grey metallic
+        "body": "#9B9E9A",
+        "light": "#B5B8B4",
+        "dark": "#6F726E",
+    },
+    "W": {  # Aluminum, olive drab cadmium — khaki / greenish-bronze
+        "body": "#6F703C",
+        "light": "#8C8D55",
+        "dark": "#4A4B28",
+    },
+    "Y": {  # Hermetic stainless, passivated
+        "body": "#A3A4A0",
+        "light": "#C0C1BD",
+        "dark": "#7A7B77",
+    },
+    "Z": {  # Aluminum, black zinc nickel — deep charcoal
+        "body": "#3D3E40",
+        "light": "#555658",
+        "dark": "#262728",
+    },
+}
+_DEFAULT_FINISH_COLORS = {"body": "#C0C0C0", "light": "#D8D8D8", "dark": "#A8A8A8"}
+
+
+def finish_palette(finish):
+    return FINISH_DRAWING_COLORS.get((finish or "").upper(), _DEFAULT_FINISH_COLORS)
+
+
+def series_iii_26_connector_svg(part_number, shell_size, finish=None):
     """
     Generate a simple SVG drawing of a Series III 26 connector based on shell size.
     
     Args:
         part_number: Part number string for the connector
         shell_size: Shell size letter ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', or 'J')
+        finish: Series III material/finish code (F, K, W, Z, …)
     
     Returns:
         str: SVG markup as a string
@@ -1445,11 +1512,13 @@ def series_iii_26_connector_svg(part_number, shell_size):
     length = spec['length'] * scale
     diameter = spec['q_max'] * scale
     half_diameter = diameter / 2
+    body_fill = finish_palette(finish)["body"]
     
     svg = f'''<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="400">
 <g id="{part_number}-drawing-contents-start">
-<rect x="0" y="{-half_diameter}" width="{length}" height="{diameter}" fill="#C0C0C0" stroke="black" stroke-width="2"/>
+<!-- Finish colors approximated from https://d38999.federalconnectors.com/ -->
+<rect x="0" y="{-half_diameter}" width="{length}" height="{diameter}" fill="{body_fill}" stroke="black" stroke-width="2"/>
 </g>
 <g id="{part_number}-drawing-contents-end">
 </g>
@@ -1624,7 +1693,11 @@ def main():
 
         # GENERATE THE SVG
         if part_configuration.get("shell_type") == "26":
-            svg_content = series_iii_26_connector_svg(part_number, attributes.get("shell_size"))
+            svg_content = series_iii_26_connector_svg(
+                part_number,
+                attributes.get("shell_size"),
+                part_configuration.get("finish"),
+            )
             svg_path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-drawing.svg")
             with open(svg_path, "w") as f:
                 f.write(svg_content)
