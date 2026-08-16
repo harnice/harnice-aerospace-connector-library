@@ -142,6 +142,7 @@ USAGE
 """
 
 import json
+import math
 import os
 import subprocess
 from dataclasses import dataclass
@@ -377,34 +378,80 @@ CONTACT_SIZE = {
     "current_rating": 3.0,
 }
 
-STANDARD_CSYS_CHILDREN = {
-    "flagnote-1": {"angle": 0, "distance": 3, "rotation": 0},
-    "flagnote-1-leader_dest": {"angle": 0, "distance": 1, "rotation": 0},
-    "flagnote-2": {"angle": 15, "distance": 3, "rotation": 0},
-    "flagnote-2-leader_dest": {"angle": 15, "distance": 1.03, "rotation": 0},
-    "flagnote-3": {"angle": -15, "distance": 3, "rotation": 0},
-    "flagnote-3-leader_dest": {"angle": -15, "distance": 1.03, "rotation": 0},
-    "flagnote-4": {"angle": 30, "distance": 3, "rotation": 0},
-    "flagnote-4-leader_dest": {"angle": 30, "distance": 1, "rotation": 0},
-    "flagnote-5": {"angle": -30, "distance": 3, "rotation": 0},
-    "flagnote-5-leader_dest": {"angle": -30, "distance": 1, "rotation": 0},
-    "flagnote-6": {"angle": 45, "distance": 3, "rotation": 0},
-    "flagnote-6-leader_dest": {"angle": 45, "distance": 0.72, "rotation": 0},
-    "flagnote-7": {"angle": -45, "distance": 3, "rotation": 0},
-    "flagnote-7-leader_dest": {"angle": -45, "distance": 0.72, "rotation": 0},
-    "flagnote-8": {"angle": 60, "distance": 3, "rotation": 0},
-    "flagnote-8-leader_dest": {"angle": 60, "distance": 0.58, "rotation": 0},
-    "flagnote-9": {"angle": -60, "distance": 3, "rotation": 0},
-    "flagnote-9-leader_dest": {"angle": -60, "distance": 0.58, "rotation": 0},
-    "flagnote-10": {"angle": -75, "distance": 3, "rotation": 0},
-    "flagnote-10-leader_dest": {"angle": -75, "distance": 0.52, "rotation": 0},
-    "flagnote-11": {"angle": 75, "distance": 3, "rotation": 0},
-    "flagnote-11-leader_dest": {"angle": 75, "distance": 0.52, "rotation": 0},
-    "flagnote-12": {"angle": -90, "distance": 3, "rotation": 0},
-    "flagnote-12-leader_dest": {"angle": -90, "distance": 0.52, "rotation": 0},
-    "flagnote-13": {"angle": 90, "distance": 3, "rotation": 0},
-    "flagnote-13-leader_dest": {"angle": 90, "distance": 0.5, "rotation": 0},
-}
+# Flagnotes sit on a circle centered 0.5 in left of the origin (cable
+# side), 15 deg apart, alternating up/down from due-right like D38999.
+# Notes stay in the right half-plane (|angle from origin| <= 90).
+# Leaders stay on that ray where it meets the mating face (x>0).
+FLAGNOTE_CENTER_X_IN = -0.5
+FLAGNOTE_CENTER_Y_IN = 0.0
+FLAGNOTE_RADIUS_IN = 3.0
+FLAGNOTE_ANGLES_DEG = (
+    0, 15, -15, 30, -30, 45, -45, 60, -60, 75, -75, 90, -90
+)
+
+
+def _flagnote_note_polar(theta_deg):
+    """Angle/distance from the flagnote center, clamped to x >= 0."""
+    rad = math.radians(theta_deg)
+    nx = FLAGNOTE_CENTER_X_IN + FLAGNOTE_RADIUS_IN * math.cos(rad)
+    ny = FLAGNOTE_CENTER_Y_IN + FLAGNOTE_RADIUS_IN * math.sin(rad)
+    if nx < 0.0:
+        nx = 0.0
+        radial = math.sqrt(
+            max(
+                FLAGNOTE_RADIUS_IN ** 2
+                - (nx - FLAGNOTE_CENTER_X_IN) ** 2,
+                0.0,
+            )
+        )
+        ny = math.copysign(radial, math.sin(rad) or theta_deg)
+    return (
+        math.degrees(math.atan2(ny - FLAGNOTE_CENTER_Y_IN, nx - FLAGNOTE_CENTER_X_IN)),
+        math.hypot(nx - FLAGNOTE_CENTER_X_IN, ny - FLAGNOTE_CENTER_Y_IN),
+    )
+
+
+def flagnote_csys_children(mating_face_x_in, mating_face_half_height_mm):
+    """Polar flagnotes from (-0.5, 0); leaders land on the mating face (x>0)."""
+    half_h_in = mating_face_half_height_mm / MM_PER_IN
+    dx = mating_face_x_in - FLAGNOTE_CENTER_X_IN
+    children = {}
+    for i, theta in enumerate(FLAGNOTE_ANGLES_DEG, start=1):
+        note_angle, note_dist = _flagnote_note_polar(theta)
+        rad = math.radians(note_angle)
+        cosine = math.cos(rad)
+        if cosine > 1e-9:
+            dist_face = dx / cosine
+            y_face = FLAGNOTE_CENTER_Y_IN + dist_face * math.sin(rad)
+            if abs(y_face) > half_h_in:
+                y_face = math.copysign(half_h_in, y_face)
+                dist_face = math.hypot(dx, y_face - FLAGNOTE_CENTER_Y_IN)
+                theta_dest = math.degrees(
+                    math.atan2(y_face - FLAGNOTE_CENTER_Y_IN, dx)
+                )
+            else:
+                theta_dest = note_angle
+        else:
+            y_face = math.copysign(half_h_in, math.sin(rad) or 1.0)
+            dist_face = math.hypot(dx, y_face - FLAGNOTE_CENTER_Y_IN)
+            theta_dest = math.degrees(
+                math.atan2(y_face - FLAGNOTE_CENTER_Y_IN, dx)
+            )
+        children[f"flagnote-{i}-leader_dest"] = {
+            "x": FLAGNOTE_CENTER_X_IN,
+            "y": FLAGNOTE_CENTER_Y_IN,
+            "angle": theta_dest,
+            "distance": dist_face,
+            "rotation": 0,
+        }
+        children[f"flagnote-{i}"] = {
+            "x": FLAGNOTE_CENTER_X_IN,
+            "y": FLAGNOTE_CENTER_Y_IN,
+            "angle": note_angle,
+            "distance": note_dist,
+            "rotation": 0,
+        }
+    return children
 
 
 def _px_mm(mm):
@@ -452,49 +499,67 @@ def make_part_number(part_configuration):
     return official_pin(part_configuration).replace("M83513/", "M83513_", 1)
 
 
+def mating_shroud_mm(shell_size, gender):
+    # Amphenol C / official /01 B -- mating-side shell depth.
+    return get_dimension(shell_size, "C", gender=gender)
+
+
+def cable_side_mm(shell_size, connector_type, gender):
+    # Cups/pigtails are not drawn; this is the rear insulator bulk.
+    # F is the pigtail-family depth stand-in; solder reuses C.
+    if connector_type == "Pigtail":
+        return get_dimension(shell_size, "F")
+    return get_dimension(shell_size, "C", gender=gender)
+
+
 def connector_depth_mm(shell_size, connector_type, gender):
-    # C for solder cup (gender-split; plug C = official /01 B).
-    # F for pigtail -- catalog-table inference, see module docstring.
-    if connector_type == "Solder Cup":
-        return get_dimension(shell_size, "C", gender=gender)
-    return get_dimension(shell_size, "F")
+    return (
+        cable_side_mm(shell_size, connector_type, gender)
+        + FLANGE_THICKNESS_MM
+        + mating_shroud_mm(shell_size, gender)
+    )
 
 
 def microd_connector_svg(part_number, part_configuration):
     """
-    Side silhouette along the mating axis (origin at the mating face, +X
-    toward the cable). Height is Amphenol B / official D. Depth is C
-    (solder cup) or F (pigtail).
+    Side silhouette along the mating axis (origin at the cable side, +X
+    toward the mating face; same convention as D38999).
+
+    Stack-up: insulator (cable) | mounting flange | mating shroud.
+    Height is Amphenol B / official D.
     """
     shell_size = part_configuration["shell_size"]
+    gender = part_configuration["gender"]
     height = get_dimension(shell_size, "B")
-    depth = connector_depth_mm(
-        shell_size,
-        part_configuration["connector_type"],
-        part_configuration["gender"],
+    cable_px = _px_mm(
+        cable_side_mm(shell_size, part_configuration["connector_type"], gender)
     )
-
-    depth_px = _px_mm(depth)
+    flange_px = _px_mm(FLANGE_THICKNESS_MM)
+    shroud_px = _px_mm(mating_shroud_mm(shell_size, gender))
+    flange_rear = cable_px
+    flange_front = cable_px + flange_px
+    mating_x = flange_front + shroud_px
     half_h = _px_mm(height) / 2.0
-    flange_px = min(_px_mm(FLANGE_THICKNESS_MM), depth_px * 0.2)
     body_half = half_h * 0.72
 
     outline = [
-        (0.0, -half_h),
-        (flange_px, -half_h),
-        (flange_px, -body_half),
-        (depth_px, -body_half),
-        (depth_px, body_half),
-        (flange_px, body_half),
-        (flange_px, half_h),
-        (0.0, half_h),
+        (0.0, -body_half),
+        (flange_rear, -body_half),
+        (flange_rear, -half_h),
+        (flange_front, -half_h),
+        (flange_front, -body_half),
+        (mating_x, -body_half),
+        (mating_x, body_half),
+        (flange_front, body_half),
+        (flange_front, half_h),
+        (flange_rear, half_h),
+        (flange_rear, body_half),
+        (0.0, body_half),
     ]
 
-    insulator_x = flange_px
-    insulator_w = max(depth_px - flange_px, 0.0)
     insulator = (
-        f'<rect x="{insulator_x:.2f}" y="{-body_half:.2f}" '
-        f'width="{insulator_w:.2f}" height="{2 * body_half:.2f}" '
+        f'<rect x="0.00" y="{-body_half:.2f}" '
+        f'width="{cable_px:.2f}" height="{2 * body_half:.2f}" '
         f'fill="#2C2C2C" stroke="black" stroke-width="1"/>'
     )
 
@@ -542,7 +607,15 @@ def compile_part_attributes(part_configuration):
     return {
         "tools": tools,
         "build_notes": build_notes,
-        "csys_children": STANDARD_CSYS_CHILDREN,
+        "csys_children": flagnote_csys_children(
+            connector_depth_mm(
+                shell_size,
+                part_configuration["connector_type"],
+                part_configuration["gender"],
+            )
+            / MM_PER_IN,
+            get_dimension(shell_size, "B") / 2.0,
+        ),
         "contacts": contacts,
         "shell_size": insert_letter(shell_size),
         "pin_count": shell_size,
