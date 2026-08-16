@@ -161,23 +161,6 @@
       "rotation": 0
     }
   },
-  "item_type": "backshell",
-  "connector_designator": "H",
   "orientation": "straight",
-  "shell_size": 21,
-  "entry_size": "03",
-  "finish": "ZP",
-  "finish_description": "Zinc Nickel, Selective Plating",
-  "detent": "detented",
-  "torque_in_lbs": 80,
-  "assembly_wrench": "Glenair 600-079-07",
-  "a_thread": "M31 X 1 - 6H",
-  "c_dia_in": 1.64,
-  "c_dia_mm": 41.7,
-  "e_dia_in": 0.812,
-  "e_dia_mm": 20.6,
-  "f_max_in": 1.15,
-  "g_max_in": 1.3,
-  "h_max_in": 1.938,
-  "j_max_in": 1.796
+  "assembly_wrench": "Glenair 600-079-07"
 }

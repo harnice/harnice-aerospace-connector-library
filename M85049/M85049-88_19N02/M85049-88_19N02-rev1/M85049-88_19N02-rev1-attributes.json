@@ -161,23 +161,6 @@
       "rotation": 0
     }
   },
-  "item_type": "backshell",
-  "connector_designator": "H",
   "orientation": "straight",
-  "shell_size": 19,
-  "entry_size": "02",
-  "finish": "N",
-  "finish_description": "Electroless Nickel",
-  "detent": "detented",
-  "torque_in_lbs": 40,
-  "assembly_wrench": "Glenair 600-079-06",
-  "a_thread": "M28 X 1 - 6H",
-  "c_dia_in": 1.52,
-  "c_dia_mm": 38.6,
-  "e_dia_in": 0.625,
-  "e_dia_mm": 15.9,
-  "f_max_in": 1.12,
-  "g_max_in": 1.27,
-  "h_max_in": 1.875,
-  "j_max_in": 1.733
+  "assembly_wrench": "Glenair 600-079-06"
 }

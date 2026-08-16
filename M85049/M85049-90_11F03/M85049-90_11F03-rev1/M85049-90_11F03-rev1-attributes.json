@@ -161,23 +161,6 @@
       "rotation": 0
     }
   },
-  "item_type": "backshell",
-  "connector_designator": "H",
   "orientation": "90",
-  "shell_size": 11,
-  "entry_size": "03",
-  "finish": "F",
-  "finish_description": "Stainless Steel",
-  "detent": "detented",
-  "torque_in_lbs": 40,
-  "assembly_wrench": "600-102-10",
-  "a_thread": "M15 X 1 - 6H",
-  "c_dia_in": 0.99,
-  "c_dia_mm": 25.1,
-  "e_dia_in": 0.312,
-  "e_dia_mm": 7.9,
-  "f_max_in": 1.03,
-  "g_max_in": 1.19,
-  "h_max_in": 1.437,
-  "j_max_in": 1.48
+  "assembly_wrench": "600-102-10"
 }

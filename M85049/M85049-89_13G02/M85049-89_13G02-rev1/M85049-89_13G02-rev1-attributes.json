@@ -131,23 +131,6 @@
       "rotation": 0
     }
   },
-  "item_type": "backshell",
-  "connector_designator": "H",
   "orientation": "45",
-  "shell_size": 13,
-  "entry_size": "02",
-  "finish": "G",
-  "finish_description": "Electroless Nickel (Space Grade)",
-  "detent": "detented",
-  "torque_in_lbs": 40,
-  "assembly_wrench": "Glenair 600-079-03",
-  "a_thread": "M18 X 1 - 6H",
-  "c_dia_in": 1.16,
-  "c_dia_mm": 29.5,
-  "e_dia_in": 0.312,
-  "e_dia_mm": 7.9,
-  "f_max_in": 1.06,
-  "g_max_in": 1.21,
-  "h_max_in": 1.562,
-  "j_max_in": 1.553
+  "assembly_wrench": "Glenair 600-079-03"
 }
