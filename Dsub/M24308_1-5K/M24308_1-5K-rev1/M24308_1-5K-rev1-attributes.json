@@ -1,0 +1,348 @@
+{
+  "tools": [
+    "Soldering iron"
+  ],
+  "build_notes": [
+    "M24308/1-5K Class G, no float mount, zinc nickel finish"
+  ],
+  "csys_children": {
+    "flagnote-1": {
+      "angle": 0,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-1-leader_dest": {
+      "angle": 0,
+      "distance": 1,
+      "rotation": 0
+    },
+    "flagnote-2": {
+      "angle": 15,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-2-leader_dest": {
+      "angle": 15,
+      "distance": 1.03,
+      "rotation": 0
+    },
+    "flagnote-3": {
+      "angle": -15,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-3-leader_dest": {
+      "angle": -15,
+      "distance": 1.03,
+      "rotation": 0
+    },
+    "flagnote-4": {
+      "angle": 30,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-4-leader_dest": {
+      "angle": 30,
+      "distance": 1,
+      "rotation": 0
+    },
+    "flagnote-5": {
+      "angle": -30,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-5-leader_dest": {
+      "angle": -30,
+      "distance": 1,
+      "rotation": 0
+    },
+    "flagnote-6": {
+      "angle": 45,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-6-leader_dest": {
+      "angle": 45,
+      "distance": 0.72,
+      "rotation": 0
+    },
+    "flagnote-7": {
+      "angle": -45,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-7-leader_dest": {
+      "angle": -45,
+      "distance": 0.72,
+      "rotation": 0
+    },
+    "flagnote-8": {
+      "angle": 60,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-8-leader_dest": {
+      "angle": 60,
+      "distance": 0.58,
+      "rotation": 0
+    },
+    "flagnote-9": {
+      "angle": -60,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-9-leader_dest": {
+      "angle": -60,
+      "distance": 0.58,
+      "rotation": 0
+    },
+    "flagnote-10": {
+      "angle": -75,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-10-leader_dest": {
+      "angle": -75,
+      "distance": 0.52,
+      "rotation": 0
+    },
+    "flagnote-11": {
+      "angle": 75,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-11-leader_dest": {
+      "angle": 75,
+      "distance": 0.52,
+      "rotation": 0
+    },
+    "flagnote-12": {
+      "angle": -90,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-12-leader_dest": {
+      "angle": -90,
+      "distance": 0.52,
+      "rotation": 0
+    },
+    "flagnote-13": {
+      "angle": 90,
+      "distance": 3,
+      "rotation": 0
+    },
+    "flagnote-13-leader_dest": {
+      "angle": 90,
+      "distance": 0.5,
+      "rotation": 0
+    }
+  },
+  "contacts": [
+    {
+      "name": "1",
+      "size": "20"
+    },
+    {
+      "name": "2",
+      "size": "20"
+    },
+    {
+      "name": "3",
+      "size": "20"
+    },
+    {
+      "name": "4",
+      "size": "20"
+    },
+    {
+      "name": "5",
+      "size": "20"
+    },
+    {
+      "name": "6",
+      "size": "20"
+    },
+    {
+      "name": "7",
+      "size": "20"
+    },
+    {
+      "name": "8",
+      "size": "20"
+    },
+    {
+      "name": "9",
+      "size": "20"
+    },
+    {
+      "name": "10",
+      "size": "20"
+    },
+    {
+      "name": "11",
+      "size": "20"
+    },
+    {
+      "name": "12",
+      "size": "20"
+    },
+    {
+      "name": "13",
+      "size": "20"
+    },
+    {
+      "name": "14",
+      "size": "20"
+    },
+    {
+      "name": "15",
+      "size": "20"
+    },
+    {
+      "name": "16",
+      "size": "20"
+    },
+    {
+      "name": "17",
+      "size": "20"
+    },
+    {
+      "name": "18",
+      "size": "20"
+    },
+    {
+      "name": "19",
+      "size": "20"
+    },
+    {
+      "name": "20",
+      "size": "20"
+    },
+    {
+      "name": "21",
+      "size": "20"
+    },
+    {
+      "name": "22",
+      "size": "20"
+    },
+    {
+      "name": "23",
+      "size": "20"
+    },
+    {
+      "name": "24",
+      "size": "20"
+    },
+    {
+      "name": "25",
+      "size": "20"
+    },
+    {
+      "name": "26",
+      "size": "20"
+    },
+    {
+      "name": "27",
+      "size": "20"
+    },
+    {
+      "name": "28",
+      "size": "20"
+    },
+    {
+      "name": "29",
+      "size": "20"
+    },
+    {
+      "name": "30",
+      "size": "20"
+    },
+    {
+      "name": "31",
+      "size": "20"
+    },
+    {
+      "name": "32",
+      "size": "20"
+    },
+    {
+      "name": "33",
+      "size": "20"
+    },
+    {
+      "name": "34",
+      "size": "20"
+    },
+    {
+      "name": "35",
+      "size": "20"
+    },
+    {
+      "name": "36",
+      "size": "20"
+    },
+    {
+      "name": "37",
+      "size": "20"
+    },
+    {
+      "name": "38",
+      "size": "20"
+    },
+    {
+      "name": "39",
+      "size": "20"
+    },
+    {
+      "name": "40",
+      "size": "20"
+    },
+    {
+      "name": "41",
+      "size": "20"
+    },
+    {
+      "name": "42",
+      "size": "20"
+    },
+    {
+      "name": "43",
+      "size": "20"
+    },
+    {
+      "name": "44",
+      "size": "20"
+    },
+    {
+      "name": "45",
+      "size": "20"
+    },
+    {
+      "name": "46",
+      "size": "20"
+    },
+    {
+      "name": "47",
+      "size": "20"
+    },
+    {
+      "name": "48",
+      "size": "20"
+    },
+    {
+      "name": "49",
+      "size": "20"
+    },
+    {
+      "name": "50",
+      "size": "20"
+    }
+  ],
+  "shell_size": 5,
+  "pin_count": 50,
+  "density": "Standard",
+  "gender": "Receptacle",
+  "connector_type": "Solder Cup",
+  "finish": "K"
+}
