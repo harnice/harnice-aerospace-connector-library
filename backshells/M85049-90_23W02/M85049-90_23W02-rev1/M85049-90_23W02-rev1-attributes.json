@@ -2,7 +2,7 @@
   "tools": [
     "Band-it clamp tool",
     "Torque wrench",
-    "600-079-08 circular backshell assembly wrench",
+    "Glenair 600-079-08 circular backshell assembly wrench",
     "Torque-stripe marker"
   ],
   "build_notes": [
@@ -15,134 +15,139 @@
       "angle": 0,
       "rotation": 90
     },
+    "leader_center": {
+      "x": 1.6422,
+      "y": 0.6896,
+      "rotation": 0
+    },
     "flagnote-1-leader_dest": {
-      "angle": 0,
-      "distance": 2.744,
+      "x": 2.744,
+      "y": -0.4123,
       "rotation": 0
     },
     "flagnote-1": {
-      "angle": 0,
-      "distance": 5.1685,
+      "x": 4.1699,
+      "y": -1.8382,
       "rotation": 0
     },
     "flagnote-2-leader_dest": {
-      "angle": 15,
-      "distance": 2.8408,
+      "x": 2.2851,
+      "y": -0.424,
       "rotation": 0
     },
     "flagnote-2": {
-      "angle": 15,
-      "distance": 5.1685,
+      "x": 3.4296,
+      "y": -2.4063,
       "rotation": 0
     },
     "flagnote-3-leader_dest": {
-      "angle": -15,
-      "distance": 1.6382,
+      "x": 2.744,
+      "y": 0.0534,
       "rotation": 0
     },
     "flagnote-3": {
-      "angle": -15,
-      "distance": 5.1685,
+      "x": 4.738,
+      "y": -1.0978,
       "rotation": 0
     },
     "flagnote-4-leader_dest": {
-      "angle": 30,
-      "distance": 3.1685,
+      "x": 1.9405,
+      "y": -0.424,
       "rotation": 0
     },
     "flagnote-4": {
-      "angle": 30,
-      "distance": 5.1685,
+      "x": 2.5674,
+      "y": -2.7634,
       "rotation": 0
     },
     "flagnote-5-leader_dest": {
-      "angle": -30,
-      "distance": 0.848,
+      "x": 2.744,
+      "y": 0.3943,
       "rotation": 0
     },
     "flagnote-5": {
-      "angle": -30,
-      "distance": 5.1685,
+      "x": 5.0952,
+      "y": -0.2357,
       "rotation": 0
     },
     "flagnote-6-leader_dest": {
-      "angle": 45,
-      "distance": 1.3774,
+      "x": 1.6422,
+      "y": -0.424,
       "rotation": 0
     },
     "flagnote-6": {
-      "angle": 45,
-      "distance": 5.1685,
+      "x": 1.6422,
+      "y": -2.8853,
       "rotation": 0
     },
     "flagnote-7-leader_dest": {
-      "angle": -45,
-      "distance": 0.5996,
+      "x": 2.744,
+      "y": 0.6896,
       "rotation": 0
     },
     "flagnote-7": {
-      "angle": -45,
-      "distance": 5.1685,
+      "x": 5.217,
+      "y": 0.6896,
       "rotation": 0
     },
     "flagnote-8-leader_dest": {
-      "angle": 60,
-      "distance": 1.948,
+      "x": 1.3438,
+      "y": -0.424,
       "rotation": 0
     },
     "flagnote-8": {
-      "angle": 60,
-      "distance": 5.1685,
+      "x": 0.7169,
+      "y": -2.7634,
       "rotation": 0
     },
     "flagnote-9-leader_dest": {
-      "angle": -60,
-      "distance": 0.4896,
+      "x": 2.744,
+      "y": 0.9848,
       "rotation": 0
     },
     "flagnote-9": {
-      "angle": -60,
-      "distance": 5.1685,
+      "x": 5.0952,
+      "y": 1.6148,
       "rotation": 0
     },
     "flagnote-10-leader_dest": {
-      "angle": -75,
-      "distance": 0.439,
+      "x": 0.9993,
+      "y": -0.424,
       "rotation": 0
     },
     "flagnote-10": {
-      "angle": -75,
-      "distance": 5.1685,
+      "x": -0.1452,
+      "y": -2.4063,
       "rotation": 0
     },
     "flagnote-11-leader_dest": {
-      "angle": 75,
-      "distance": 0.439,
+      "x": 2.744,
+      "y": 1.3257,
       "rotation": 0
     },
     "flagnote-11": {
-      "angle": 75,
-      "distance": 5.1685,
+      "x": 4.738,
+      "y": 2.477,
       "rotation": 0
     },
     "flagnote-12-leader_dest": {
-      "angle": -90,
-      "distance": 0.424,
+      "x": 0.5286,
+      "y": -0.424,
       "rotation": 0
     },
     "flagnote-12": {
-      "angle": -90,
-      "distance": 5.1685,
+      "x": -0.8856,
+      "y": -1.8382,
       "rotation": 0
     },
     "flagnote-13-leader_dest": {
-      "angle": 90,
-      "distance": 0.424,
+      "x": 2.744,
+      "y": 1.7914,
       "rotation": 0
     },
     "flagnote-13": {
-      "angle": 90,
-      "distance": 5.1685,
+      "x": 4.1699,
+      "y": 3.2173,
       "rotation": 0
     }
   },
@@ -155,7 +160,7 @@
   "finish_description": "Cadmium Olive Drab",
   "detent": "detented",
   "torque_in_lbs": 80,
-  "assembly_wrench": "600-079-08",
+  "assembly_wrench": "Glenair 600-079-08",
   "a_thread": "M34 X 1 - 6H",
   "c_dia_in": 1.77,
   "c_dia_mm": 45.0,

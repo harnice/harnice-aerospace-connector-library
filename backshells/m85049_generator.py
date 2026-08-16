@@ -233,10 +233,13 @@ WRENCH_DASH_ANTI_DECOUPLING = {  # 600-079
     25: "10",
 }
 
-# Polar flagnotes: same ray from origin through leader_dest and flagnote.
-# Angles match the original every-15° layout (degrees, math +Y up).
-FLAGNOTE_ANGLES_DEG = [0, 15, -15, 30, -30, 45, -45, 60, -60, -75, 75, -90, 90]
-FLAGNOTE_OFFSET_IN = 2.0  # flagnote sits this far beyond the perimeter hit
+# Polar flagnotes about the silhouette centroid, every 15°.
+# Angled parts keep only outside-of-bend rays; numbering starts at the exterior
+# bisector and interleaves outward (flagnote-1 at center of the outside arc).
+FLAGNOTE_ANGLES_DEG = list(range(-180, 180, 15))
+FLAGNOTE_OFFSET_IN = 2.0  # flagnotes sit this far beyond the farthest leader tip
+MIN_LEADER_RADIUS_IN = 0.2  # drop rays that skim too close to the centroid
+MIN_FLAGNOTE_CLEARANCE_IN = 0.5  # drop flagnotes that land too close to the part
 
 
 def entry_dia(shell_size, entry_size):
@@ -523,25 +526,41 @@ def connector_csys(orientation, shell_size):
 
 
 def part_perimeter_inches(orientation, shell_size, entry_size):
-    """Outer silhouette vertices in inches (math coords, +Y up), CCW, closed."""
+    """Outer silhouette vertices in inches (math coords, +Y up), CCW, closed.
+
+    Must match the drawing outline in backshell_svg so leader tips land on the
+    visible edge.
+    """
     data = SHELL_DATA[shell_size]
     half_c = data["c_in"] / 2
     half_e = platform_od_in(shell_size, entry_size) / 2
 
     if orientation == "straight":
-        length = STRAIGHT_BODY_IN + BAND_PLATFORM_IN
+        body = STRAIGHT_BODY_IN
         band = BAND_PLATFORM_IN
-        taper = STRAIGHT_BODY_IN * 0.12
-        # Stepped body matching the drawing outline
+        nut = body * 0.28
+        taper = body * 0.12
+        mid = body - nut - taper
+        half_mid = (half_c + half_e) / 2
+        # Same stepped outline as straight_backshell_svg (inches, +Y up)
+        x0 = 0.0
+        x1 = band
+        x2 = band + taper
+        x3 = band + taper + mid  # = length - nut
+        x4 = band + body
         pts = [
-            (0.0, half_e),
-            (band, half_e),
-            (band + taper, half_c),
-            (length, half_c),
-            (length, -half_c),
-            (band + taper, -half_c),
-            (band, -half_e),
-            (0.0, -half_e),
+            (x0, half_e),
+            (x1, half_e),
+            (x2, half_mid),
+            (x3, half_mid),
+            (x3, half_c),
+            (x4, half_c),
+            (x4, -half_c),
+            (x3, -half_c),
+            (x3, -half_mid),
+            (x2, -half_mid),
+            (x1, -half_e),
+            (x0, -half_e),
         ]
     elif orientation == "45":
         f, g = data["f_in"], data["g_in"]
@@ -613,6 +632,136 @@ def connector_mating_face_inches(orientation, shell_size, entry_size):
     raise ValueError(f"Unknown orientation '{orientation}'")
 
 
+def cable_entry_face_inches(orientation, shell_size, entry_size):
+    """Endpoints of the cable-entry face segment (inches, +Y up)."""
+    half_e = platform_od_in(shell_size, entry_size) / 2
+    # All orientations: cable entry is the vertical face at x=0.
+    return (0.0, half_e), (0.0, -half_e)
+
+
+def inside_bend_edges_inches(orientation, shell_size, entry_size):
+    """Perimeter edges on the inside of a 45°/90° bend (inches, +Y up).
+
+    Used when ray-casting from the centroid (straight unused). Straight parts
+    have no bend; return [].
+    """
+    if orientation == "straight":
+        return []
+
+    data = SHELL_DATA[shell_size]
+    half_c = data["c_in"] / 2
+    half_e = platform_od_in(shell_size, entry_size) / 2
+
+    if orientation == "90":
+        h, j = data["h_in"], data["j_in"]
+        # Top of horizontal arm + inner face of vertical arm (concave crook).
+        return [
+            ((0.0, half_e), (j - half_c, half_e)),
+            ((j - half_c, half_e), (j - half_c, h)),
+        ]
+
+    if orientation == "45":
+        f, g = data["f_in"], data["g_in"]
+        a = math.radians(45)
+        cos_a, sin_a = math.cos(a), math.sin(a)
+
+        def off(cx, cy, tx, ty, dist):
+            nx, ny = -ty, tx
+            return (cx + nx * dist, cy + ny * dist)
+
+        c0 = (0.0, 0.0)
+        c1 = (g, 0.0)
+        c2 = (g + f * cos_a, f * sin_a)
+        w0, w1, w2 = half_e, (half_c + half_e) / 2, half_c
+        # +offset side of both arms faces the concave inside of the bend.
+        p0 = off(*c0, 1, 0, w0)
+        p1 = off(*c1, 1, 0, w1)
+        p2 = off(*c2, cos_a, sin_a, w2)
+        return [(p0, p1), (p1, p2)]
+
+    raise ValueError(f"Unknown orientation '{orientation}'")
+
+
+def leader_center_inches(orientation, shell_size, entry_size):
+    """Polar origin for flagnote leaders: silhouette area centroid (inches, +Y up)."""
+    return _polygon_centroid(
+        part_perimeter_inches(orientation, shell_size, entry_size)
+    )
+
+
+def exterior_bisector_deg(orientation):
+    """Preferred start angle (deg) for flagnote-1 about the centroid."""
+    if orientation == "straight":
+        return 90.0  # middle of the top face
+    if orientation == "90":
+        # Exterior bisector of the L outer corner (body occupies ~90°…180°).
+        return -45.0
+    if orientation == "45":
+        # Outward normal of the 0°→45° bend.
+        return (0.0 + 45.0) / 2.0 - 90.0  # −67.5°
+    raise ValueError(f"Unknown orientation '{orientation}'")
+
+
+def _angle_diff_deg(a, b):
+    """Signed difference a−b in (−180, 180]."""
+    d = (a - b + 180.0) % 360.0 - 180.0
+    if d <= -180.0:
+        d += 360.0
+    return d
+
+
+def flagnote_angles_deg(orientation):
+    """Candidate polar angles (deg) about the centroid, outside-of-bend for angled."""
+    if orientation == "straight":
+        return list(FLAGNOTE_ANGLES_DEG)
+
+    if orientation == "90":
+        # From centroid, outside faces are bottom (−Y) and outer vertical (+X).
+        # Keep the open half toward the convex exterior (about bisector −45°).
+        bisector = exterior_bisector_deg(orientation)
+        half_span = 135.0  # ~270° exterior sector
+        return [
+            a
+            for a in FLAGNOTE_ANGLES_DEG
+            if abs(_angle_diff_deg(a, bisector)) <= half_span + 1e-9
+        ]
+
+    if orientation == "45":
+        bisector = exterior_bisector_deg(orientation)
+        half_span = 90.0  # ~180° convex-outside arc
+        return [
+            a
+            for a in FLAGNOTE_ANGLES_DEG
+            if abs(_angle_diff_deg(a, bisector)) <= half_span + 1e-9
+        ]
+
+    raise ValueError(f"Unknown orientation '{orientation}'")
+
+
+def _order_angles_from_bisector(angles, bisector):
+    """flagnote-1 nearest bisector, then alternate sides outward (2,3,4,5,…)."""
+    if not angles:
+        return []
+    # Seed with the angle closest to the exterior bisector
+    first = min(angles, key=lambda a: abs(_angle_diff_deg(a, bisector)))
+    first_diff = _angle_diff_deg(first, bisector)
+    left = sorted(
+        (a for a in angles if _angle_diff_deg(a, bisector) < first_diff - 1e-9),
+        key=lambda a: -_angle_diff_deg(a, bisector),
+    )
+    right = sorted(
+        (a for a in angles if _angle_diff_deg(a, bisector) > first_diff + 1e-9),
+        key=lambda a: _angle_diff_deg(a, bisector),
+    )
+    ordered = [first]
+    for i in range(max(len(left), len(right))):
+        if i < len(left):
+            ordered.append(left[i])
+        if i < len(right):
+            ordered.append(right[i])
+    return ordered
+
+
 def _points_close(a, b, tol=1e-4):
     return abs(a[0] - b[0]) <= tol and abs(a[1] - b[1]) <= tol
 
@@ -623,28 +772,75 @@ def _same_segment(a0, a1, b0, b1, tol=1e-4):
     )
 
 
-def _ray_edge_intersection_t(angle_rad, p0, p1, eps=1e-9):
+def _polygon_centroid(pts):
+    """Area centroid of a polygon in inches (+Y up). pts may be closed."""
+    verts = pts[:-1] if pts and pts[0] == pts[-1] else pts
+    n = len(verts)
+    if n < 3:
+        if not verts:
+            return 0.0, 0.0
+        return (
+            sum(v[0] for v in verts) / n,
+            sum(v[1] for v in verts) / n,
+        )
+
+    area2 = 0.0  # 2 * signed area
+    cx = cy = 0.0
+    for i in range(n):
+        x0, y0 = verts[i]
+        x1, y1 = verts[(i + 1) % n]
+        cross = x0 * y1 - x1 * y0
+        area2 += cross
+        cx += (x0 + x1) * cross
+        cy += (y0 + y1) * cross
+
+    if abs(area2) < 1e-12:
+        return (
+            sum(v[0] for v in verts) / n,
+            sum(v[1] for v in verts) / n,
+        )
+    inv = 1.0 / (3.0 * area2)
+    return cx * inv, cy * inv
+
+
+def _point_segment_distance(px, py, a, b):
+    ax, ay = a
+    bx, by = b
+    ex, ey = bx - ax, by - ay
+    L2 = ex * ex + ey * ey
+    if L2 < 1e-18:
+        return math.hypot(px - ax, py - ay)
+    u = max(0.0, min(1.0, ((px - ax) * ex + (py - ay) * ey) / L2))
+    return math.hypot(px - (ax + u * ex), py - (ay + u * ey))
+
+
+def _point_perimeter_distance(px, py, perimeter):
+    if perimeter[0] != perimeter[-1]:
+        perimeter = perimeter + [perimeter[0]]
+    return min(
+        _point_segment_distance(px, py, perimeter[i], perimeter[i + 1])
+        for i in range(len(perimeter) - 1)
+    )
+
+
+def _ray_edge_intersection_t(origin, angle_rad, p0, p1, eps=1e-9):
     """Distance t>=0 along ray from origin at angle_rad to segment p0→p1, or None."""
+    ox, oy = origin
     dx, dy = math.cos(angle_rad), math.sin(angle_rad)
     ex, ey = p1[0] - p0[0], p1[1] - p0[1]
-    # Solve t*(dx,dy) = p0 + u*(ex,ey),  t>=0, u in [0,1]
     det = dx * ey - dy * ex
     if abs(det) < eps:
-        return None  # parallel
-    # t = (p0 × edge) / det   using 2D cross
-    t = (p0[0] * ey - p0[1] * ex) / det
-    u = (p0[0] * dy - p0[1] * dx) / det
+        return None
+    rx, ry = p0[0] - ox, p0[1] - oy
+    t = (rx * ey - ry * ex) / det
+    u = (rx * dy - ry * dx) / det
     if t < -eps or u < -eps or u > 1 + eps:
         return None
     return max(0.0, t)
 
 
-def _ray_perimeter_exit_distance(angle_deg, perimeter, exclude_edges=None):
-    """Farthest intersection of a polar ray with the part perimeter (inches).
-
-    Edges in exclude_edges (list of (p0, p1)) are skipped — used to keep
-    leaders off the connector mating face.
-    """
+def _ray_perimeter_exit_distance(origin, angle_deg, perimeter, exclude_edges=None):
+    """Farthest intersection of a polar ray with the part perimeter (inches)."""
     if perimeter[0] != perimeter[-1]:
         perimeter = perimeter + [perimeter[0]]
     exclude_edges = exclude_edges or []
@@ -654,7 +850,7 @@ def _ray_perimeter_exit_distance(angle_deg, perimeter, exclude_edges=None):
         p0, p1 = perimeter[i], perimeter[i + 1]
         if any(_same_segment(p0, p1, e0, e1) for e0, e1 in exclude_edges):
             continue
-        t = _ray_edge_intersection_t(angle_rad, p0, p1)
+        t = _ray_edge_intersection_t(origin, angle_rad, p0, p1)
         if t is not None and t > 1e-6:
             hits.append(t)
     if not hits:
@@ -663,41 +859,83 @@ def _ray_perimeter_exit_distance(angle_deg, perimeter, exclude_edges=None):
 
 
 def flagnote_csys_children(orientation, shell_size, entry_size):
-    """Polar flagnotes on one shared radius; leaders at each ray's perimeter hit.
+    """Polar flagnotes about the silhouette centroid.
 
-    Flagnotes sit on a circle: r_flag = max(perimeter hits) + FLAGNOTE_OFFSET_IN.
-    Leaders keep per-angle radii from the part geometry, never on the connector face.
+    Leaders at each ray's perimeter hit. Connector mating face and cable-entry
+    face are never used; for 45°/90°, inside-of-bend edges are also excluded.
+    Flagnotes share one circle: max(hit) + FLAGNOTE_OFFSET_IN.
+    flagnote-1 is nearest the preferred start angle (top for straight; exterior
+    bisector for angled), then interleaved outward. Rays/flagnotes too close to
+    the part are dropped.
+
+    Stored as absolute x/y (harnice treats x/y vs angle/distance as exclusive).
     """
     perimeter = part_perimeter_inches(orientation, shell_size, entry_size)
+    cx, cy = _polygon_centroid(perimeter)
+    origin = (cx, cy)
+    bisector = exterior_bisector_deg(orientation)
+
     mating = connector_mating_face_inches(orientation, shell_size, entry_size)
-    exclude = [mating]
+    cable = cable_entry_face_inches(orientation, shell_size, entry_size)
+    exclude = [mating, cable] + inside_bend_edges_inches(
+        orientation, shell_size, entry_size
+    )
 
     leaders = []
-    for angle in FLAGNOTE_ANGLES_DEG:
-        r_leader = _ray_perimeter_exit_distance(angle, perimeter, exclude_edges=exclude)
-        if r_leader is None:
+    for angle in flagnote_angles_deg(orientation):
+        r_leader = _ray_perimeter_exit_distance(
+            origin, angle, perimeter, exclude_edges=exclude
+        )
+        if r_leader is None or r_leader < MIN_LEADER_RADIUS_IN:
             continue
         leaders.append((angle, r_leader))
 
     if not leaders:
-        return {}
+        return {
+            "leader_center": {
+                "x": round(cx, 4),
+                "y": round(cy, 4),
+                "rotation": 0,
+            }
+        }
 
     r_flag = max(r for _, r in leaders) + FLAGNOTE_OFFSET_IN
 
-    children = {}
-    for i, (angle, r_leader) in enumerate(leaders, start=1):
+    kept = []
+    for angle, r_leader in leaders:
+        rad = math.radians(angle)
+        fx = cx + r_flag * math.cos(rad)
+        fy = cy + r_flag * math.sin(rad)
+        if _point_perimeter_distance(fx, fy, perimeter) < MIN_FLAGNOTE_CLEARANCE_IN:
+            continue
+        kept.append((angle, r_leader))
+
+    # Number after filtering so flagnote-1 is truly nearest the start angle.
+    by_angle = {angle: r for angle, r in kept}
+    ordered_angles = _order_angles_from_bisector(list(by_angle), bisector)
+    kept = [(angle, by_angle[angle]) for angle in ordered_angles]
+
+    children = {
+        "leader_center": {
+            "x": round(cx, 4),
+            "y": round(cy, 4),
+            "rotation": 0,
+        }
+    }
+    for i, (angle, r_leader) in enumerate(kept, start=1):
+        rad = math.radians(angle)
+        cos_a, sin_a = math.cos(rad), math.sin(rad)
         children[f"flagnote-{i}-leader_dest"] = {
-            "angle": angle,
-            "distance": round(r_leader, 4),
+            "x": round(cx + r_leader * cos_a, 4),
+            "y": round(cy + r_leader * sin_a, 4),
             "rotation": 0,
         }
         children[f"flagnote-{i}"] = {
-            "angle": angle,
-            "distance": round(r_flag, 4),
+            "x": round(cx + r_flag * cos_a, 4),
+            "y": round(cy + r_flag * sin_a, 4),
             "rotation": 0,
         }
     return children
-
 
 def circular_backshell_assembly_wrench_part_number(shell_size, finish):
     """Glenair 600-series circular backshell assembly wrench for this shell/finish."""
@@ -707,7 +945,7 @@ def circular_backshell_assembly_wrench_part_number(shell_size, finish):
         return f"600-102-{dash}"
     # Aluminum self-locking (/88–90) — anti-decoupling wrench 600-079
     dash = WRENCH_DASH_ANTI_DECOUPLING[shell_size]
-    return f"600-079-{dash}"
+    return f"Glenair 600-079-{dash}"
 
 
 def compile_part_attributes(part_configuration):
@@ -783,11 +1021,26 @@ def iter_part_configurations():
                         }
 
 
+def _progress_bar(done, total, width=25):
+    """Return a text progress bar like: [ x x x . . . ] (35%)."""
+    if total <= 0:
+        filled = width
+        pct = 100
+    else:
+        filled = min(width, max(0, int(round(width * done / total))))
+        pct = int(round(100.0 * done / total))
+    cells = ["x"] * filled + ["."] * (width - filled)
+    return "[ " + " ".join(cells) + f" ] ({pct}%)"
+
+
 def main():
     state.set_rev(REVISION)
     state.set_product("part")
 
-    for part_configuration in iter_part_configurations():
+    configs = list(iter_part_configurations())
+    total = len(configs)
+
+    for i, part_configuration in enumerate(configs, start=1):
         part_number = make_part_number(
             part_configuration["basic"],
             part_configuration["detent"],
@@ -847,6 +1100,8 @@ def main():
 
         # d38999_generator used `harnice -r`; current CLI builds with -b
         subprocess.run(["harnice", "-b"], cwd=rev_dir, check=True)
+
+        print(_progress_bar(i, total))
 
     print("Finished rendering all parts in family.")
 

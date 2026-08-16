@@ -2,7 +2,7 @@
   "tools": [
     "Band-it clamp tool",
     "Torque wrench",
-    "600-079-10 circular backshell assembly wrench",
+    "Glenair 600-079-10 circular backshell assembly wrench",
     "Torque-stripe marker"
   ],
   "build_notes": [
@@ -15,124 +15,109 @@
       "angle": 0,
       "rotation": 45
     },
+    "leader_center": {
+      "x": 1.3304,
+      "y": 0.1814,
+      "rotation": 0
+    },
     "flagnote-1-leader_dest": {
-      "angle": 0,
-      "distance": 2.5561,
+      "x": 1.5374,
+      "y": -0.5912,
       "rotation": 0
     },
     "flagnote-1": {
-      "angle": 0,
-      "distance": 4.5561,
+      "x": 2.1938,
+      "y": -3.0407,
       "rotation": 0
     },
     "flagnote-2-leader_dest": {
-      "angle": -15,
-      "distance": 1.8104,
+      "x": 1.3304,
+      "y": -0.6964,
       "rotation": 0
     },
     "flagnote-2": {
-      "angle": -15,
-      "distance": 4.5561,
+      "x": 1.3304,
+      "y": -3.1544,
       "rotation": 0
     },
     "flagnote-3-leader_dest": {
-      "angle": 30,
-      "distance": 1.5821,
+      "x": 1.7165,
+      "y": -0.4873,
       "rotation": 0
     },
     "flagnote-3": {
-      "angle": 30,
-      "distance": 4.5561,
+      "x": 2.9983,
+      "y": -2.7075,
       "rotation": 0
     },
     "flagnote-4-leader_dest": {
-      "angle": -30,
-      "distance": 1.3272,
+      "x": 1.1061,
+      "y": -0.6557,
       "rotation": 0
     },
     "flagnote-4": {
-      "angle": -30,
-      "distance": 4.5561,
+      "x": 0.4671,
+      "y": -3.0407,
       "rotation": 0
     },
     "flagnote-5-leader_dest": {
-      "angle": 45,
-      "distance": 0.7861,
+      "x": 1.8953,
+      "y": -0.3835,
       "rotation": 0
     },
     "flagnote-5": {
-      "angle": 45,
-      "distance": 4.5561,
+      "x": 3.6891,
+      "y": -2.1774,
       "rotation": 0
     },
     "flagnote-6-leader_dest": {
-      "angle": -45,
-      "distance": 0.7861,
+      "x": 0.8717,
+      "y": -0.6132,
       "rotation": 0
     },
     "flagnote-6": {
-      "angle": -45,
-      "distance": 4.5561,
+      "x": -0.3375,
+      "y": -2.7075,
       "rotation": 0
     },
     "flagnote-7-leader_dest": {
-      "angle": 60,
-      "distance": 0.5869,
+      "x": 2.1015,
+      "y": -0.2638,
       "rotation": 0
     },
     "flagnote-7": {
-      "angle": 60,
-      "distance": 4.5561,
+      "x": 4.2192,
+      "y": -1.4865,
       "rotation": 0
     },
     "flagnote-8-leader_dest": {
-      "angle": -60,
-      "distance": 0.5869,
+      "x": 0.5874,
+      "y": -0.5616,
       "rotation": 0
     },
     "flagnote-8": {
-      "angle": -60,
-      "distance": 4.5561,
+      "x": -1.0283,
+      "y": -2.1774,
       "rotation": 0
     },
     "flagnote-9-leader_dest": {
-      "angle": -75,
-      "distance": 0.4951,
+      "x": 2.3827,
+      "y": -0.1006,
       "rotation": 0
     },
     "flagnote-9": {
-      "angle": -75,
-      "distance": 4.5561,
+      "x": 4.5525,
+      "y": -0.682,
       "rotation": 0
     },
     "flagnote-10-leader_dest": {
-      "angle": 75,
-      "distance": 0.4951,
+      "x": 0.1736,
+      "y": -0.4865,
       "rotation": 0
     },
     "flagnote-10": {
-      "angle": 75,
-      "distance": 4.5561,
-      "rotation": 0
-    },
-    "flagnote-11-leader_dest": {
-      "angle": -90,
-      "distance": 0.455,
-      "rotation": 0
-    },
-    "flagnote-11": {
-      "angle": -90,
-      "distance": 4.5561,
-      "rotation": 0
-    },
-    "flagnote-12-leader_dest": {
-      "angle": 90,
-      "distance": 0.455,
-      "rotation": 0
-    },
-    "flagnote-12": {
-      "angle": 90,
-      "distance": 4.5561,
+      "x": -1.5584,
+      "y": -1.4865,
       "rotation": 0
     }
   },
@@ -145,7 +130,7 @@
   "finish_description": "Pure Dense Electrodeposited Aluminum, Selective Plating",
   "detent": "detented",
   "torque_in_lbs": 80,
-  "assembly_wrench": "600-079-10",
+  "assembly_wrench": "Glenair 600-079-10",
   "a_thread": "M37 X 1 - 6H",
   "c_dia_in": 1.89,
   "c_dia_mm": 48.0,

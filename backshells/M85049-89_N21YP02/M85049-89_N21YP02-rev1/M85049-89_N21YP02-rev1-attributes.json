@@ -2,7 +2,7 @@
   "tools": [
     "Band-it clamp tool",
     "Torque wrench",
-    "600-079-07 circular backshell assembly wrench",
+    "Glenair 600-079-07 circular backshell assembly wrench",
     "Torque-stripe marker"
   ],
   "build_notes": [
@@ -15,124 +15,119 @@
       "angle": 0,
       "rotation": 45
     },
+    "leader_center": {
+      "x": 1.2741,
+      "y": 0.185,
+      "rotation": 0
+    },
     "flagnote-1-leader_dest": {
-      "angle": 0,
-      "distance": 2.3058,
+      "x": 1.4602,
+      "y": -0.5097,
       "rotation": 0
     },
     "flagnote-1": {
-      "angle": 0,
-      "distance": 4.3058,
+      "x": 2.1382,
+      "y": -3.04,
       "rotation": 0
     },
     "flagnote-2-leader_dest": {
-      "angle": -15,
-      "distance": 1.6525,
+      "x": 1.2741,
+      "y": -0.602,
       "rotation": 0
     },
     "flagnote-2": {
-      "angle": -15,
-      "distance": 4.3058,
+      "x": 1.2741,
+      "y": -3.1537,
       "rotation": 0
     },
     "flagnote-3-leader_dest": {
-      "angle": 30,
-      "distance": 1.5607,
+      "x": 1.6196,
+      "y": -0.4136,
       "rotation": 0
     },
     "flagnote-3": {
-      "angle": 30,
-      "distance": 4.3058,
+      "x": 2.9434,
+      "y": -2.7064,
       "rotation": 0
     },
     "flagnote-4-leader_dest": {
-      "angle": -30,
-      "distance": 1.0976,
+      "x": 1.0721,
+      "y": -0.5688,
       "rotation": 0
     },
     "flagnote-4": {
-      "angle": -30,
-      "distance": 4.3058,
+      "x": 0.4099,
+      "y": -3.04,
       "rotation": 0
     },
     "flagnote-5-leader_dest": {
-      "angle": 45,
-      "distance": 0.6643,
+      "x": 1.7775,
+      "y": -0.3184,
       "rotation": 0
     },
     "flagnote-5": {
-      "angle": 45,
-      "distance": 4.3058,
+      "x": 3.6349,
+      "y": -2.1758,
       "rotation": 0
     },
     "flagnote-6-leader_dest": {
-      "angle": -45,
-      "distance": 0.6643,
+      "x": 0.8591,
+      "y": -0.5338,
       "rotation": 0
     },
     "flagnote-6": {
-      "angle": -45,
-      "distance": 4.3058,
+      "x": -0.3953,
+      "y": -2.7064,
       "rotation": 0
     },
     "flagnote-7-leader_dest": {
-      "angle": 60,
-      "distance": 0.5008,
+      "x": 1.9578,
+      "y": -0.2098,
       "rotation": 0
     },
     "flagnote-7": {
-      "angle": 60,
-      "distance": 4.3058,
+      "x": 4.1655,
+      "y": -1.4844,
       "rotation": 0
     },
     "flagnote-8-leader_dest": {
-      "angle": -60,
-      "distance": 0.5008,
+      "x": 0.5982,
+      "y": -0.4909,
       "rotation": 0
     },
     "flagnote-8": {
-      "angle": -60,
-      "distance": 4.3058,
+      "x": -1.0868,
+      "y": -2.1758,
       "rotation": 0
     },
     "flagnote-9-leader_dest": {
-      "angle": -75,
-      "distance": 0.4251,
+      "x": 2.2008,
+      "y": -0.0633,
       "rotation": 0
     },
     "flagnote-9": {
-      "angle": -75,
-      "distance": 4.3058,
+      "x": 4.499,
+      "y": -0.6791,
       "rotation": 0
     },
     "flagnote-10-leader_dest": {
-      "angle": 75,
-      "distance": 0.4251,
+      "x": 0.2131,
+      "y": -0.4275,
       "rotation": 0
     },
     "flagnote-10": {
-      "angle": 75,
-      "distance": 4.3058,
+      "x": -1.6174,
+      "y": -1.4844,
       "rotation": 0
     },
     "flagnote-11-leader_dest": {
-      "angle": -90,
-      "distance": 0.3925,
+      "x": 2.6128,
+      "y": 0.185,
       "rotation": 0
     },
     "flagnote-11": {
-      "angle": -90,
-      "distance": 4.3058,
-      "rotation": 0
-    },
-    "flagnote-12-leader_dest": {
-      "angle": 90,
-      "distance": 0.3925,
-      "rotation": 0
-    },
-    "flagnote-12": {
-      "angle": 90,
-      "distance": 4.3058,
+      "x": 4.6128,
+      "y": 0.185,
       "rotation": 0
     }
   },
@@ -145,7 +140,7 @@
   "finish_description": "Pure Dense Electrodeposited Aluminum, Selective Plating",
   "detent": "non-detented",
   "torque_in_lbs": 80,
-  "assembly_wrench": "600-079-07",
+  "assembly_wrench": "Glenair 600-079-07",
   "a_thread": "M31 X 1 - 6H",
   "c_dia_in": 1.64,
   "c_dia_mm": 41.7,
