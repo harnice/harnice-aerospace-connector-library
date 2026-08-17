@@ -3,9 +3,7 @@
     "M22520/2-01 crimp tool",
     "M81969/39-01 extraction tool"
   ],
-  "build_notes": [
-    "M24308/4-14Z Class G, no float mount, zinc finish"
-  ],
+  "build_notes": [],
   "csys_children": {
     "flagnote-1-leader_dest": {
       "x": 0.0,
@@ -383,11 +381,5 @@
       "name": "62",
       "size": "22"
     }
-  ],
-  "shell_size": 4,
-  "pin_count": 62,
-  "density": "High",
-  "gender": "Plug",
-  "connector_type": "Crimp",
-  "finish": "Z"
+  ]
 }

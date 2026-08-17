@@ -2,12 +2,7 @@
   "tools": [
     "Soldering iron"
   ],
-  "build_notes": [
-    "M83513/02-HT metal shell, nickel fluorocarbon polymer finish",
-    "26 AWG is the maximum wire size for the solder cup (MIL-DTL-83513/1H Figure 1 note 7)",
-    "Mounting hardware ordered separately (MIL-DTL-83513/5)",
-    "B corrected from OCR '15.72mm' to 45.72mm (=1.800in x 25.4) -- an obvious dropped leading digit; 15.72mm would make the largest shell's width smaller than every other shell size's, which isn't physically plausible."
-  ],
+  "build_notes": [],
   "csys_children": {},
   "contacts": [
     {
@@ -410,10 +405,5 @@
       "name": "100",
       "size": "24"
     }
-  ],
-  "shell_size": "H",
-  "pin_count": 100,
-  "gender": "Receptacle",
-  "connector_type": "Solder Cup",
-  "finish": "T"
+  ]
 }

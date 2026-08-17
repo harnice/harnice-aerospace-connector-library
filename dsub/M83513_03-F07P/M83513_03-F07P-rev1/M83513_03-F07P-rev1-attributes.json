@@ -1,10 +1,6 @@
 {
   "tools": [],
-  "build_notes": [
-    "M83513/03-F07P metal shell, passivated stainless steel finish",
-    "Factory pigtail: A-A-59551 25 AWG solid, 0.5 in, tin plated",
-    "Mounting hardware ordered separately (MIL-DTL-83513/5)"
-  ],
+  "build_notes": [],
   "csys_children": {
     "flagnote-1-leader_dest": {
       "x": 0.0,
@@ -226,10 +222,5 @@
       "name": "37",
       "size": "24"
     }
-  ],
-  "shell_size": "F",
-  "pin_count": 37,
-  "gender": "Plug",
-  "connector_type": "Pigtail",
-  "finish": "P"
+  ]
 }

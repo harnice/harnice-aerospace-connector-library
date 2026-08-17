@@ -1,11 +1,6 @@
 {
   "tools": [],
-  "build_notes": [
-    "M83513/03-H15N metal shell, electroless nickel finish",
-    "Factory pigtail: M22759/33-26-9, 72 in, white",
-    "Mounting hardware ordered separately (MIL-DTL-83513/5)",
-    "B corrected from OCR '15.72mm' to 45.72mm (=1.800in x 25.4) -- an obvious dropped leading digit; 15.72mm would make the largest shell's width smaller than every other shell size's, which isn't physically plausible."
-  ],
+  "build_notes": [],
   "csys_children": {
     "flagnote-1-leader_dest": {
       "x": 0.0,
@@ -451,10 +446,5 @@
       "name": "100",
       "size": "24"
     }
-  ],
-  "shell_size": "H",
-  "pin_count": 100,
-  "gender": "Plug",
-  "connector_type": "Pigtail",
-  "finish": "N"
+  ]
 }

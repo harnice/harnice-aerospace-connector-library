@@ -2,9 +2,7 @@
   "tools": [
     "Soldering iron"
   ],
-  "build_notes": [
-    "M24308/3-3T Class G, no float mount, nickel fluorocarbon polymer finish"
-  ],
+  "build_notes": [],
   "csys_children": {
     "flagnote-1-leader_dest": {
       "x": 0.0,
@@ -234,11 +232,5 @@
       "name": "25",
       "size": "20"
     }
-  ],
-  "shell_size": 3,
-  "pin_count": 25,
-  "density": "Standard",
-  "gender": "Plug",
-  "connector_type": "Solder Cup",
-  "finish": "T"
+  ]
 }

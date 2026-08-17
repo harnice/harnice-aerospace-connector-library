@@ -1,10 +1,6 @@
 {
   "tools": [],
-  "build_notes": [
-    "M83513/04-G09N metal shell, electroless nickel finish",
-    "Factory pigtail: M22759/33-26-9, 18 in, white",
-    "Mounting hardware ordered separately (MIL-DTL-83513/5)"
-  ],
+  "build_notes": [],
   "csys_children": {
     "flagnote-1-leader_dest": {
       "x": 0.0,
@@ -282,10 +278,5 @@
       "name": "51",
       "size": "24"
     }
-  ],
-  "shell_size": "G",
-  "pin_count": 51,
-  "gender": "Receptacle",
-  "connector_type": "Pigtail",
-  "finish": "N"
+  ]
 }

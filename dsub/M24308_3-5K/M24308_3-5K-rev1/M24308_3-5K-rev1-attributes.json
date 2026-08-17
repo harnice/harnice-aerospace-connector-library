@@ -2,9 +2,7 @@
   "tools": [
     "Soldering iron"
   ],
-  "build_notes": [
-    "M24308/3-5K Class G, no float mount, zinc nickel finish"
-  ],
+  "build_notes": [],
   "csys_children": {
     "flagnote-1-leader_dest": {
       "x": 0.0,
@@ -334,11 +332,5 @@
       "name": "50",
       "size": "20"
     }
-  ],
-  "shell_size": 5,
-  "pin_count": 50,
-  "density": "Standard",
-  "gender": "Plug",
-  "connector_type": "Solder Cup",
-  "finish": "K"
+  ]
 }

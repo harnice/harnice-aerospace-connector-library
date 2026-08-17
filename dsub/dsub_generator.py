@@ -1359,7 +1359,6 @@ def compile_part_attributes(part_configuration):
     variant = variant_from_configuration(part_configuration)
     size = contact_size_for(variant.density)
     size_info = CONTACT_SIZES[size]
-    slash = slash_sheet(variant.connector_type, variant.gender)
 
     contacts = [{"name": str(i), "size": size} for i in range(1, variant.pin_count + 1)]
 
@@ -1371,15 +1370,9 @@ def compile_part_attributes(part_configuration):
     else:
         tools = ["Soldering iron"]
 
-    finish = part_configuration["finish"]
-    finish_name = FINISHES[finish]
-    official_pin = f"M24308/{slash}-{dash_number(variant.density, variant.shell_no)}{finish}"
-
     attributes = {
         "tools": tools,
-        "build_notes": [
-            f"{official_pin} Class G, no float mount, {finish_name} finish",
-        ],
+        "build_notes": [],
         "csys_children": {
             **flagnote_csys_children(
                 connector_depth_mm(variant) / MM_PER_IN,
@@ -1387,12 +1380,6 @@ def compile_part_attributes(part_configuration):
             ),
         },
         "contacts": contacts,
-        "shell_size": variant.shell_no,
-        "pin_count": variant.pin_count,
-        "density": variant.density,
-        "gender": variant.gender,
-        "connector_type": variant.connector_type,
-        "finish": finish,
     }
     return attributes
 
