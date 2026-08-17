@@ -426,7 +426,11 @@ def _even_face_ys(half_h, count):
 
 
 def flagnote_csys_children(mating_face_x_in, mating_face_half_height_mm):
-    """Polar flagnotes from the origin; leaders spaced along the mating face."""
+    """Polar flagnotes from the origin; leaders spaced along the mating face.
+
+    Harnice treats cartesian (x/y) and polar (angle/distance) as exclusive:
+    if x/y are present, even as 0.0, polar is ignored. Emit polar only.
+    """
     half_h_in = mating_face_half_height_mm / MM_PER_IN
     dx = mating_face_x_in - FLAGNOTE_CENTER_X_IN
     kept = []
@@ -448,15 +452,11 @@ def flagnote_csys_children(mating_face_x_in, mating_face_half_height_mm):
         )
         dist_face = math.hypot(dx, y_face - FLAGNOTE_CENTER_Y_IN)
         children[f"flagnote-{i}-leader_dest"] = {
-            "x": FLAGNOTE_CENTER_X_IN,
-            "y": FLAGNOTE_CENTER_Y_IN,
             "angle": theta_dest,
             "distance": dist_face,
             "rotation": 0,
         }
         children[f"flagnote-{i}"] = {
-            "x": FLAGNOTE_CENTER_X_IN,
-            "y": FLAGNOTE_CENTER_Y_IN,
             "angle": note_angle,
             "distance": note_dist,
             "rotation": 0,

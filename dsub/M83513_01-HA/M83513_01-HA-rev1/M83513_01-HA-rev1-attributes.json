@@ -5,43 +5,31 @@
   "build_notes": [],
   "csys_children": {
     "flagnote-1-leader_dest": {
-      "x": 0.0,
-      "y": 0.0,
       "angle": 0.0,
       "distance": 2.8055118110236226,
       "rotation": 0
     },
     "flagnote-1": {
-      "x": 0.0,
-      "y": 0.0,
       "angle": 0.0,
       "distance": 3.0,
       "rotation": 0
     },
     "flagnote-2-leader_dest": {
-      "x": 0.0,
-      "y": 0.0,
       "angle": 13.005749966445668,
       "distance": 2.879375022777173,
       "rotation": 0
     },
     "flagnote-2": {
-      "x": 0.0,
-      "y": 0.0,
       "angle": 14.999999999999998,
       "distance": 3.0,
       "rotation": 0
     },
     "flagnote-3-leader_dest": {
-      "x": 0.0,
-      "y": 0.0,
       "angle": -13.005749966445668,
       "distance": 2.879375022777173,
       "rotation": 0
     },
     "flagnote-3": {
-      "x": 0.0,
-      "y": 0.0,
       "angle": -14.999999999999998,
       "distance": 3.0,
       "rotation": 0
