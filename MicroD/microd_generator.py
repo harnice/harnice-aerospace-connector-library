@@ -378,11 +378,11 @@ CONTACT_SIZE = {
     "current_rating": 3.0,
 }
 
-# Flagnotes sit on a circle centered 0.5 in left of the origin (cable
-# side), 15 deg apart, alternating up/down from due-right like D38999.
-# Notes stay in the right half-plane (|angle from origin| <= 90).
-# Leaders stay on that ray where it meets the mating face (x>0).
-FLAGNOTE_CENTER_X_IN = -0.5
+# Flagnotes sit on a circle centered at the cable-side origin, 15 deg
+# apart, alternating up/down from due-right like D38999. Notes left of
+# the mating face are omitted. Leader destinations are spaced evenly
+# along the mating-face outline (shroud height).
+FLAGNOTE_CENTER_X_IN = 0.0
 FLAGNOTE_CENTER_Y_IN = 0.0
 FLAGNOTE_RADIUS_IN = 3.0
 FLAGNOTE_ANGLES_DEG = (
@@ -411,32 +411,42 @@ def _flagnote_note_polar(theta_deg):
     )
 
 
+def _even_face_ys(half_h, count):
+    """Center-out stations from -half_h to +half_h (0, +step, -step, ...)."""
+    if count <= 1:
+        return [0.0]
+    step = (2.0 * half_h) / (count - 1)
+    ys = [0.0]
+    for j in range(1, (count + 1) // 2):
+        ys.append(j * step)
+        ys.append(-j * step)
+    if len(ys) < count:
+        ys.append((count // 2) * step)
+    return ys
+
+
 def flagnote_csys_children(mating_face_x_in, mating_face_half_height_mm):
-    """Polar flagnotes from (-0.5, 0); leaders land on the mating face (x>0)."""
+    """Polar flagnotes from the origin; leaders spaced along the mating face."""
     half_h_in = mating_face_half_height_mm / MM_PER_IN
     dx = mating_face_x_in - FLAGNOTE_CENTER_X_IN
-    children = {}
-    for i, theta in enumerate(FLAGNOTE_ANGLES_DEG, start=1):
+    kept = []
+    for theta in FLAGNOTE_ANGLES_DEG:
         note_angle, note_dist = _flagnote_note_polar(theta)
-        rad = math.radians(note_angle)
-        cosine = math.cos(rad)
-        if cosine > 1e-9:
-            dist_face = dx / cosine
-            y_face = FLAGNOTE_CENTER_Y_IN + dist_face * math.sin(rad)
-            if abs(y_face) > half_h_in:
-                y_face = math.copysign(half_h_in, y_face)
-                dist_face = math.hypot(dx, y_face - FLAGNOTE_CENTER_Y_IN)
-                theta_dest = math.degrees(
-                    math.atan2(y_face - FLAGNOTE_CENTER_Y_IN, dx)
-                )
-            else:
-                theta_dest = note_angle
-        else:
-            y_face = math.copysign(half_h_in, math.sin(rad) or 1.0)
-            dist_face = math.hypot(dx, y_face - FLAGNOTE_CENTER_Y_IN)
-            theta_dest = math.degrees(
-                math.atan2(y_face - FLAGNOTE_CENTER_Y_IN, dx)
-            )
+        note_x = (
+            FLAGNOTE_CENTER_X_IN
+            + note_dist * math.cos(math.radians(note_angle))
+        )
+        if note_x < mating_face_x_in:
+            continue
+        kept.append((note_angle, note_dist))
+    children = {}
+    for i, ((note_angle, note_dist), y_face) in enumerate(
+        zip(kept, _even_face_ys(half_h_in, len(kept))), start=1
+    ):
+        theta_dest = math.degrees(
+            math.atan2(y_face - FLAGNOTE_CENTER_Y_IN, dx)
+        )
+        dist_face = math.hypot(dx, y_face - FLAGNOTE_CENTER_Y_IN)
         children[f"flagnote-{i}-leader_dest"] = {
             "x": FLAGNOTE_CENTER_X_IN,
             "y": FLAGNOTE_CENTER_Y_IN,
@@ -607,15 +617,17 @@ def compile_part_attributes(part_configuration):
     return {
         "tools": tools,
         "build_notes": build_notes,
-        "csys_children": flagnote_csys_children(
-            connector_depth_mm(
-                shell_size,
-                part_configuration["connector_type"],
-                part_configuration["gender"],
-            )
-            / MM_PER_IN,
-            get_dimension(shell_size, "B") / 2.0,
-        ),
+        "csys_children": {
+            **flagnote_csys_children(
+                connector_depth_mm(
+                    shell_size,
+                    part_configuration["connector_type"],
+                    part_configuration["gender"],
+                )
+                / MM_PER_IN,
+                get_dimension(shell_size, "B") * 0.72 / 2.0,
+            ),
+        },
         "contacts": contacts,
         "shell_size": insert_letter(shell_size),
         "pin_count": shell_size,
