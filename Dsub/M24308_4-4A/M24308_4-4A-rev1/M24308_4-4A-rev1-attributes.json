@@ -8,185 +8,129 @@
   ],
   "csys_children": {
     "flagnote-1-leader_dest": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
       "angle": 0.0,
-      "distance": 1.4011811023622047,
+      "distance": 0.9011811023622048,
       "rotation": 0
     },
     "flagnote-1": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
       "angle": 0.0,
       "distance": 3.0,
       "rotation": 0
     },
     "flagnote-2-leader_dest": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
-      "angle": 14.999999999999998,
-      "distance": 1.4506094197163328,
+      "angle": 16.839509219592024,
+      "distance": 0.9415550158519228,
       "rotation": 0
     },
     "flagnote-2": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
       "angle": 14.999999999999998,
       "distance": 3.0,
       "rotation": 0
     },
     "flagnote-3-leader_dest": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
-      "angle": -14.999999999999998,
-      "distance": 1.4506094197163328,
+      "angle": -16.839509219592024,
+      "distance": 0.9415550158519228,
       "rotation": 0
     },
     "flagnote-3": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
       "angle": -14.999999999999998,
       "distance": 3.0,
       "rotation": 0
     },
     "flagnote-4-leader_dest": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
-      "angle": 29.999999999999996,
-      "distance": 1.6179445732644708,
+      "angle": 31.18822869354696,
+      "distance": 1.0534330798581288,
       "rotation": 0
     },
     "flagnote-4": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
       "angle": 29.999999999999996,
       "distance": 3.0,
       "rotation": 0
     },
     "flagnote-5-leader_dest": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
-      "angle": -29.999999999999996,
-      "distance": 1.6179445732644708,
+      "angle": -31.18822869354696,
+      "distance": 1.0534330798581288,
       "rotation": 0
     },
     "flagnote-5": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
       "angle": -29.999999999999996,
       "distance": 3.0,
       "rotation": 0
     },
     "flagnote-6-leader_dest": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
-      "angle": 44.24153790136725,
-      "distance": 1.955850553008274,
+      "angle": 42.23979835241912,
+      "distance": 1.217256586281283,
       "rotation": 0
     },
     "flagnote-6": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
       "angle": 44.99999999999999,
       "distance": 3.0,
       "rotation": 0
     },
     "flagnote-7-leader_dest": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
-      "angle": -44.24153790136725,
-      "distance": 1.955850553008274,
+      "angle": -42.23979835241912,
+      "distance": 1.217256586281283,
       "rotation": 0
     },
     "flagnote-7": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
       "angle": -44.99999999999999,
       "distance": 3.0,
       "rotation": 0
     },
     "flagnote-8-leader_dest": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
-      "angle": 44.24153790136725,
-      "distance": 1.955850553008274,
+      "angle": 50.44393874006901,
+      "distance": 1.4150981864143755,
       "rotation": 0
     },
     "flagnote-8": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
       "angle": 59.99999999999999,
       "distance": 3.0000000000000004,
       "rotation": 0
     },
     "flagnote-9-leader_dest": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
-      "angle": -44.24153790136725,
-      "distance": 1.955850553008274,
+      "angle": -50.44393874006901,
+      "distance": 1.4150981864143755,
       "rotation": 0
     },
     "flagnote-9": {
-      "x": -0.5,
+      "x": 0.0,
       "y": 0.0,
       "angle": -59.99999999999999,
       "distance": 3.0000000000000004,
-      "rotation": 0
-    },
-    "flagnote-10-leader_dest": {
-      "x": -0.5,
-      "y": 0.0,
-      "angle": 44.24153790136725,
-      "distance": 1.955850553008274,
-      "rotation": 0
-    },
-    "flagnote-10": {
-      "x": -0.5,
-      "y": 0.0,
-      "angle": 75.0,
-      "distance": 3.0,
-      "rotation": 0
-    },
-    "flagnote-11-leader_dest": {
-      "x": -0.5,
-      "y": 0.0,
-      "angle": -44.24153790136725,
-      "distance": 1.955850553008274,
-      "rotation": 0
-    },
-    "flagnote-11": {
-      "x": -0.5,
-      "y": 0.0,
-      "angle": -75.0,
-      "distance": 3.0,
-      "rotation": 0
-    },
-    "flagnote-12-leader_dest": {
-      "x": -0.5,
-      "y": 0.0,
-      "angle": 44.24153790136725,
-      "distance": 1.955850553008274,
-      "rotation": 0
-    },
-    "flagnote-12": {
-      "x": -0.5,
-      "y": 0.0,
-      "angle": 80.40593177313954,
-      "distance": 3.0,
-      "rotation": 0
-    },
-    "flagnote-13-leader_dest": {
-      "x": -0.5,
-      "y": 0.0,
-      "angle": -44.24153790136725,
-      "distance": 1.955850553008274,
-      "rotation": 0
-    },
-    "flagnote-13": {
-      "x": -0.5,
-      "y": 0.0,
-      "angle": -80.40593177313954,
-      "distance": 3.0,
       "rotation": 0
     }
   },
