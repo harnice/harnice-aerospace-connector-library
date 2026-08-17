@@ -1,11 +1,6 @@
 {
   "tools": [],
-  "build_notes": [
-    "M83513/04-D13A metal shell, pure electrodeposited aluminum finish",
-    "Factory pigtail: M22759/11-26-9, 72 in, white",
-    "Mounting hardware ordered separately (MIL-DTL-83513/5)",
-    "A corrected from OCR '1.85in' to 30.10mm (=1.185in), matching the mm figure printed alongside it and the step pattern between shell 21 (27.58mm) and shell 31 (33.91mm)."
-  ],
+  "build_notes": [],
   "csys_children": {
     "flagnote-1-leader_dest": {
       "x": 0.0,
@@ -207,10 +202,5 @@
       "name": "25",
       "size": "24"
     }
-  ],
-  "shell_size": "D",
-  "pin_count": 25,
-  "gender": "Receptacle",
-  "connector_type": "Pigtail",
-  "finish": "A"
+  ]
 }

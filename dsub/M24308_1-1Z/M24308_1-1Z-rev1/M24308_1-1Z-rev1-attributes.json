@@ -2,9 +2,7 @@
   "tools": [
     "Soldering iron"
   ],
-  "build_notes": [
-    "M24308/1-1Z Class G, no float mount, zinc finish"
-  ],
+  "build_notes": [],
   "csys_children": {
     "flagnote-1-leader_dest": {
       "x": 0.0,
@@ -170,11 +168,5 @@
       "name": "9",
       "size": "20"
     }
-  ],
-  "shell_size": 1,
-  "pin_count": 9,
-  "density": "Standard",
-  "gender": "Receptacle",
-  "connector_type": "Solder Cup",
-  "finish": "Z"
+  ]
 }

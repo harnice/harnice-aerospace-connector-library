@@ -1,11 +1,6 @@
 {
   "tools": [],
-  "build_notes": [
-    "M83513/03-E09K metal shell, zinc nickel finish",
-    "Factory pigtail: M22759/33-26-9, 18 in, white",
-    "Mounting hardware ordered separately (MIL-DTL-83513/5)",
-    "B corrected from OCR '26.32mm' to 28.32mm, recomputed from the printed inch value 1.115in (1.115 x 25.4 = 28.32mm), since 26.32mm breaks the step pattern between shells 25 (24.51mm) and 37 (32.13mm)."
-  ],
+  "build_notes": [],
   "csys_children": {
     "flagnote-1-leader_dest": {
       "x": 0.0,
@@ -231,10 +226,5 @@
       "name": "31",
       "size": "24"
     }
-  ],
-  "shell_size": "E",
-  "pin_count": 31,
-  "gender": "Plug",
-  "connector_type": "Pigtail",
-  "finish": "K"
+  ]
 }

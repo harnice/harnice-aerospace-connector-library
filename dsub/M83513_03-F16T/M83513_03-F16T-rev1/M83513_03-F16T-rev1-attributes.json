@@ -1,10 +1,6 @@
 {
   "tools": [],
-  "build_notes": [
-    "M83513/03-F16T metal shell, nickel fluorocarbon polymer finish",
-    "Factory pigtail: M22759/33-26-X, 72 in, 10-color repeating",
-    "Mounting hardware ordered separately (MIL-DTL-83513/5)"
-  ],
+  "build_notes": [],
   "csys_children": {
     "flagnote-1-leader_dest": {
       "x": 0.0,
@@ -226,10 +222,5 @@
       "name": "37",
       "size": "24"
     }
-  ],
-  "shell_size": "F",
-  "pin_count": 37,
-  "gender": "Plug",
-  "connector_type": "Pigtail",
-  "finish": "T"
+  ]
 }

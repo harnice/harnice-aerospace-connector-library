@@ -586,8 +586,6 @@ def microd_connector_svg(part_number, part_configuration):
 
 def compile_part_attributes(part_configuration):
     shell_size = part_configuration["shell_size"]
-    finish = part_configuration["finish"]
-    pin = official_pin(part_configuration)
     contacts = [
         {"name": str(i), "size": CONTACT_SIZE["size"]}
         for i in range(1, shell_size + 1)
@@ -595,28 +593,12 @@ def compile_part_attributes(part_configuration):
 
     if part_configuration["connector_type"] == "Solder Cup":
         tools = ["Soldering iron"]
-        build_notes = [
-            f"{pin} metal shell, {FINISHES[finish]} finish",
-            "26 AWG is the maximum wire size for the solder cup "
-            "(MIL-DTL-83513/1H Figure 1 note 7)",
-            "Mounting hardware ordered separately (MIL-DTL-83513/5)",
-        ]
     else:
-        wire = part_configuration["wire_type"]
         tools = []
-        build_notes = [
-            f"{pin} metal shell, {FINISHES[finish]} finish",
-            f"Factory pigtail: {WIRE_TYPES[wire]}",
-            "Mounting hardware ordered separately (MIL-DTL-83513/5)",
-        ]
-
-    row_note = get_note(shell_size)
-    if row_note:
-        build_notes.append(row_note)
 
     return {
         "tools": tools,
-        "build_notes": build_notes,
+        "build_notes": [],
         "csys_children": {
             **flagnote_csys_children(
                 connector_depth_mm(
@@ -629,11 +611,6 @@ def compile_part_attributes(part_configuration):
             ),
         },
         "contacts": contacts,
-        "shell_size": insert_letter(shell_size),
-        "pin_count": shell_size,
-        "gender": part_configuration["gender"],
-        "connector_type": part_configuration["connector_type"],
-        "finish": finish,
     }
 
 

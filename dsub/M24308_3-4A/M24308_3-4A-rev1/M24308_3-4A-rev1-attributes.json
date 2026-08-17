@@ -2,9 +2,7 @@
   "tools": [
     "Soldering iron"
   ],
-  "build_notes": [
-    "M24308/3-4A Class G, no float mount, pure electrodeposited aluminum finish"
-  ],
+  "build_notes": [],
   "csys_children": {
     "flagnote-1-leader_dest": {
       "x": 0.0,
@@ -282,11 +280,5 @@
       "name": "37",
       "size": "20"
     }
-  ],
-  "shell_size": 4,
-  "pin_count": 37,
-  "density": "Standard",
-  "gender": "Plug",
-  "connector_type": "Solder Cup",
-  "finish": "A"
+  ]
 }

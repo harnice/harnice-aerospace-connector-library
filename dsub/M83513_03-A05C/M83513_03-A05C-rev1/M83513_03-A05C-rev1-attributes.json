@@ -1,10 +1,6 @@
 {
   "tools": [],
-  "build_notes": [
-    "M83513/03-A05C metal shell, cadmium finish",
-    "Factory pigtail: A-A-59551 25 AWG solid, 0.5 in, gold plated",
-    "Mounting hardware ordered separately (MIL-DTL-83513/5)"
-  ],
+  "build_notes": [],
   "csys_children": {
     "flagnote-1-leader_dest": {
       "x": 0.0,
@@ -198,10 +194,5 @@
       "name": "9",
       "size": "24"
     }
-  ],
-  "shell_size": "A",
-  "pin_count": 9,
-  "gender": "Plug",
-  "connector_type": "Pigtail",
-  "finish": "C"
+  ]
 }

@@ -2,11 +2,7 @@
   "tools": [
     "Soldering iron"
   ],
-  "build_notes": [
-    "M83513/02-CP metal shell, passivated stainless steel finish",
-    "26 AWG is the maximum wire size for the solder cup (MIL-DTL-83513/1H Figure 1 note 7)",
-    "Mounting hardware ordered separately (MIL-DTL-83513/5)"
-  ],
+  "build_notes": [],
   "csys_children": {
     "flagnote-1-leader_dest": {
       "x": 0.0,
@@ -220,10 +216,5 @@
       "name": "21",
       "size": "24"
     }
-  ],
-  "shell_size": "C",
-  "pin_count": 21,
-  "gender": "Receptacle",
-  "connector_type": "Solder Cup",
-  "finish": "P"
+  ]
 }
