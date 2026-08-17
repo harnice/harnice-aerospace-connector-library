@@ -4,20 +4,20 @@
 <!-- Finish colors approximated from https://d38999.federalconnectors.com/ -->
 <!-- Knurl and section details from typical M85049/88 /89 /90 hardware -->
 <defs>
-<pattern id="M85049-88_N13ZP03-knurl-diamond" width="8" height="8" patternUnits="userSpaceOnUse">
+<pattern id="m85049-88_n13zp03-knurl-diamond" width="8" height="8" patternUnits="userSpaceOnUse">
   <path d="M0,8 L8,0 M-2,2 L2,-2 M6,10 L10,6" stroke="#5A6168" stroke-width="0.85" fill="none"/>
   <path d="M0,0 L8,8 M-2,6 L2,10 M6,-2 L10,2" stroke="#5A6168" stroke-width="0.85" fill="none"/>
 </pattern>
-<pattern id="M85049-88_N13ZP03-knurl-diamond-nut" width="8" height="8" patternUnits="userSpaceOnUse">
+<pattern id="m85049-88_n13zp03-knurl-diamond-nut" width="8" height="8" patternUnits="userSpaceOnUse">
   <path d="M0,8 L8,0 M-2,2 L2,-2 M6,10 L10,6" stroke="#6A6B6D" stroke-width="0.85" fill="none"/>
   <path d="M0,0 L8,8 M-2,6 L2,10 M6,-2 L10,2" stroke="#6A6B6D" stroke-width="0.85" fill="none"/>
 </pattern>
 </defs>
 <polygon points="-33.60,-28.70 0.00,-28.70 15.55,-42.19 93.31,-42.19 93.31,-55.68 129.60,-55.68 129.60,55.68 93.31,55.68 93.31,42.19 15.55,42.19 0.00,28.70 -33.60,28.70" fill="#3D3E40" stroke="#222222" stroke-width="1.5"/>
 <rect x="93.31" y="-55.68" width="36.29" height="111.36" fill="#1E1F21" stroke="none"/>
-<rect x="93.31" y="-55.68" width="25.40" height="111.36" fill="url(#M85049-88_N13ZP03-knurl-diamond-nut)" stroke="none" opacity="0.55"/>
+<rect x="93.31" y="-55.68" width="25.40" height="111.36" fill="#6A6B6D" stroke="none" opacity="0.55"/>
 <rect x="-33.60" y="-28.70" width="33.60" height="57.41" fill="#C5CAD0" stroke="none"/>
-<rect x="-29.57" y="-28.70" width="29.57" height="57.41" fill="url(#M85049-88_N13ZP03-knurl-diamond)" stroke="none" opacity="0.55"/>
+<rect x="-29.57" y="-28.70" width="29.57" height="57.41" fill="#5A6168" stroke="none" opacity="0.55"/>
 <polygon points="-33.60,-28.70 0.00,-28.70 15.55,-42.19 93.31,-42.19 93.31,-55.68 129.60,-55.68 129.60,55.68 93.31,55.68 93.31,42.19 15.55,42.19 0.00,28.70 -33.60,28.70" fill="none" stroke="#222222" stroke-width="1.5"/>
 </g>
 <g id="M85049-88_N13ZP03-drawing-contents-end">

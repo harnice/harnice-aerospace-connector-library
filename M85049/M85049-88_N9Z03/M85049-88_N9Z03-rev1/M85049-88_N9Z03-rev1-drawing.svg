@@ -4,19 +4,19 @@
 <!-- Finish colors approximated from https://d38999.federalconnectors.com/ -->
 <!-- Knurl and section details from typical M85049/88 /89 /90 hardware -->
 <defs>
-<pattern id="M85049-88_N9Z03-knurl-diamond" width="8" height="8" patternUnits="userSpaceOnUse">
+<pattern id="m85049-88_n9z03-knurl-diamond" width="8" height="8" patternUnits="userSpaceOnUse">
   <path d="M0,8 L8,0 M-2,2 L2,-2 M6,10 L10,6" stroke="#6A6B6D" stroke-width="0.85" fill="none"/>
   <path d="M0,0 L8,8 M-2,6 L2,10 M6,-2 L10,2" stroke="#6A6B6D" stroke-width="0.85" fill="none"/>
 </pattern>
-<pattern id="M85049-88_N9Z03-knurl-diamond-nut" width="8" height="8" patternUnits="userSpaceOnUse">
+<pattern id="m85049-88_n9z03-knurl-diamond-nut" width="8" height="8" patternUnits="userSpaceOnUse">
   <path d="M0,8 L8,0 M-2,2 L2,-2 M6,10 L10,6" stroke="#6A6B6D" stroke-width="0.85" fill="none"/>
   <path d="M0,0 L8,8 M-2,6 L2,10 M6,-2 L10,2" stroke="#6A6B6D" stroke-width="0.85" fill="none"/>
 </pattern>
 </defs>
 <polygon points="-33.60,-19.68 0.00,-19.68 15.55,-30.48 93.31,-30.48 93.31,-41.28 129.60,-41.28 129.60,41.28 93.31,41.28 93.31,30.48 15.55,30.48 0.00,19.68 -33.60,19.68" fill="#3D3E40" stroke="#222222" stroke-width="1.5"/>
 <rect x="93.31" y="-41.28" width="36.29" height="82.56" fill="#1E1F21" stroke="none"/>
-<rect x="93.31" y="-41.28" width="25.40" height="82.56" fill="url(#M85049-88_N9Z03-knurl-diamond-nut)" stroke="none" opacity="0.55"/>
-<rect x="-29.57" y="-19.68" width="29.57" height="39.36" fill="url(#M85049-88_N9Z03-knurl-diamond)" stroke="none" opacity="0.55"/>
+<rect x="93.31" y="-41.28" width="25.40" height="82.56" fill="#6A6B6D" stroke="none" opacity="0.55"/>
+<rect x="-29.57" y="-19.68" width="29.57" height="39.36" fill="#6A6B6D" stroke="none" opacity="0.55"/>
 <polygon points="-33.60,-19.68 0.00,-19.68 15.55,-30.48 93.31,-30.48 93.31,-41.28 129.60,-41.28 129.60,41.28 93.31,41.28 93.31,30.48 15.55,30.48 0.00,19.68 -33.60,19.68" fill="none" stroke="#222222" stroke-width="1.5"/>
 </g>
 <g id="M85049-88_N9Z03-drawing-contents-end">

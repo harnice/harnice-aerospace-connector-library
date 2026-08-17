@@ -4,20 +4,20 @@
 <!-- Finish colors approximated from https://d38999.federalconnectors.com/ -->
 <!-- Knurl and section details from typical M85049/88 /89 /90 hardware -->
 <defs>
-<pattern id="M85049-89_N23ZP03-knurl-diamond" width="8" height="8" patternUnits="userSpaceOnUse">
+<pattern id="m85049-89_n23zp03-knurl-diamond" width="8" height="8" patternUnits="userSpaceOnUse">
   <path d="M0,8 L8,0 M-2,2 L2,-2 M6,10 L10,6" stroke="#5A6168" stroke-width="0.85" fill="none"/>
   <path d="M0,0 L8,8 M-2,6 L2,10 M6,-2 L10,2" stroke="#5A6168" stroke-width="0.85" fill="none"/>
 </pattern>
-<pattern id="M85049-89_N23ZP03-knurl-diamond-nut" width="8" height="8" patternUnits="userSpaceOnUse">
+<pattern id="m85049-89_n23zp03-knurl-diamond-nut" width="8" height="8" patternUnits="userSpaceOnUse">
   <path d="M0,8 L8,0 M-2,2 L2,-2 M6,10 L10,6" stroke="#6A6B6D" stroke-width="0.85" fill="none"/>
   <path d="M0,0 L8,8 M-2,6 L2,10 M6,-2 L10,2" stroke="#6A6B6D" stroke-width="0.85" fill="none"/>
 </pattern>
 </defs>
 <polygon points="-33.60,52.70 94.08,68.83 205.78,8.45 233.58,-19.35 113.43,-139.50 85.63,-111.70 94.08,-68.83 -33.60,-52.70" fill="#3D3E40" stroke="#222222" stroke-width="1.5"/>
 <polygon points="205.78,8.45 233.58,-19.35 113.43,-139.50 85.63,-111.70" fill="#1E1F21" stroke="none"/>
-<polygon points="205.78,8.45 225.79,-11.56 105.64,-131.71 85.63,-111.70" fill="url(#M85049-89_N23ZP03-knurl-diamond-nut)" stroke="none" opacity="0.55"/>
+<polygon points="205.78,8.45 225.79,-11.56 105.64,-131.71 85.63,-111.70" fill="#6A6B6D" stroke="none" opacity="0.55"/>
 <rect x="-33.60" y="-52.70" width="33.60" height="105.41" fill="#C5CAD0" stroke="none"/>
-<rect x="-29.57" y="-52.70" width="29.57" height="105.41" fill="url(#M85049-89_N23ZP03-knurl-diamond)" stroke="none" opacity="0.55"/>
+<rect x="-29.57" y="-52.70" width="29.57" height="105.41" fill="#5A6168" stroke="none" opacity="0.55"/>
 <line x1="94.08" y1="68.83" x2="94.08" y2="-68.83" stroke="#000000" stroke-width="1" opacity="0.05"/>
 <polygon points="-33.60,52.70 94.08,68.83 205.78,8.45 233.58,-19.35 113.43,-139.50 85.63,-111.70 94.08,-68.83 -33.60,-52.70" fill="none" stroke="#222222" stroke-width="1.5"/>
 </g>
