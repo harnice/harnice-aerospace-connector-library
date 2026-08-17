@@ -482,8 +482,12 @@ def plug_svg(part_number, shell_size, shell_style, finish=None):
 
 
 def connector_csys():
-    """Connector mating face csys in inches."""
-    return {"x": round(BODY_IN, 4), "y": 0, "angle": 0, "rotation": 0}
+    """Connector mating face csys in inches (cartesian; omit polar keys).
+
+    Harnice treats cartesian (x/y) and polar (angle/distance) as exclusive:
+    if x/y are present, even as 0.0, polar is ignored.
+    """
+    return {"x": round(BODY_IN, 4), "y": 0, "rotation": 0}
 
 
 def connector_mating_face_inches(shell_size, shell_style):
@@ -620,7 +624,10 @@ def _order_angles_from_bisector(angles, bisector):
 
 
 def flagnote_csys_children(shell_size, shell_style):
-    """Polar flagnotes about the silhouette centroid (straight plug)."""
+    """Flagnotes about the silhouette centroid (straight plug).
+
+    Stored as absolute x/y (harnice treats x/y vs angle/distance as exclusive).
+    """
     perimeter = part_perimeter_inches(shell_size, shell_style)
     cx, cy = _polygon_centroid(perimeter)
     origin = (cx, cy)
