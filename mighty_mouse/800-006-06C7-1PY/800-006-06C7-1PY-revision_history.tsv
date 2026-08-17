@@ -1,0 +1,2 @@
+product	mfg	pn	desc	rev	status	releaseticket	library_repo	library_subpath	datestarted	datemodified	datereleased	git_hash_of_harnice_src	drawnby	checkedby	revisionupdates	affectedinstances
+part	Glenair	800-006-06C7-1PY		1			https://github.com/harnice/harnice-aerospace-connector-library		8/16/26	8/17/26		037ca7c155b2dd0ccb2cb0975a6e1ee5dc5cf182	K SHUTT			
