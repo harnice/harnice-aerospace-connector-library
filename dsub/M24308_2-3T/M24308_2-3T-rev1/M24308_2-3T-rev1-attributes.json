@@ -1,0 +1,237 @@
+{
+  "tools": [
+    "M22520/2-01 crimp tool",
+    "M81969/14-01 extraction tool"
+  ],
+  "build_notes": [],
+  "csys_children": {
+    "flagnote-1-leader_dest": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": 0.0,
+      "distance": 0.9070866141732283,
+      "rotation": 0
+    },
+    "flagnote-1": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": 0.0,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-2-leader_dest": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": 11.762330423216305,
+      "distance": 0.9265425012645201,
+      "rotation": 0
+    },
+    "flagnote-2": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": 14.999999999999998,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-3-leader_dest": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": -11.762330423216305,
+      "distance": 0.9265425012645201,
+      "rotation": 0
+    },
+    "flagnote-3": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": -14.999999999999998,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-4-leader_dest": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": 22.60926949803473,
+      "distance": 0.9826014704656713,
+      "rotation": 0
+    },
+    "flagnote-4": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": 29.999999999999996,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-5-leader_dest": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": -22.60926949803473,
+      "distance": 0.9826014704656713,
+      "rotation": 0
+    },
+    "flagnote-5": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": -29.999999999999996,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-6-leader_dest": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": 31.991969312448887,
+      "distance": 1.069523283967025,
+      "rotation": 0
+    },
+    "flagnote-6": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": 44.99999999999999,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-7-leader_dest": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": -31.991969312448887,
+      "distance": 1.069523283967025,
+      "rotation": 0
+    },
+    "flagnote-7": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": -44.99999999999999,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-8-leader_dest": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": 39.79089178616516,
+      "distance": 1.1805101533694846,
+      "rotation": 0
+    },
+    "flagnote-8": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": 59.99999999999999,
+      "distance": 3.0000000000000004,
+      "rotation": 0
+    },
+    "flagnote-9-leader_dest": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": -39.79089178616516,
+      "distance": 1.1805101533694846,
+      "rotation": 0
+    },
+    "flagnote-9": {
+      "x": 0.0,
+      "y": 0.0,
+      "angle": -59.99999999999999,
+      "distance": 3.0000000000000004,
+      "rotation": 0
+    }
+  },
+  "contacts": [
+    {
+      "name": "1",
+      "size": "20"
+    },
+    {
+      "name": "2",
+      "size": "20"
+    },
+    {
+      "name": "3",
+      "size": "20"
+    },
+    {
+      "name": "4",
+      "size": "20"
+    },
+    {
+      "name": "5",
+      "size": "20"
+    },
+    {
+      "name": "6",
+      "size": "20"
+    },
+    {
+      "name": "7",
+      "size": "20"
+    },
+    {
+      "name": "8",
+      "size": "20"
+    },
+    {
+      "name": "9",
+      "size": "20"
+    },
+    {
+      "name": "10",
+      "size": "20"
+    },
+    {
+      "name": "11",
+      "size": "20"
+    },
+    {
+      "name": "12",
+      "size": "20"
+    },
+    {
+      "name": "13",
+      "size": "20"
+    },
+    {
+      "name": "14",
+      "size": "20"
+    },
+    {
+      "name": "15",
+      "size": "20"
+    },
+    {
+      "name": "16",
+      "size": "20"
+    },
+    {
+      "name": "17",
+      "size": "20"
+    },
+    {
+      "name": "18",
+      "size": "20"
+    },
+    {
+      "name": "19",
+      "size": "20"
+    },
+    {
+      "name": "20",
+      "size": "20"
+    },
+    {
+      "name": "21",
+      "size": "20"
+    },
+    {
+      "name": "22",
+      "size": "20"
+    },
+    {
+      "name": "23",
+      "size": "20"
+    },
+    {
+      "name": "24",
+      "size": "20"
+    },
+    {
+      "name": "25",
+      "size": "20"
+    }
+  ]
+}
