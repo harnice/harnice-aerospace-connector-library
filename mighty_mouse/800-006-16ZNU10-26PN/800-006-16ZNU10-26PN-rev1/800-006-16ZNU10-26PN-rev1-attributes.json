@@ -1,0 +1,251 @@
+{
+  "tools": [
+    "M22520/2-01 crimp tool",
+    "Glenair 809-005 positioner",
+    "Glenair 809-088 insertion/extraction tool",
+    "Glenair 601-101 Band-Master ATS micro banding tool"
+  ],
+  "build_notes": [
+    "Torque coupling nut to 20-24 in-lbs during harness installation"
+  ],
+  "csys_children": {
+    "connector": {
+      "x": 0.65,
+      "y": 0,
+      "angle": 0,
+      "rotation": 0
+    },
+    "leader_center": {
+      "x": 0.2667,
+      "y": -0.0,
+      "rotation": 0
+    },
+    "flagnote-1-leader_dest": {
+      "x": 0.2667,
+      "y": 0.44,
+      "rotation": 0
+    },
+    "flagnote-1": {
+      "x": 0.2667,
+      "y": 2.5543,
+      "rotation": 0
+    },
+    "flagnote-2-leader_dest": {
+      "x": 0.3846,
+      "y": 0.44,
+      "rotation": 0
+    },
+    "flagnote-2": {
+      "x": 0.9278,
+      "y": 2.4672,
+      "rotation": 0
+    },
+    "flagnote-3-leader_dest": {
+      "x": 0.1488,
+      "y": 0.44,
+      "rotation": 0
+    },
+    "flagnote-3": {
+      "x": -0.3944,
+      "y": 2.4672,
+      "rotation": 0
+    },
+    "flagnote-4-leader_dest": {
+      "x": 0.5438,
+      "y": 0.48,
+      "rotation": 0
+    },
+    "flagnote-4": {
+      "x": 1.5438,
+      "y": 2.2121,
+      "rotation": 0
+    },
+    "flagnote-5-leader_dest": {
+      "x": 0.0478,
+      "y": 0.3791,
+      "rotation": 0
+    },
+    "flagnote-5": {
+      "x": -1.0104,
+      "y": 2.2121,
+      "rotation": 0
+    },
+    "flagnote-6-leader_dest": {
+      "x": 0.5438,
+      "y": -0.48,
+      "rotation": 0
+    },
+    "flagnote-6": {
+      "x": 1.5438,
+      "y": -2.2121,
+      "rotation": 0
+    },
+    "flagnote-7-leader_dest": {
+      "x": -0.0158,
+      "y": 0.2825,
+      "rotation": 0
+    },
+    "flagnote-7": {
+      "x": -1.5394,
+      "y": 1.8061,
+      "rotation": 0
+    },
+    "flagnote-8-leader_dest": {
+      "x": 0.3846,
+      "y": -0.44,
+      "rotation": 0
+    },
+    "flagnote-8": {
+      "x": 0.9278,
+      "y": -2.4672,
+      "rotation": 0
+    },
+    "flagnote-9-leader_dest": {
+      "x": -0.0158,
+      "y": -0.2825,
+      "rotation": 0
+    },
+    "flagnote-9": {
+      "x": -1.5394,
+      "y": -1.8061,
+      "rotation": 0
+    },
+    "flagnote-10-leader_dest": {
+      "x": 0.0478,
+      "y": -0.3791,
+      "rotation": 0
+    },
+    "flagnote-10": {
+      "x": -1.0104,
+      "y": -2.2121,
+      "rotation": 0
+    },
+    "flagnote-11-leader_dest": {
+      "x": 0.1488,
+      "y": -0.44,
+      "rotation": 0
+    },
+    "flagnote-11": {
+      "x": -0.3944,
+      "y": -2.4672,
+      "rotation": 0
+    },
+    "flagnote-12-leader_dest": {
+      "x": 0.2667,
+      "y": -0.44,
+      "rotation": 0
+    },
+    "flagnote-12": {
+      "x": 0.2667,
+      "y": -2.5543,
+      "rotation": 0
+    }
+  },
+  "contacts": [
+    {
+      "name": "1",
+      "size": "23"
+    },
+    {
+      "name": "2",
+      "size": "23"
+    },
+    {
+      "name": "3",
+      "size": "23"
+    },
+    {
+      "name": "4",
+      "size": "23"
+    },
+    {
+      "name": "5",
+      "size": "23"
+    },
+    {
+      "name": "6",
+      "size": "23"
+    },
+    {
+      "name": "7",
+      "size": "23"
+    },
+    {
+      "name": "8",
+      "size": "23"
+    },
+    {
+      "name": "9",
+      "size": "23"
+    },
+    {
+      "name": "10",
+      "size": "23"
+    },
+    {
+      "name": "11",
+      "size": "23"
+    },
+    {
+      "name": "12",
+      "size": "23"
+    },
+    {
+      "name": "13",
+      "size": "23"
+    },
+    {
+      "name": "14",
+      "size": "23"
+    },
+    {
+      "name": "15",
+      "size": "23"
+    },
+    {
+      "name": "16",
+      "size": "23"
+    },
+    {
+      "name": "17",
+      "size": "23"
+    },
+    {
+      "name": "18",
+      "size": "23"
+    },
+    {
+      "name": "19",
+      "size": "23"
+    },
+    {
+      "name": "20",
+      "size": "23"
+    },
+    {
+      "name": "21",
+      "size": "23"
+    },
+    {
+      "name": "22",
+      "size": "23"
+    },
+    {
+      "name": "23",
+      "size": "23"
+    },
+    {
+      "name": "24",
+      "size": "23"
+    },
+    {
+      "name": "25",
+      "size": "23"
+    },
+    {
+      "name": "26",
+      "size": "23"
+    }
+  ],
+  "shell_size": 10
+}
