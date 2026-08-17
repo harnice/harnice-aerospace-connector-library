@@ -2,9 +2,44 @@ import json
 import math
 import os
 import subprocess
+import sys
 
 from harnice import state
 from harnice.lists import rev_history
+
+
+def _load_step_utils():
+    try:
+        from harnice.utils import step_utils as module
+        return module
+    except ImportError:
+        pass
+    import importlib.util
+
+    sibling = os.path.normpath(
+        os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "..",
+            "..",
+            "Harnice",
+            "src",
+            "harnice",
+            "utils",
+            "step_utils.py",
+        )
+    )
+    spec = importlib.util.spec_from_file_location("harnice_step_utils", sibling)
+    if spec is None or spec.loader is None:
+        raise ImportError(
+            "Generating STEP envelopes requires harnice.utils.step_utils "
+            "(Harnice src/harnice/utils/step_utils.py)."
+        )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+step_utils = _load_step_utils()
 
 REVISION = "1"
 DATE_STARTED = "8/7/26"
@@ -407,6 +442,11 @@ def finish_palette(finish):
     return {**_DEFAULT_FINISH_COLORS, **p}
 
 
+def _knurl_pattern_id(part_number, suffix):
+    # Matplotlib's SVG parser lowercases url(#id) lookups, so ids must be lowercase.
+    return f"{part_number}-{suffix}".lower()
+
+
 def _diamond_pattern(pid, color):
     return (
         f'<pattern id="{pid}" width="8" height="8" patternUnits="userSpaceOnUse">\n'
@@ -430,8 +470,8 @@ def finish_svg_defs(part_number, finish):
             "<!-- Finish colors approximated from https://d38999.federalconnectors.com/ -->",
             "<!-- Knurl and section details from typical M85049/88 /89 /90 hardware -->",
             "<defs>",
-            _diamond_pattern(f"{part_number}-knurl-diamond", band["knurl"]),
-            _diamond_pattern(f"{part_number}-knurl-diamond-nut", body["knurl"]),
+            _diamond_pattern(_knurl_pattern_id(part_number, "knurl-diamond"), band["knurl"]),
+            _diamond_pattern(_knurl_pattern_id(part_number, "knurl-diamond-nut"), body["knurl"]),
             "</defs>",
         ]
     )
@@ -444,8 +484,8 @@ def finish_fills(part_number, finish):
         "body": body["body"],
         "nut": body["dark"],
         "band": band["body"],
-        "diamond": f"url(#{part_number}-knurl-diamond)",
-        "diamond_nut": f"url(#{part_number}-knurl-diamond-nut)",
+        "diamond": band["knurl"],
+        "diamond_nut": body["knurl"],
         "rim": body["rim"],
         "selective": (finish or "").upper() in SELECTIVE_FINISHES,
     }
@@ -726,6 +766,81 @@ def ninety_backshell_svg(part_number, shell_size, entry_size, finish=None):
 <g id="{part_number}-drawing-contents-end">
 </g>
 </svg>'''
+
+
+INCH_TO_MM = 25.4
+
+
+def backshell_envelope_mm(orientation, shell_size, entry_size):
+    """Low-fidelity 3D envelope in millimetres.
+
+    Same silhouette as the 2D drawing (including the banding platform in −X),
+    without knurl texture. Origin is the right end of that platform; body +X
+    toward the connector.
+    """
+    data = SHELL_DATA[shell_size]
+    half_c = data["c_in"] * INCH_TO_MM / 2.0
+    half_e = platform_od_in(shell_size, entry_size) * INCH_TO_MM / 2.0
+    band = BAND_PLATFORM_IN * INCH_TO_MM
+
+    if orientation == "straight":
+        body = STRAIGHT_BODY_IN * INCH_TO_MM
+        nut = body * 0.28
+        taper = body * 0.12
+        mid = body - nut - taper
+        half_mid = (half_c + half_e) / 2.0
+        stations = [
+            (-band, half_e),
+            (0.0, half_e),
+            (taper, half_mid),
+            (taper + mid, half_mid),
+            (taper + mid, half_c),
+            (body, half_c),
+        ]
+        return "revolution", stations, None
+
+    if orientation == "45":
+        f_mm = data["f_in"] * INCH_TO_MM
+        g_mm = data["g_in"] * INCH_TO_MM
+        return "elbow", {
+            "entry": (-band, 0.0, 0.0),
+            "corner": (g_mm - band, 0.0, 0.0),
+            "angle_deg": 45,
+            "exit_length": f_mm,
+            "r_entry": half_e,
+            "r_body": (half_c + half_e) / 2.0,
+            "r_nut": half_c,
+            "nut_length": f_mm * 0.35,
+        }, None
+
+    if orientation == "90":
+        h_mm = data["h_in"] * INCH_TO_MM
+        j_mm = data["j_in"] * INCH_TO_MM
+        return "elbow", {
+            "entry": (-band, 0.0, 0.0),
+            "corner": (j_mm - band, 0.0, 0.0),
+            "angle_deg": 90,
+            "exit_length": h_mm,
+            "r_entry": half_e,
+            "r_body": (half_c + half_e) / 2.0,
+            "r_nut": half_c,
+            "nut_length": h_mm * 0.30,
+        }, None
+
+    raise ValueError(f"Unknown orientation '{orientation}'")
+
+
+def write_part_step(rev_dir, part_number, orientation, shell_size, entry_size):
+    kind, geom, radii = backshell_envelope_mm(orientation, shell_size, entry_size)
+    path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-model.step")
+    description = f"M85049/{orientation} low-fidelity envelope"
+    if kind == "revolution":
+        step_utils.write_revolution_step(path, part_number, geom, description=description)
+    elif kind == "elbow":
+        step_utils.write_elbow_step(path, part_number, description=description, **geom)
+    else:
+        step_utils.write_sweep_step(path, part_number, geom, radii, description=description)
+    return path
 
 
 def backshell_svg(part_number, orientation, shell_size, entry_size, finish=None):
@@ -1250,7 +1365,7 @@ def _progress_bar(done, total, width=25):
     return "[ " + " ".join(cells) + f" ] ({pct}%)"
 
 
-def main():
+def main(step_only=False):
     state.set_rev(REVISION)
     state.set_product("part")
 
@@ -1270,6 +1385,20 @@ def main():
         family_dir = os.path.dirname(os.path.abspath(__file__))
         part_dir = os.path.join(family_dir, part_number)
         os.makedirs(part_dir, exist_ok=True)
+        orientation = ORIENTATIONS[part_configuration["basic"]]
+        rev_dir = os.path.join(part_dir, f"{part_number}-rev{REVISION}")
+
+        if step_only:
+            os.makedirs(rev_dir, exist_ok=True)
+            write_part_step(
+                rev_dir,
+                part_number,
+                orientation,
+                part_configuration["shell_size"],
+                part_configuration["entry_size"],
+            )
+            print(_progress_bar(i, total))
+            continue
 
         revision_history_content_dict = {
             "product": state.product,
@@ -1289,7 +1418,6 @@ def main():
             revision_history_content_dict, revision_history_csv_path
         )
 
-        rev_dir = os.path.join(part_dir, f"{part_number}-rev{REVISION}")
         if os.path.exists(rev_dir):
             for item in os.listdir(rev_dir):
                 item_path = os.path.join(rev_dir, item)
@@ -1305,7 +1433,6 @@ def main():
         with open(json_path, "w") as f:
             json.dump(attributes, f, indent=2)
 
-        orientation = ORIENTATIONS[part_configuration["basic"]]
         svg_content = backshell_svg(
             part_number,
             orientation,
@@ -1316,6 +1443,14 @@ def main():
         svg_path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-drawing.svg")
         with open(svg_path, "w") as f:
             f.write(svg_content)
+
+        write_part_step(
+            rev_dir,
+            part_number,
+            orientation,
+            part_configuration["shell_size"],
+            part_configuration["entry_size"],
+        )
 
         # d38999_generator used `harnice -r`; current CLI builds with -b
         subprocess.run(["harnice", "-b"], cwd=rev_dir, check=True)
@@ -1330,4 +1465,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(step_only="--step-only" in sys.argv)

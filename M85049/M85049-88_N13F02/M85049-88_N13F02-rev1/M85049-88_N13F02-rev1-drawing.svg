@@ -4,19 +4,19 @@
 <!-- Finish colors approximated from https://d38999.federalconnectors.com/ -->
 <!-- Knurl and section details from typical M85049/88 /89 /90 hardware -->
 <defs>
-<pattern id="M85049-88_N13F02-knurl-diamond" width="8" height="8" patternUnits="userSpaceOnUse">
+<pattern id="m85049-88_n13f02-knurl-diamond" width="8" height="8" patternUnits="userSpaceOnUse">
   <path d="M0,8 L8,0 M-2,2 L2,-2 M6,10 L10,6" stroke="#5C5D5A" stroke-width="0.85" fill="none"/>
   <path d="M0,0 L8,8 M-2,6 L2,10 M6,-2 L10,2" stroke="#5C5D5A" stroke-width="0.85" fill="none"/>
 </pattern>
-<pattern id="M85049-88_N13F02-knurl-diamond-nut" width="8" height="8" patternUnits="userSpaceOnUse">
+<pattern id="m85049-88_n13f02-knurl-diamond-nut" width="8" height="8" patternUnits="userSpaceOnUse">
   <path d="M0,8 L8,0 M-2,2 L2,-2 M6,10 L10,6" stroke="#5C5D5A" stroke-width="0.85" fill="none"/>
   <path d="M0,0 L8,8 M-2,6 L2,10 M6,-2 L10,2" stroke="#5C5D5A" stroke-width="0.85" fill="none"/>
 </pattern>
 </defs>
 <polygon points="-33.60,-25.06 0.00,-25.06 15.55,-40.37 93.31,-40.37 93.31,-55.68 129.60,-55.68 129.60,55.68 93.31,55.68 93.31,40.37 15.55,40.37 0.00,25.06 -33.60,25.06" fill="#A3A4A0" stroke="#222222" stroke-width="1.5"/>
 <rect x="93.31" y="-55.68" width="36.29" height="111.36" fill="#6E6F6C" stroke="none"/>
-<rect x="93.31" y="-55.68" width="25.40" height="111.36" fill="url(#M85049-88_N13F02-knurl-diamond-nut)" stroke="none" opacity="0.55"/>
-<rect x="-29.57" y="-25.06" width="29.57" height="50.11" fill="url(#M85049-88_N13F02-knurl-diamond)" stroke="none" opacity="0.55"/>
+<rect x="93.31" y="-55.68" width="25.40" height="111.36" fill="#5C5D5A" stroke="none" opacity="0.55"/>
+<rect x="-29.57" y="-25.06" width="29.57" height="50.11" fill="#5C5D5A" stroke="none" opacity="0.55"/>
 <polygon points="-33.60,-25.06 0.00,-25.06 15.55,-40.37 93.31,-40.37 93.31,-55.68 129.60,-55.68 129.60,55.68 93.31,55.68 93.31,40.37 15.55,40.37 0.00,25.06 -33.60,25.06" fill="none" stroke="#222222" stroke-width="1.5"/>
 </g>
 <g id="M85049-88_N13F02-drawing-contents-end">
