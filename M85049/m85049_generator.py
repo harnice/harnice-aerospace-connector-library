@@ -831,7 +831,7 @@ def backshell_envelope_mm(orientation, shell_size, entry_size):
 
 
 def write_part_step(rev_dir, part_number, orientation, shell_size, entry_size):
-    kind, geom, radii = backshell_envelope_mm(orientation, shell_size, entry_size)
+    kind, geom, _radii = backshell_envelope_mm(orientation, shell_size, entry_size)
     path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-model.step")
     description = f"M85049/{orientation} low-fidelity envelope"
     if kind == "revolution":
@@ -839,7 +839,7 @@ def write_part_step(rev_dir, part_number, orientation, shell_size, entry_size):
     elif kind == "elbow":
         step_utils.write_elbow_step(path, part_number, description=description, **geom)
     else:
-        step_utils.write_sweep_step(path, part_number, geom, radii, description=description)
+        raise ValueError(f"Unknown M85049 envelope kind {kind!r}")
     return path
 
 

@@ -1,0 +1,180 @@
+{
+  "tools": [
+    "Soldering iron"
+  ],
+  "build_notes": [],
+  "csys_children": {
+    "flagnote-1-leader_dest": {
+      "angle": 0.0,
+      "distance": 0.40196850393700795,
+      "rotation": 0
+    },
+    "flagnote-1": {
+      "angle": 0.0,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-2-leader_dest": {
+      "angle": 7.297729894134484,
+      "distance": 0.4052512513370853,
+      "rotation": 0
+    },
+    "flagnote-2": {
+      "angle": 14.999999999999998,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-3-leader_dest": {
+      "angle": -7.297729894134484,
+      "distance": 0.4052512513370853,
+      "rotation": 0
+    },
+    "flagnote-3": {
+      "angle": -14.999999999999998,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-4-leader_dest": {
+      "angle": 14.366077564776047,
+      "distance": 0.4149436978302295,
+      "rotation": 0
+    },
+    "flagnote-4": {
+      "angle": 29.999999999999996,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-5-leader_dest": {
+      "angle": -14.366077564776047,
+      "distance": 0.4149436978302295,
+      "rotation": 0
+    },
+    "flagnote-5": {
+      "angle": -29.999999999999996,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-6-leader_dest": {
+      "angle": 21.016178763813006,
+      "distance": 0.4306132431005929,
+      "rotation": 0
+    },
+    "flagnote-6": {
+      "angle": 44.99999999999999,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-7-leader_dest": {
+      "angle": -21.016178763813006,
+      "distance": 0.4306132431005929,
+      "rotation": 0
+    },
+    "flagnote-7": {
+      "angle": -44.99999999999999,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-8-leader_dest": {
+      "angle": 27.123827515705276,
+      "distance": 0.45163819037369957,
+      "rotation": 0
+    },
+    "flagnote-8": {
+      "angle": 59.99999999999999,
+      "distance": 3.0000000000000004,
+      "rotation": 0
+    },
+    "flagnote-9-leader_dest": {
+      "angle": -27.123827515705276,
+      "distance": 0.45163819037369957,
+      "rotation": 0
+    },
+    "flagnote-9": {
+      "angle": -59.99999999999999,
+      "distance": 3.0000000000000004,
+      "rotation": 0
+    },
+    "flagnote-10-leader_dest": {
+      "angle": 32.63198071717114,
+      "distance": 0.47731136795626816,
+      "rotation": 0
+    },
+    "flagnote-10": {
+      "angle": 75.0,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-11-leader_dest": {
+      "angle": -32.63198071717114,
+      "distance": 0.47731136795626816,
+      "rotation": 0
+    },
+    "flagnote-11": {
+      "angle": -75.0,
+      "distance": 3.0,
+      "rotation": 0
+    }
+  },
+  "contacts": [
+    {
+      "name": "1",
+      "size": "24"
+    },
+    {
+      "name": "2",
+      "size": "24"
+    },
+    {
+      "name": "3",
+      "size": "24"
+    },
+    {
+      "name": "4",
+      "size": "24"
+    },
+    {
+      "name": "5",
+      "size": "24"
+    },
+    {
+      "name": "6",
+      "size": "24"
+    },
+    {
+      "name": "7",
+      "size": "24"
+    },
+    {
+      "name": "8",
+      "size": "24"
+    },
+    {
+      "name": "9",
+      "size": "24"
+    },
+    {
+      "name": "10",
+      "size": "24"
+    },
+    {
+      "name": "11",
+      "size": "24"
+    },
+    {
+      "name": "12",
+      "size": "24"
+    },
+    {
+      "name": "13",
+      "size": "24"
+    },
+    {
+      "name": "14",
+      "size": "24"
+    },
+    {
+      "name": "15",
+      "size": "24"
+    }
+  ]
+}

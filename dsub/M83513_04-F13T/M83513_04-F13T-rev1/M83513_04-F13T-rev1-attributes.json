@@ -1,0 +1,266 @@
+{
+  "tools": [],
+  "build_notes": [],
+  "csys_children": {
+    "flagnote-1-leader_dest": {
+      "angle": 0.0,
+      "distance": 0.4,
+      "rotation": 0
+    },
+    "flagnote-1": {
+      "angle": 0.0,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-2-leader_dest": {
+      "angle": 12.827156416108535,
+      "distance": 0.41023779695315754,
+      "rotation": 0
+    },
+    "flagnote-2": {
+      "angle": 14.999999999999998,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-3-leader_dest": {
+      "angle": -12.827156416108535,
+      "distance": 0.41023779695315754,
+      "rotation": 0
+    },
+    "flagnote-3": {
+      "angle": -14.999999999999998,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-4-leader_dest": {
+      "angle": 24.483847101047925,
+      "distance": 0.43952269588261356,
+      "rotation": 0
+    },
+    "flagnote-4": {
+      "angle": 29.999999999999996,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-5-leader_dest": {
+      "angle": -24.483847101047925,
+      "distance": 0.43952269588261356,
+      "rotation": 0
+    },
+    "flagnote-5": {
+      "angle": -29.999999999999996,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-6-leader_dest": {
+      "angle": 34.336152344173904,
+      "distance": 0.4844124796501644,
+      "rotation": 0
+    },
+    "flagnote-6": {
+      "angle": 44.99999999999999,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-7-leader_dest": {
+      "angle": -34.336152344173904,
+      "distance": 0.4844124796501644,
+      "rotation": 0
+    },
+    "flagnote-7": {
+      "angle": -44.99999999999999,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-8-leader_dest": {
+      "angle": 42.326370020310854,
+      "distance": 0.5410367832076499,
+      "rotation": 0
+    },
+    "flagnote-8": {
+      "angle": 59.99999999999999,
+      "distance": 3.0000000000000004,
+      "rotation": 0
+    },
+    "flagnote-9-leader_dest": {
+      "angle": -42.326370020310854,
+      "distance": 0.5410367832076499,
+      "rotation": 0
+    },
+    "flagnote-9": {
+      "angle": -59.99999999999999,
+      "distance": 3.0000000000000004,
+      "rotation": 0
+    },
+    "flagnote-10-leader_dest": {
+      "angle": 48.70470301306859,
+      "distance": 0.6061157077856525,
+      "rotation": 0
+    },
+    "flagnote-10": {
+      "angle": 75.0,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-11-leader_dest": {
+      "angle": -48.70470301306859,
+      "distance": 0.6061157077856525,
+      "rotation": 0
+    },
+    "flagnote-11": {
+      "angle": -75.0,
+      "distance": 3.0,
+      "rotation": 0
+    }
+  },
+  "contacts": [
+    {
+      "name": "1",
+      "size": "24"
+    },
+    {
+      "name": "2",
+      "size": "24"
+    },
+    {
+      "name": "3",
+      "size": "24"
+    },
+    {
+      "name": "4",
+      "size": "24"
+    },
+    {
+      "name": "5",
+      "size": "24"
+    },
+    {
+      "name": "6",
+      "size": "24"
+    },
+    {
+      "name": "7",
+      "size": "24"
+    },
+    {
+      "name": "8",
+      "size": "24"
+    },
+    {
+      "name": "9",
+      "size": "24"
+    },
+    {
+      "name": "10",
+      "size": "24"
+    },
+    {
+      "name": "11",
+      "size": "24"
+    },
+    {
+      "name": "12",
+      "size": "24"
+    },
+    {
+      "name": "13",
+      "size": "24"
+    },
+    {
+      "name": "14",
+      "size": "24"
+    },
+    {
+      "name": "15",
+      "size": "24"
+    },
+    {
+      "name": "16",
+      "size": "24"
+    },
+    {
+      "name": "17",
+      "size": "24"
+    },
+    {
+      "name": "18",
+      "size": "24"
+    },
+    {
+      "name": "19",
+      "size": "24"
+    },
+    {
+      "name": "20",
+      "size": "24"
+    },
+    {
+      "name": "21",
+      "size": "24"
+    },
+    {
+      "name": "22",
+      "size": "24"
+    },
+    {
+      "name": "23",
+      "size": "24"
+    },
+    {
+      "name": "24",
+      "size": "24"
+    },
+    {
+      "name": "25",
+      "size": "24"
+    },
+    {
+      "name": "26",
+      "size": "24"
+    },
+    {
+      "name": "27",
+      "size": "24"
+    },
+    {
+      "name": "28",
+      "size": "24"
+    },
+    {
+      "name": "29",
+      "size": "24"
+    },
+    {
+      "name": "30",
+      "size": "24"
+    },
+    {
+      "name": "31",
+      "size": "24"
+    },
+    {
+      "name": "32",
+      "size": "24"
+    },
+    {
+      "name": "33",
+      "size": "24"
+    },
+    {
+      "name": "34",
+      "size": "24"
+    },
+    {
+      "name": "35",
+      "size": "24"
+    },
+    {
+      "name": "36",
+      "size": "24"
+    },
+    {
+      "name": "37",
+      "size": "24"
+    }
+  ]
+}

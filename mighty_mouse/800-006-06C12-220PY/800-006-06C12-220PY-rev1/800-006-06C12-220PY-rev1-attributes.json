@@ -1,0 +1,226 @@
+{
+  "tools": [
+    "M22520/2-01 crimp tool",
+    "Glenair 809-206 positioner",
+    "Glenair 809-203 insertion/extraction tool",
+    "Glenair 601-101 Band-Master ATS micro banding tool"
+  ],
+  "build_notes": [
+    "Torque coupling nut to 20-24 in-lbs during harness installation"
+  ],
+  "csys_children": {
+    "connector": {
+      "x": 0.65,
+      "y": 0,
+      "rotation": 0
+    },
+    "leader_center": {
+      "x": 0.2578,
+      "y": -0.0,
+      "rotation": 0
+    },
+    "flagnote-1-leader_dest": {
+      "x": 0.2578,
+      "y": 0.44,
+      "rotation": 0
+    },
+    "flagnote-1": {
+      "x": 0.2578,
+      "y": 2.56,
+      "rotation": 0
+    },
+    "flagnote-2-leader_dest": {
+      "x": 0.3757,
+      "y": 0.44,
+      "rotation": 0
+    },
+    "flagnote-2": {
+      "x": 0.9204,
+      "y": 2.4728,
+      "rotation": 0
+    },
+    "flagnote-3-leader_dest": {
+      "x": 0.1399,
+      "y": 0.44,
+      "rotation": 0
+    },
+    "flagnote-3": {
+      "x": -0.4048,
+      "y": 2.4728,
+      "rotation": 0
+    },
+    "flagnote-4-leader_dest": {
+      "x": 0.5378,
+      "y": 0.485,
+      "rotation": 0
+    },
+    "flagnote-4": {
+      "x": 1.5378,
+      "y": 2.2171,
+      "rotation": 0
+    },
+    "flagnote-5-leader_dest": {
+      "x": 0.0379,
+      "y": 0.3809,
+      "rotation": 0
+    },
+    "flagnote-5": {
+      "x": -1.0222,
+      "y": 2.2171,
+      "rotation": 0
+    },
+    "flagnote-6-leader_dest": {
+      "x": 0.5378,
+      "y": -0.485,
+      "rotation": 0
+    },
+    "flagnote-6": {
+      "x": 1.5378,
+      "y": -2.2171,
+      "rotation": 0
+    },
+    "flagnote-7-leader_dest": {
+      "x": -0.0672,
+      "y": 0.325,
+      "rotation": 0
+    },
+    "flagnote-7": {
+      "x": -1.5524,
+      "y": 1.8102,
+      "rotation": 0
+    },
+    "flagnote-8-leader_dest": {
+      "x": 0.3757,
+      "y": -0.44,
+      "rotation": 0
+    },
+    "flagnote-8": {
+      "x": 0.9204,
+      "y": -2.4728,
+      "rotation": 0
+    },
+    "flagnote-9-leader_dest": {
+      "x": -0.0672,
+      "y": -0.325,
+      "rotation": 0
+    },
+    "flagnote-9": {
+      "x": -1.5524,
+      "y": -1.8102,
+      "rotation": 0
+    },
+    "flagnote-10-leader_dest": {
+      "x": 0.0379,
+      "y": -0.3809,
+      "rotation": 0
+    },
+    "flagnote-10": {
+      "x": -1.0222,
+      "y": -2.2171,
+      "rotation": 0
+    },
+    "flagnote-11-leader_dest": {
+      "x": 0.1399,
+      "y": -0.44,
+      "rotation": 0
+    },
+    "flagnote-11": {
+      "x": -0.4048,
+      "y": -2.4728,
+      "rotation": 0
+    },
+    "flagnote-12-leader_dest": {
+      "x": 0.2578,
+      "y": -0.44,
+      "rotation": 0
+    },
+    "flagnote-12": {
+      "x": 0.2578,
+      "y": -2.56,
+      "rotation": 0
+    }
+  },
+  "contacts": [
+    {
+      "name": "1",
+      "size": "20HD"
+    },
+    {
+      "name": "2",
+      "size": "20HD"
+    },
+    {
+      "name": "3",
+      "size": "20HD"
+    },
+    {
+      "name": "4",
+      "size": "20HD"
+    },
+    {
+      "name": "5",
+      "size": "20HD"
+    },
+    {
+      "name": "6",
+      "size": "20HD"
+    },
+    {
+      "name": "7",
+      "size": "20HD"
+    },
+    {
+      "name": "8",
+      "size": "20HD"
+    },
+    {
+      "name": "9",
+      "size": "20HD"
+    },
+    {
+      "name": "10",
+      "size": "20HD"
+    },
+    {
+      "name": "11",
+      "size": "20HD"
+    },
+    {
+      "name": "12",
+      "size": "20HD"
+    },
+    {
+      "name": "13",
+      "size": "20HD"
+    },
+    {
+      "name": "14",
+      "size": "20HD"
+    },
+    {
+      "name": "15",
+      "size": "20HD"
+    },
+    {
+      "name": "16",
+      "size": "20HD"
+    },
+    {
+      "name": "17",
+      "size": "20HD"
+    },
+    {
+      "name": "18",
+      "size": "20HD"
+    },
+    {
+      "name": "19",
+      "size": "20HD"
+    },
+    {
+      "name": "20",
+      "size": "20HD"
+    }
+  ],
+  "shell_size": 12
+}
