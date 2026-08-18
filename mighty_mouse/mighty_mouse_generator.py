@@ -2,9 +2,44 @@ import json
 import math
 import os
 import subprocess
+import sys
 
 from harnice import state
 from harnice.lists import rev_history
+
+
+def _load_step_utils():
+    try:
+        from harnice.utils import step_utils as module
+        return module
+    except ImportError:
+        pass
+    import importlib.util
+
+    sibling = os.path.normpath(
+        os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "..",
+            "..",
+            "Harnice",
+            "src",
+            "harnice",
+            "utils",
+            "step_utils.py",
+        )
+    )
+    spec = importlib.util.spec_from_file_location("harnice_step_utils", sibling)
+    if spec is None or spec.loader is None:
+        raise ImportError(
+            "Generating STEP envelopes requires harnice.utils.step_utils "
+            "(Harnice src/harnice/utils/step_utils.py)."
+        )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+step_utils = _load_step_utils()
 
 REVISION = "1"
 DATE_STARTED = "8/16/26"
@@ -490,6 +525,40 @@ def connector_csys():
     return {"x": round(BODY_IN, 4), "y": 0, "rotation": 0}
 
 
+INCH_TO_MM = 25.4
+
+
+def envelope_stations(shell_size, shell_style):
+    """Stepped cylinder stations (x_mm, radius_mm) matching the 2D silhouette."""
+    style, d_in = style_dims(shell_size, shell_style)
+    half_b = style["b_in"] * INCH_TO_MM / 2.0
+    half_c = style["c_in"] * INCH_TO_MM / 2.0
+    half_d = d_in * INCH_TO_MM / 2.0
+    body = BODY_IN * INCH_TO_MM
+    band = BAND_PLATFORM_IN * INCH_TO_MM
+    nut = body * 0.38
+    taper = body * 0.12
+    return [
+        (-band, half_d),
+        (0.0, half_d),
+        (taper, half_c),
+        (body - nut, half_c),
+        (body - nut, half_b),
+        (body, half_b),
+    ]
+
+
+def write_part_step(rev_dir, part_number, shell_size, shell_style):
+    path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-model.step")
+    step_utils.write_revolution_step(
+        path,
+        part_number,
+        envelope_stations(shell_size, shell_style),
+        description="Glenair Series 800 Mighty Mouse low-fidelity envelope",
+    )
+    return path
+
+
 def connector_mating_face_inches(shell_size, shell_style):
     half_b = style_dims(shell_size, shell_style)[0]["b_in"] / 2
     return (BODY_IN, half_b), (BODY_IN, -half_b)
@@ -761,7 +830,7 @@ def _progress_bar(done, total, width=25):
     return "[ " + " ".join(cells) + f" ] ({pct}%)"
 
 
-def main():
+def main(step_only=False):
     state.set_rev(REVISION)
     state.set_product("part")
 
@@ -780,6 +849,19 @@ def main():
 
         family_dir = os.path.dirname(os.path.abspath(__file__))
         part_dir = os.path.join(family_dir, part_number)
+        rev_dir = os.path.join(part_dir, f"{part_number}-rev{REVISION}")
+
+        if step_only:
+            os.makedirs(rev_dir, exist_ok=True)
+            write_part_step(
+                rev_dir,
+                part_number,
+                part_configuration["shell_size"],
+                part_configuration["shell_style"],
+            )
+            print(_progress_bar(i, total), flush=True)
+            continue
+
         os.makedirs(part_dir, exist_ok=True)
 
         revision_history_content_dict = {
@@ -826,6 +908,13 @@ def main():
         with open(svg_path, "w") as f:
             f.write(svg_content)
 
+        write_part_step(
+            rev_dir,
+            part_number,
+            part_configuration["shell_size"],
+            part_configuration["shell_style"],
+        )
+
         subprocess.run(
             ["harnice", "-b"],
             cwd=rev_dir,
@@ -840,6 +929,8 @@ def main():
 
         print(_progress_bar(i, total), flush=True)
 
+    print("Finished rendering all parts in family.")
+
 
 if __name__ == "__main__":
-    main()
+    main(step_only="--step-only" in sys.argv)
