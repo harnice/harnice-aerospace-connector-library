@@ -4,8 +4,9 @@ import os
 import subprocess
 import sys
 
-from harnice import state
+from harnice import fileio, state
 from harnice.lists import rev_history
+import harnice.products.part as part
 
 
 def _load_step_utils():
@@ -1365,12 +1366,49 @@ def _progress_bar(done, total, width=25):
     return "[ " + " ".join(cells) + f" ] ({pct}%)"
 
 
-def main(step_only=False):
+def cache_run_constant_lookups():
+    """Resolve the per-part lookups that cannot change during a run, once.
+
+    `rev_history.part_family_append` calls `get_git_hash_of_harnice_src` (which
+    shells out to `git rev-parse`) and re-reads `drawnby.json` for every part.
+    Neither value can change while the run is in flight.
+    """
+    git_hash = fileio.get_git_hash_of_harnice_src()
+    drawnby = fileio.drawnby()
+    fileio.get_git_hash_of_harnice_src = lambda: git_hash
+    fileio.drawnby = lambda: drawnby
+
+
+def build_part(part_number, rev_dir):
+    """Run the harnice part build in this process.
+
+    Equivalent to `harnice -b` in **rev_dir**, minus the checks the CLI performs
+    that this generator has already satisfied: it wrote the revision history
+    itself, so it does not need `verify_revision_structure` to discover the part
+    number, re-derive the library identity, or refresh datemodified. Skipping
+    the CLI avoids paying interpreter startup and a harnice import per part.
+    """
+    cwd = os.getcwd()
+    os.chdir(rev_dir)
+    try:
+        state.set_pn(part_number)
+        state.set_rev(REVISION)
+        state.set_file_structure(part.file_structure())
+        part.generate_structure()
+        part.build()
+    finally:
+        os.chdir(cwd)
+
+
+def main(step_only=False, use_cli=False):
     state.set_rev(REVISION)
     state.set_product("part")
 
     configs = list(iter_part_configurations())
     total = len(configs)
+
+    if not step_only:
+        cache_run_constant_lookups()
 
     for i, part_configuration in enumerate(configs, start=1):
         part_number = make_part_number(
@@ -1453,7 +1491,10 @@ def main(step_only=False):
         )
 
         # d38999_generator used `harnice -r`; current CLI builds with -b
-        subprocess.run(["harnice", "-b"], cwd=rev_dir, check=True)
+        if use_cli:
+            subprocess.run(["harnice", "-b"], cwd=rev_dir, check=True)
+        else:
+            build_part(part_number, rev_dir)
         if delete_pngs:
             for item in os.listdir(rev_dir):
                 if item.endswith(".png"):
@@ -1465,4 +1506,7 @@ def main(step_only=False):
 
 
 if __name__ == "__main__":
-    main(step_only="--step-only" in sys.argv)
+    main(
+        step_only="--step-only" in sys.argv,
+        use_cli="--cli" in sys.argv,
+    )
