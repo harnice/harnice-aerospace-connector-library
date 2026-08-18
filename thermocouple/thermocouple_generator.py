@@ -121,9 +121,6 @@ TYPES = {
         "positive_alloy": "copper (compensating)",
         "negative_alloy": "copper-nickel compensating (RNX/SNX)",
         "used_with": "Type R (Pt13%Rh-Pt) and Type S (Pt10%Rh-Pt)",
-        "notes": [
-            "One connector serves Type R and Type S.",
-        ],
     },
     "T": {
         "official_code": "T",
@@ -134,7 +131,6 @@ TYPES = {
         "positive_alloy": "copper",
         "negative_alloy": "constantan",
         "used_with": "Type T (Cu-CuNi)",
-        "notes": [],
     },
     "K": {
         "official_code": "K",
@@ -145,7 +141,6 @@ TYPES = {
         "positive_alloy": "chromel (Ni-Cr)",
         "negative_alloy": "alumel (Ni-Al)",
         "used_with": "Type K (NiCr-NiAl)",
-        "notes": [],
     },
     "J": {
         "official_code": "J",
@@ -156,7 +151,6 @@ TYPES = {
         "positive_alloy": "iron",
         "negative_alloy": "constantan",
         "used_with": "Type J (Fe-CuNi)",
-        "notes": [],
     },
     "D": {
         "official_code": "D",
@@ -167,9 +161,6 @@ TYPES = {
         "positive_alloy": "W3%Re compensating",
         "negative_alloy": "W25%Re compensating",
         "used_with": "Type D (W3%Re-W25%Re)",
-        "notes": [
-            "Tungsten-rhenium type; same ASTM E1129 envelope as base-metal OST.",
-        ],
     },
     "C": {
         "official_code": "C",
@@ -180,9 +171,6 @@ TYPES = {
         "positive_alloy": "W5%Re compensating (CPX)",
         "negative_alloy": "W26%Re compensating (CNX)",
         "used_with": "Type C (W5%Re-W26%Re)",
-        "notes": [
-            "Tungsten-rhenium type; Omega glass-filled nylon is often solid-pin male only.",
-        ],
     },
     "N": {
         "official_code": "N",
@@ -193,7 +181,6 @@ TYPES = {
         "positive_alloy": "nicrosil",
         "negative_alloy": "nisil",
         "used_with": "Type N (NiCrSi-NiSi)",
-        "notes": [],
     },
     "E": {
         "official_code": "E",
@@ -204,7 +191,6 @@ TYPES = {
         "positive_alloy": "chromel (Ni-Cr)",
         "negative_alloy": "constantan",
         "used_with": "Type E (NiCr-CuNi)",
-        "notes": [],
     },
     "G": {
         "official_code": "G",
@@ -215,9 +201,6 @@ TYPES = {
         "positive_alloy": "tungsten compensating",
         "negative_alloy": "W26%Re compensating",
         "used_with": "Type G (W-W26%Re)",
-        "notes": [
-            "Tungsten-rhenium type; same ASTM E1129 envelope as base-metal OST.",
-        ],
     },
     "U": {
         "official_code": "U",
@@ -228,9 +211,6 @@ TYPES = {
         "positive_alloy": "copper",
         "negative_alloy": "copper",
         "used_with": "Type B (Pt30%Rh-Pt6%Rh); uncompensated Cu/Cu",
-        "notes": [
-            "Uncompensated copper/copper. Customarily used with Type B thermocouples.",
-        ],
     },
 }
 
@@ -584,21 +564,11 @@ def thermocouple_svg(part_number, tc_type, gender):
 
 
 def compile_part_attributes(part_configuration):
-    tc_type = part_configuration["tc_type"]
     gender = part_configuration["gender"]
-    spec = TYPES[tc_type]
     length_mm = connector_length_mm(gender)
-    notes = [
-        "Negative contact is the larger-diameter round pin (ASTM E1129).",
-        f"Screw-terminal wire attachment, {MIN_WIRE_AWG}–{MAX_WIRE_AWG} AWG. "
-        "Combination Phillips/slot cover screw.",
-        f"ANSI body color: {spec['ansi_color']}.",
-        f"Used with {spec['used_with']}.",
-    ]
-    notes.extend(spec["notes"])
     return {
         "tools": ["Phillips/slot screwdriver"],
-        "build_notes": notes,
+        "build_notes": [],
         "csys_children": flagnote_csys_children(
             length_mm / MM_PER_IN,
             BODY_WIDTH_MM / 2.0,

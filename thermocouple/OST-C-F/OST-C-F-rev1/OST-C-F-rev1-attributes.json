@@ -2,13 +2,7 @@
   "tools": [
     "Phillips/slot screwdriver"
   ],
-  "build_notes": [
-    "Negative contact is the larger-diameter round pin (ASTM E1129).",
-    "Screw-terminal wire attachment, 30\u201314 AWG. Combination Phillips/slot cover screw.",
-    "ANSI body color: red.",
-    "Used with Type C (W5%Re-W26%Re).",
-    "Tungsten-rhenium type; Omega glass-filled nylon is often solid-pin male only."
-  ],
+  "build_notes": [],
   "csys_children": {
     "flagnote-1-leader_dest": {
       "angle": 0.0,

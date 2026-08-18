@@ -2,13 +2,7 @@
   "tools": [
     "Phillips/slot screwdriver"
   ],
-  "build_notes": [
-    "Negative contact is the larger-diameter round pin (ASTM E1129).",
-    "Screw-terminal wire attachment, 30\u201314 AWG. Combination Phillips/slot cover screw.",
-    "ANSI body color: white.",
-    "Used with Type B (Pt30%Rh-Pt6%Rh); uncompensated Cu/Cu.",
-    "Uncompensated copper/copper. Customarily used with Type B thermocouples."
-  ],
+  "build_notes": [],
   "csys_children": {
     "flagnote-1-leader_dest": {
       "angle": 0.0,
