@@ -1,0 +1,21 @@
+library_pn,official_pin,spec,common_name,tc_type,gender,contacts,ansi_color,positive_alloy,negative_alloy,pin_count,max_wire_awg,color_code
+OST-RS-M,OST-R/S-M,ASTM E1129,Type R/S standard plug,R/S,Plug,pin,green,copper (compensating),copper-nickel compensating (RNX/SNX),2,14,ANSI
+OST-RS-F,OST-R/S-F,ASTM E1129,Type R/S standard jack,R/S,Jack,socket,green,copper (compensating),copper-nickel compensating (RNX/SNX),2,14,ANSI
+OST-T-M,OST-T-M,ASTM E1129,Type T standard plug,T,Plug,pin,blue,copper,constantan,2,14,ANSI
+OST-T-F,OST-T-F,ASTM E1129,Type T standard jack,T,Jack,socket,blue,copper,constantan,2,14,ANSI
+OST-K-M,OST-K-M,ASTM E1129,Type K standard plug,K,Plug,pin,yellow,chromel (Ni-Cr),alumel (Ni-Al),2,14,ANSI
+OST-K-F,OST-K-F,ASTM E1129,Type K standard jack,K,Jack,socket,yellow,chromel (Ni-Cr),alumel (Ni-Al),2,14,ANSI
+OST-J-M,OST-J-M,ASTM E1129,Type J standard plug,J,Plug,pin,black,iron,constantan,2,14,ANSI
+OST-J-F,OST-J-F,ASTM E1129,Type J standard jack,J,Jack,socket,black,iron,constantan,2,14,ANSI
+OST-D-M,OST-D-M,ASTM E1129,Type D standard plug,D,Plug,pin,red with white insert,W3%Re compensating,W25%Re compensating,2,14,ANSI
+OST-D-F,OST-D-F,ASTM E1129,Type D standard jack,D,Jack,socket,red with white insert,W3%Re compensating,W25%Re compensating,2,14,ANSI
+OST-C-M,OST-C-M,ASTM E1129,Type C standard plug,C,Plug,pin,red,W5%Re compensating (CPX),W26%Re compensating (CNX),2,14,ANSI
+OST-C-F,OST-C-F,ASTM E1129,Type C standard jack,C,Jack,socket,red,W5%Re compensating (CPX),W26%Re compensating (CNX),2,14,ANSI
+OST-N-M,OST-N-M,ASTM E1129,Type N standard plug,N,Plug,pin,orange,nicrosil,nisil,2,14,ANSI
+OST-N-F,OST-N-F,ASTM E1129,Type N standard jack,N,Jack,socket,orange,nicrosil,nisil,2,14,ANSI
+OST-E-M,OST-E-M,ASTM E1129,Type E standard plug,E,Plug,pin,purple,chromel (Ni-Cr),constantan,2,14,ANSI
+OST-E-F,OST-E-F,ASTM E1129,Type E standard jack,E,Jack,socket,purple,chromel (Ni-Cr),constantan,2,14,ANSI
+OST-G-M,OST-G-M,ASTM E1129,Type G standard plug,G,Plug,pin,red with green insert,tungsten compensating,W26%Re compensating,2,14,ANSI
+OST-G-F,OST-G-F,ASTM E1129,Type G standard jack,G,Jack,socket,red with green insert,tungsten compensating,W26%Re compensating,2,14,ANSI
+OST-U-M,OST-U-M,ASTM E1129,Type U (uncompensated) standard plug,U,Plug,pin,white,copper,copper,2,14,ANSI
+OST-U-F,OST-U-F,ASTM E1129,Type U (uncompensated) standard jack,U,Jack,socket,white,copper,copper,2,14,ANSI
