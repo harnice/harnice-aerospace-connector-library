@@ -107,6 +107,7 @@ BODY_CORNER_MM = 1.5
 MAX_WIRE_AWG = 14
 MIN_WIRE_AWG = 30
 TEMP_C = (-29, 180)             # glass-filled nylon OST / OSTW
+PIN_HEX = "#C0C0C0"             # contact metal in STEP / SVG
 
 # ANSI body colors for the 2D drawing. C/D/G are the usual tungsten-rhenium
 # markings on an ASTM-size shell (red; D white insert, G green insert).
@@ -388,29 +389,113 @@ def envelope_prisms_mm(gender):
     Male prongs continue +X past the body. Negative prong is larger and
     sits at −Y.
     """
+    return [segment for _name, segment, _hex in envelope_colored_parts("K", gender)]
+
+
+def envelope_colored_parts(tc_type, gender):
+    """Named prism segments with ANSI / metal hex colors for STEP styling."""
+    spec = TYPES[tc_type]
     body = _rounded_rect_yz(BODY_WIDTH_MM, BODY_THICKNESS_MM)
-    segments = [(0.0, BODY_LENGTH_MM, body)]
+    parts = []
+    if spec["cap_hex"]:
+        parts.append(("insert", (0.0, CAP_LENGTH_MM, body), spec["cap_hex"]))
+        parts.append(("body", (CAP_LENGTH_MM, BODY_LENGTH_MM, body), spec["body_hex"]))
+    else:
+        parts.append(("body", (0.0, BODY_LENGTH_MM, body), spec["body_hex"]))
     if gender == "M":
         half = PRONG_SPACING_MM / 2.0
         x0 = BODY_LENGTH_MM
         x1 = x0 + PRONG_LENGTH_MM
-        segments.append(
-            (x0, x1, _circle_yz(half, 0.0, POSITIVE_PIN_DIA_MM / 2.0))
+        parts.append(
+            (
+                "positive_pin",
+                (x0, x1, _circle_yz(half, 0.0, POSITIVE_PIN_DIA_MM / 2.0)),
+                PIN_HEX,
+            )
         )
-        segments.append(
-            (x0, x1, _circle_yz(-half, 0.0, NEGATIVE_PIN_DIA_MM / 2.0))
+        parts.append(
+            (
+                "negative_pin",
+                (x0, x1, _circle_yz(-half, 0.0, NEGATIVE_PIN_DIA_MM / 2.0)),
+                PIN_HEX,
+            )
         )
-    return segments
+    return parts
 
 
-def write_part_step(rev_dir, part_number, gender):
+def _hex_rgb(hex_color):
+    value = hex_color.lstrip("#")
+    return tuple(int(value[i : i + 2], 16) / 255.0 for i in (0, 2, 4))
+
+
+def _write_colored_ost_step(path, part_number, tc_type, gender):
+    """AP214 STEP with XCAF surface colors (body / insert / pins)."""
+    from OCP.BRep import BRep_Builder
+    from OCP.IFSelect import IFSelect_RetDone
+    from OCP.Interface import Interface_Static
+    from OCP.Quantity import Quantity_Color, Quantity_TOC_RGB
+    from OCP.STEPCAFControl import STEPCAFControl_Writer
+    from OCP.TCollection import TCollection_ExtendedString
+    from OCP.TDataStd import TDataStd_Name
+    from OCP.TDocStd import TDocStd_Document
+    from OCP.TopoDS import TopoDS_Compound
+    from OCP.XCAFApp import XCAFApp_Application
+    from OCP.XCAFDoc import XCAFDoc_ColorType, XCAFDoc_DocumentTool
+
+    Interface_Static.SetCVal_s("write.step.schema", "AP214IS")
+    Interface_Static.SetCVal_s("write.step.unit", "MM")
+
+    solids = []
+    colors = []
+    for name, segment, hex_color in envelope_colored_parts(tc_type, gender):
+        solids.append(step_utils._ocp_prism_segments_solid([segment]))
+        colors.append((name, _hex_rgb(hex_color)))
+
+    builder = BRep_Builder()
+    compound = TopoDS_Compound()
+    builder.MakeCompound(compound)
+    for solid in solids:
+        builder.Add(compound, solid)
+
+    app = XCAFApp_Application.GetApplication_s()
+    doc = TDocStd_Document(TCollection_ExtendedString("MDTV-XCAF"))
+    app.NewDocument(TCollection_ExtendedString("MDTV-XCAF"), doc)
+    shape_tool = XCAFDoc_DocumentTool.ShapeTool_s(doc.Main())
+    color_tool = XCAFDoc_DocumentTool.ColorTool_s(doc.Main())
+    label = shape_tool.AddShape(compound, True)
+    TDataStd_Name.Set_s(label, TCollection_ExtendedString(str(part_number)))
+    for solid, (_name, rgb) in zip(solids, colors):
+        color = Quantity_Color(rgb[0], rgb[1], rgb[2], Quantity_TOC_RGB)
+        color_tool.SetColor(solid, color, XCAFDoc_ColorType.XCAFDoc_ColorSurf)
+        color_tool.SetColor(solid, color, XCAFDoc_ColorType.XCAFDoc_ColorGen)
+
+    writer = STEPCAFControl_Writer()
+    writer.SetNameMode(True)
+    writer.SetColorMode(True)
+    with step_utils._silence_stdio():
+        if not writer.Transfer(doc):
+            raise RuntimeError("STEPCAFControl_Writer.Transfer failed")
+        status = writer.Write(path)
+    try:
+        app.Close(doc)
+    except Exception:
+        pass
+    if status != IFSelect_RetDone:
+        raise RuntimeError(f"STEPCAFControl_Writer.Write failed: {status}")
+    return path
+
+
+def write_part_step(rev_dir, part_number, tc_type, gender):
     path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-model.step")
-    step_utils.write_prism_segments_step(
-        path,
-        part_number,
-        envelope_prisms_mm(gender),
-        description="ASTM E1129 / Omega OST low-fidelity envelope",
-    )
+    try:
+        _write_colored_ost_step(path, part_number, tc_type, gender)
+    except ImportError:
+        step_utils.write_prism_segments_step(
+            path,
+            part_number,
+            envelope_prisms_mm(gender),
+            description="ASTM E1129 / Omega OST low-fidelity envelope",
+        )
     return path
 
 
@@ -468,12 +553,12 @@ def thermocouple_svg(part_number, tc_type, gender):
         parts.append(
             f'<rect x="{body_px:.2f}" y="{-half_sp - neg_r:.2f}" '
             f'width="{prong_px:.2f}" height="{2 * neg_r:.2f}" '
-            f'fill="#C0C0C0" stroke="black" stroke-width="1"/>'
+            f'fill="{PIN_HEX}" stroke="black" stroke-width="1"/>'
         )
         parts.append(
             f'<rect x="{body_px:.2f}" y="{half_sp - pos_r:.2f}" '
             f'width="{prong_px:.2f}" height="{2 * pos_r:.2f}" '
-            f'fill="#C0C0C0" stroke="black" stroke-width="1"/>'
+            f'fill="{PIN_HEX}" stroke="black" stroke-width="1"/>'
         )
     parts.append(
         f'<circle cx="{body_px / 2.0:.2f}" cy="0.00" r="{screw_r:.2f}" '
@@ -640,7 +725,12 @@ def make_part(part_configuration):
             )
         )
 
-    write_part_step(rev_dir, part_number, part_configuration["gender"])
+    write_part_step(
+        rev_dir,
+        part_number,
+        part_configuration["tc_type"],
+        part_configuration["gender"],
+    )
 
     subprocess.run(["harnice", "-b"], cwd=rev_dir, check=True)
     if delete_pngs:
@@ -687,7 +777,12 @@ def main(step_only=False, csv_only=False):
                         part_configuration["gender"],
                     )
                 )
-            write_part_step(rev_dir, part_number, part_configuration["gender"])
+            write_part_step(
+        rev_dir,
+        part_number,
+        part_configuration["tc_type"],
+        part_configuration["gender"],
+    )
             print(_progress_bar(i, total))
             continue
         make_part(part_configuration)
