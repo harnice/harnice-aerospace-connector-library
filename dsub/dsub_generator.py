@@ -46,10 +46,12 @@ isolation -- see the notes above for how each was confirmed):
     C - mounting hole spacing (screw-to-screw)
     D - shell body height, excl. mounting ears (short axis)
     E - overall height, incl. mounting ears (short axis)
-    F - mating-face shroud depth (front-to-back, mating axis)
-    G - a secondary short-axis dimension near the shroud opening
-        (likely a step/relief -- not independently confirmed against a
-        second source; treat with more caution than A-F)
+    F - side-view dimension drawn next to E (not a mating-axis length).
+        Earlier envelopes used F as shroud depth; that doubled the
+        front-to-back stack because MAX is already the overall length.
+    G - front-of-shell length on the side view, labeled "G 09 TO 37 PIN"
+        (~5.8-6.3mm). This is the mating shroud. Shell 5's tabulated G
+        is the 3-row height, not a depth -- do not use it as shroud.
     H - a dimension that scales with shell size roughly in proportion to
         B, not to A or F. Earlier drafts of this dataset assumed H was
         the rear (cable-side) insulator depth -- checking the ratio
@@ -69,11 +71,11 @@ isolation -- see the notes above for how each was confirmed):
     L - a small edge/chamfer-scale dimension. Never restated by the
         source past shell 3, so modeled as constant beyond that point
         (see JUDGMENT CALLS).
-    MAX_total_depth - a separate "MAX" call-out in the drawing (not part
-        of the A-L table), constant per gender: 9.91mm for solder-cup
-        receptacles across all shell sizes; 11.23mm for solder-cup plugs
-        on shells 1-4, but 9.91mm specifically for the 50-pin/3-row plug
-        (see JUDGMENT CALLS for why the plug value is split by shell).
+    MAX_total_depth - side-view "11.23 MAX" / "9.91 MAX" overall length
+        along the mating axis (not a rear-only segment). 9.91mm for
+        solder-cup receptacles; 11.23mm for solder-cup plugs on shells
+        1-4; 9.91mm for the 50-pin/3-row plug. Crimp has no MAX; J
+        (~10.7mm, constant) is the same class of overall-depth stand-in.
 
 JUDGMENT CALLS (made where the OCR'd source text was ambiguous or
 incomplete; the user accepted these as final rather than requiring a
@@ -156,11 +158,46 @@ import json
 import math
 import os
 import subprocess
+import sys
 from dataclasses import dataclass, field
 from typing import Optional, Union, Literal
 
 from harnice import state
 from harnice.lists import rev_history
+
+
+def _load_step_utils():
+    try:
+        from harnice.utils import step_utils as module
+        return module
+    except ImportError:
+        pass
+    import importlib.util
+
+    sibling = os.path.normpath(
+        os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "..",
+            "..",
+            "Harnice",
+            "src",
+            "harnice",
+            "utils",
+            "step_utils.py",
+        )
+    )
+    spec = importlib.util.spec_from_file_location("harnice_step_utils", sibling)
+    if spec is None or spec.loader is None:
+        raise ImportError(
+            "Generating STEP envelopes requires harnice.utils.step_utils "
+            "(Harnice src/harnice/utils/step_utils.py)."
+        )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+step_utils = _load_step_utils()
 
 Aggregation = Literal["range", "min", "max", "mid"]
 
@@ -1285,22 +1322,33 @@ def variant_from_configuration(part_configuration):
     )
 
 
+# G on the Amphenol side view is the 09–37 pin front-of-shell length.
+# Tabulated G for 50-pin is the 3-row height (~15mm), not a depth.
+_DSUB_SHROUD_DEPTH_MAX_MM = 8.0
+_DSUB_SHROUD_FALLBACK_MM = 5.935  # shell-1 plug G midpoint
+
+
 def mating_shroud_mm(variant):
+    g = _mid(variant.dims.get("G"))
+    if g is not None and g < _DSUB_SHROUD_DEPTH_MAX_MM:
+        return g
+    return _DSUB_SHROUD_FALLBACK_MM
+
+
+def connector_depth_mm(variant):
+    # MAX is the overall mating-axis length. Crimp uses constant J.
+    maxd = _mid(variant.dims.get("MAX_total_depth"))
+    if maxd is not None:
+        return maxd
+    j = _mid(variant.dims.get("J"))
+    if j is not None:
+        return j
     return _mid(variant.dims["F"])
 
 
 def cable_side_mm(variant):
-    # Solder-cup MAX is the flange-rear-to-termination envelope (9.91 /
-    # 11.23 in the Amphenol side view). Cups are not drawn; the block is
-    # the insulator bulk. Crimp has no MAX -- reuse F as a rear estimate.
-    maxd = _mid(variant.dims.get("MAX_total_depth"))
-    if maxd is not None:
-        return maxd
-    return _mid(variant.dims["F"])
-
-
-def connector_depth_mm(variant):
-    return cable_side_mm(variant) + FLANGE_THICKNESS_MM + mating_shroud_mm(variant)
+    rear = connector_depth_mm(variant) - FLANGE_THICKNESS_MM - mating_shroud_mm(variant)
+    return max(rear, 1.0)
 
 
 def dsub_connector_svg(part_number, variant):
@@ -1309,7 +1357,7 @@ def dsub_connector_svg(part_number, variant):
     face (same convention as D38999).
 
     Stack-up matches the Amphenol side view, mirrored to this origin:
-    insulator (cable) | mounting flange | mating shroud.
+    insulator (remainder of MAX/J) | mounting flange | mating shroud (G).
     Vertical is A (ears) / B (body). D/E is into the page and not drawn.
     """
     a = _mid(variant.dims["A"])
@@ -1353,6 +1401,135 @@ def dsub_connector_svg(part_number, variant):
 <g id="{part_number}-drawing-contents-end">
 </g>
 </svg>'''
+
+
+DSUB_SIDE_TAPER_DEG = 12.0
+_EPS = 1e-9
+
+
+def _arc_yz(cx, cz, radius, a0, a1, n):
+    pts = []
+    for i in range(n + 1):
+        t = a0 + (a1 - a0) * i / n
+        pts.append((cx + radius * math.cos(t), cz + radius * math.sin(t)))
+    return pts
+
+
+def _fillet_vertex_yz(p0, p1, p2, radius, n):
+    """Arc replacing corner p1 of a CCW YZ polygon."""
+    y0, z0 = p0
+    y1, z1 = p1
+    y2, z2 = p2
+    v1 = (y0 - y1, z0 - z1)
+    v2 = (y2 - y1, z2 - z1)
+    l1 = math.hypot(*v1)
+    l2 = math.hypot(*v2)
+    if l1 < _EPS or l2 < _EPS or radius < _EPS:
+        return [p1]
+    u1 = (v1[0] / l1, v1[1] / l1)
+    u2 = (v2[0] / l2, v2[1] / l2)
+    turn = math.atan2(u1[0] * u2[1] - u1[1] * u2[0], u1[0] * u2[0] + u1[1] * u2[1])
+    half = abs(turn) / 2.0
+    if half < 1e-6:
+        return [p1]
+    t = min(radius / math.tan(half), l1 * 0.45, l2 * 0.45)
+    r = t * math.tan(half)
+    t1 = (y1 + u1[0] * t, z1 + u1[1] * t)
+    t2 = (y1 + u2[0] * t, z1 + u2[1] * t)
+    bis = (u1[0] + u2[0], u1[1] + u2[1])
+    bl = math.hypot(*bis)
+    if bl < _EPS:
+        return [t1, t2]
+    dist = r / math.sin(half)
+    cy = y1 + bis[0] / bl * dist
+    cz = z1 + bis[1] / bl * dist
+    a0 = math.atan2(t1[1] - cz, t1[0] - cy)
+    a1 = math.atan2(t2[1] - cz, t2[0] - cy)
+    sweep = a1 - a0
+    while sweep <= 0.0:
+        sweep += 2.0 * math.pi
+    while sweep > 2.0 * math.pi:
+        sweep -= 2.0 * math.pi
+    return [
+        (cy + r * math.cos(a0 + sweep * i / n), cz + r * math.sin(a0 + sweep * i / n))
+        for i in range(n + 1)
+    ]
+
+
+def _rounded_rect_yz(width_mm, height_mm, radius_mm=None, n=6):
+    """Flange plate in YZ: width = A (pin row), height = E (short axis)."""
+    hw, hh = width_mm / 2.0, height_mm / 2.0
+    r = min(
+        radius_mm if radius_mm is not None else min(hw, hh) * 0.18,
+        hw * 0.45,
+        hh * 0.45,
+    )
+    if r < 0.05:
+        return [(-hw, -hh), (hw, -hh), (hw, hh), (-hw, hh)]
+    pts = []
+    pts += _arc_yz(hw - r, -hh + r, r, -math.pi / 2, 0.0, n)
+    pts += _arc_yz(hw - r, hh - r, r, 0.0, math.pi / 2, n)
+    pts += _arc_yz(-hw + r, hh - r, r, math.pi / 2, math.pi, n)
+    pts += _arc_yz(-hw + r, -hh + r, r, math.pi, 3.0 * math.pi / 2, n)
+    return pts
+
+
+def _d_shell_yz(wide_mm, height_mm, n=8):
+    """D-sub mating outline: isosceles trapezoid (wide at −Z), rounded corners."""
+    inset = height_mm * math.tan(math.radians(DSUB_SIDE_TAPER_DEG))
+    narrow = max(wide_mm - 2.0 * inset, wide_mm * 0.55)
+    hw, hn, hh = wide_mm / 2.0, narrow / 2.0, height_mm / 2.0
+    r = min(height_mm * 0.15, hw * 0.25, hn * 0.25)
+    verts = [(-hw, -hh), (hw, -hh), (hn, hh), (-hn, hh)]
+    pts = []
+    m = len(verts)
+    for i in range(m):
+        pts.extend(
+            _fillet_vertex_yz(
+                verts[(i - 1) % m], verts[i], verts[(i + 1) % m], r, n
+            )
+        )
+    return pts
+
+
+def envelope_prisms_mm(variant):
+    """Low-fi envelope from Amphenol A–G / MAX, in millimetres.
+
+    Catalog front view (the photo) is the YZ plane, looking toward −X:
+      A  flange length along the pin row     →  STEP ±Y
+      B  shell width along the pin row       →  STEP ±Y
+      C  mounting-hole spacing               →  not modelled
+      D  shell height (short axis)           →  STEP ±Z
+      E  flange height (short axis)          →  STEP ±Z
+      G  mating-shroud depth (09–37 pin)     →  STEP +X, in front of the flange
+      MAX / J  overall mating-axis length    →  STEP +X total
+    +X is the cable/mating axis (same as D38999). FreeCAD Front is XZ (the
+    side, ~square); the D-face is FreeCAD Right (YZ).
+    """
+    cable = cable_side_mm(variant)
+    flange = FLANGE_THICKNESS_MM
+    shroud = mating_shroud_mm(variant)
+    shell = _d_shell_yz(_mid(variant.dims["B"]), _mid(variant.dims["D"]))
+    plate = _rounded_rect_yz(_mid(variant.dims["A"]), _mid(variant.dims["E"]))
+    x1 = cable
+    x2 = cable + flange
+    x3 = x2 + shroud
+    return [
+        (0.0, x1, shell),
+        (x1, x2, plate),
+        (x2, x3, shell),
+    ]
+
+
+def write_part_step(rev_dir, part_number, variant):
+    path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-model.step")
+    step_utils.write_prism_segments_step(
+        path,
+        part_number,
+        envelope_prisms_mm(variant),
+        description="MIL-DTL-24308 low-fidelity envelope",
+    )
+    return path
 
 
 def compile_part_attributes(part_configuration):
@@ -1456,6 +1633,8 @@ def make_part(part_configuration):
     with open(svg_path, "w") as f:
         f.write(svg_content)
 
+    write_part_step(rev_dir, part_number, variant)
+
     subprocess.run(["harnice", "-b"], cwd=rev_dir, check=True)
     if delete_pngs:
         for item in os.listdir(rev_dir):
@@ -1465,13 +1644,35 @@ def make_part(part_configuration):
     return part_number
 
 
-def main():
+def main(step_only=False):
     state.set_rev(REVISION)
     state.set_product("part")
 
     configs = list(iter_part_configurations())
     total = len(configs)
     for i, part_configuration in enumerate(configs, start=1):
+        if step_only:
+            part_number = make_part_number(part_configuration)
+            print("Preparing part number: ", part_number)
+            family_dir = os.path.dirname(os.path.abspath(__file__))
+            rev_dir = os.path.join(
+                family_dir, part_number, f"{part_number}-rev{REVISION}"
+            )
+            os.makedirs(rev_dir, exist_ok=True)
+            variant = variant_from_configuration(part_configuration)
+            json_path = os.path.join(
+                rev_dir, f"{part_number}-rev{REVISION}-attributes.json"
+            )
+            with open(json_path, "w") as f:
+                json.dump(compile_part_attributes(part_configuration), f, indent=2)
+            svg_path = os.path.join(
+                rev_dir, f"{part_number}-rev{REVISION}-drawing.svg"
+            )
+            with open(svg_path, "w") as f:
+                f.write(dsub_connector_svg(part_number, variant))
+            write_part_step(rev_dir, part_number, variant)
+            print(_progress_bar(i, total))
+            continue
         make_part(part_configuration)
         print(_progress_bar(i, total))
 
@@ -1479,4 +1680,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(step_only="--step-only" in sys.argv)

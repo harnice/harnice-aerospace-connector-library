@@ -145,11 +145,46 @@ import json
 import math
 import os
 import subprocess
+import sys
 from dataclasses import dataclass
 from typing import Optional, Literal
 
 from harnice import state
 from harnice.lists import rev_history
+
+
+def _load_step_utils():
+    try:
+        from harnice.utils import step_utils as module
+        return module
+    except ImportError:
+        pass
+    import importlib.util
+
+    sibling = os.path.normpath(
+        os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "..",
+            "..",
+            "Harnice",
+            "src",
+            "harnice",
+            "utils",
+            "step_utils.py",
+        )
+    )
+    spec = importlib.util.spec_from_file_location("harnice_step_utils", sibling)
+    if spec is None or spec.loader is None:
+        raise ImportError(
+            "Generating STEP envelopes requires harnice.utils.step_utils "
+            "(Harnice src/harnice/utils/step_utils.py)."
+        )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+step_utils = _load_step_utils()
 
 Letter = Literal["A", "B", "C", "D", "E", "F", "G"]
 
@@ -510,24 +545,28 @@ def make_part_number(part_configuration):
 
 
 def mating_shroud_mm(shell_size, gender):
-    # Amphenol C / official /01 B -- mating-side shell depth.
-    return get_dimension(shell_size, "C", gender=gender)
-
-
-def cable_side_mm(shell_size, connector_type, gender):
-    # Cups/pigtails are not drawn; this is the rear insulator bulk.
-    # F is the pigtail-family depth stand-in; solder reuses C.
-    if connector_type == "Pigtail":
-        return get_dimension(shell_size, "F")
-    return get_dimension(shell_size, "C", gender=gender)
+    # G is gender-split like official shroud depth; it is constant for
+    # sizes 9–37 and then drifts with pin count. Use the 9-position
+    # value so large shells stay ~8–10mm deep.
+    return get_dimension(9, "G", gender=gender)
 
 
 def connector_depth_mm(shell_size, connector_type, gender):
-    return (
-        cable_side_mm(shell_size, connector_type, gender)
-        + FLANGE_THICKNESS_MM
-        + mating_shroud_mm(shell_size, gender)
+    # Official /01 B is the mating-axis envelope and does not grow with
+    # shell size. Catalog C matches it at 9 positions, then tracks the
+    # pin row — use the size-9 value for every shell.
+    if connector_type == "Pigtail":
+        return get_dimension(9, "F")
+    return get_dimension(9, "C", gender=gender)
+
+
+def cable_side_mm(shell_size, connector_type, gender):
+    rear = (
+        connector_depth_mm(shell_size, connector_type, gender)
+        - FLANGE_THICKNESS_MM
+        - mating_shroud_mm(shell_size, gender)
     )
+    return max(rear, 1.0)
 
 
 def microd_connector_svg(part_number, part_configuration):
@@ -582,6 +621,127 @@ def microd_connector_svg(part_number, part_configuration):
 <g id="{part_number}-drawing-contents-end">
 </g>
 </svg>'''
+
+
+DSUB_SIDE_TAPER_DEG = 12.0
+_EPS = 1e-9
+
+
+def _arc_yz(cx, cz, radius, a0, a1, n):
+    pts = []
+    for i in range(n + 1):
+        t = a0 + (a1 - a0) * i / n
+        pts.append((cx + radius * math.cos(t), cz + radius * math.sin(t)))
+    return pts
+
+
+def _fillet_vertex_yz(p0, p1, p2, radius, n):
+    """Arc replacing corner p1 of a CCW YZ polygon."""
+    y0, z0 = p0
+    y1, z1 = p1
+    y2, z2 = p2
+    v1 = (y0 - y1, z0 - z1)
+    v2 = (y2 - y1, z2 - z1)
+    l1 = math.hypot(*v1)
+    l2 = math.hypot(*v2)
+    if l1 < _EPS or l2 < _EPS or radius < _EPS:
+        return [p1]
+    u1 = (v1[0] / l1, v1[1] / l1)
+    u2 = (v2[0] / l2, v2[1] / l2)
+    turn = math.atan2(u1[0] * u2[1] - u1[1] * u2[0], u1[0] * u2[0] + u1[1] * u2[1])
+    half = abs(turn) / 2.0
+    if half < 1e-6:
+        return [p1]
+    t = min(radius / math.tan(half), l1 * 0.45, l2 * 0.45)
+    r = t * math.tan(half)
+    t1 = (y1 + u1[0] * t, z1 + u1[1] * t)
+    t2 = (y1 + u2[0] * t, z1 + u2[1] * t)
+    bis = (u1[0] + u2[0], u1[1] + u2[1])
+    bl = math.hypot(*bis)
+    if bl < _EPS:
+        return [t1, t2]
+    dist = r / math.sin(half)
+    cy = y1 + bis[0] / bl * dist
+    cz = z1 + bis[1] / bl * dist
+    a0 = math.atan2(t1[1] - cz, t1[0] - cy)
+    a1 = math.atan2(t2[1] - cz, t2[0] - cy)
+    sweep = a1 - a0
+    while sweep <= 0.0:
+        sweep += 2.0 * math.pi
+    while sweep > 2.0 * math.pi:
+        sweep -= 2.0 * math.pi
+    return [
+        (cy + r * math.cos(a0 + sweep * i / n), cz + r * math.sin(a0 + sweep * i / n))
+        for i in range(n + 1)
+    ]
+
+
+def _rounded_rect_yz(width_mm, height_mm, radius_mm=None, n=6):
+    hw, hh = width_mm / 2.0, height_mm / 2.0
+    r = min(
+        radius_mm if radius_mm is not None else min(hw, hh) * 0.18,
+        hw * 0.45,
+        hh * 0.45,
+    )
+    if r < 0.05:
+        return [(-hw, -hh), (hw, -hh), (hw, hh), (-hw, hh)]
+    pts = []
+    pts += _arc_yz(hw - r, -hh + r, r, -math.pi / 2, 0.0, n)
+    pts += _arc_yz(hw - r, hh - r, r, 0.0, math.pi / 2, n)
+    pts += _arc_yz(-hw + r, hh - r, r, math.pi / 2, math.pi, n)
+    pts += _arc_yz(-hw + r, -hh + r, r, math.pi, 3.0 * math.pi / 2, n)
+    return pts
+
+
+def _d_shell_yz(wide_mm, height_mm, n=8):
+    """D-sub mating outline: isosceles trapezoid (wide at −Z), rounded corners."""
+    inset = height_mm * math.tan(math.radians(DSUB_SIDE_TAPER_DEG))
+    narrow = max(wide_mm - 2.0 * inset, wide_mm * 0.55)
+    hw, hn, hh = wide_mm / 2.0, narrow / 2.0, height_mm / 2.0
+    r = min(height_mm * 0.15, hw * 0.25, hn * 0.25)
+    verts = [(-hw, -hh), (hw, -hh), (hn, hh), (-hn, hh)]
+    pts = []
+    m = len(verts)
+    for i in range(m):
+        pts.extend(
+            _fillet_vertex_yz(
+                verts[(i - 1) % m], verts[i], verts[(i + 1) % m], r, n
+            )
+        )
+    return pts
+
+
+def envelope_prisms_mm(part_configuration):
+    """Cable-side D-shell, A×B collar, mating-face D-shell (mm)."""
+    shell_size = part_configuration["shell_size"]
+    gender = part_configuration["gender"]
+    connector_type = part_configuration["connector_type"]
+    cable = cable_side_mm(shell_size, connector_type, gender)
+    flange = FLANGE_THICKNESS_MM
+    shroud = mating_shroud_mm(shell_size, gender)
+    wide = get_dimension(shell_size, "A")
+    height = get_dimension(shell_size, "B")
+    shell = _d_shell_yz(wide, height * 0.72)
+    plate = _rounded_rect_yz(wide, height)
+    x1 = cable
+    x2 = cable + flange
+    x3 = x2 + shroud
+    return [
+        (0.0, x1, shell),
+        (x1, x2, plate),
+        (x2, x3, shell),
+    ]
+
+
+def write_part_step(rev_dir, part_number, part_configuration):
+    path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-model.step")
+    step_utils.write_prism_segments_step(
+        path,
+        part_number,
+        envelope_prisms_mm(part_configuration),
+        description="MIL-DTL-83513 low-fidelity envelope",
+    )
+    return path
 
 
 def compile_part_attributes(part_configuration):
@@ -695,6 +855,8 @@ def make_part(part_configuration):
     with open(svg_path, "w") as f:
         f.write(svg_content)
 
+    write_part_step(rev_dir, part_number, part_configuration)
+
     subprocess.run(["harnice", "-b"], cwd=rev_dir, check=True)
     if delete_pngs:
         for item in os.listdir(rev_dir):
@@ -704,13 +866,34 @@ def make_part(part_configuration):
     return part_number
 
 
-def main():
+def main(step_only=False):
     state.set_rev(REVISION)
     state.set_product("part")
 
     configs = list(iter_part_configurations())
     total = len(configs)
     for i, part_configuration in enumerate(configs, start=1):
+        if step_only:
+            part_number = make_part_number(part_configuration)
+            print("Preparing part number: ", part_number)
+            family_dir = os.path.dirname(os.path.abspath(__file__))
+            rev_dir = os.path.join(
+                family_dir, part_number, f"{part_number}-rev{REVISION}"
+            )
+            os.makedirs(rev_dir, exist_ok=True)
+            json_path = os.path.join(
+                rev_dir, f"{part_number}-rev{REVISION}-attributes.json"
+            )
+            with open(json_path, "w") as f:
+                json.dump(compile_part_attributes(part_configuration), f, indent=2)
+            svg_path = os.path.join(
+                rev_dir, f"{part_number}-rev{REVISION}-drawing.svg"
+            )
+            with open(svg_path, "w") as f:
+                f.write(microd_connector_svg(part_number, part_configuration))
+            write_part_step(rev_dir, part_number, part_configuration)
+            print(_progress_bar(i, total))
+            continue
         make_part(part_configuration)
         print(_progress_bar(i, total))
 
@@ -718,4 +901,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(step_only="--step-only" in sys.argv)
