@@ -1,0 +1,228 @@
+{
+  "specification": "MIL-DTL-27500",
+  "properties": {
+    "od": "0.395in",
+    "conductors": "8",
+    "component_wire_specification": "MIL-DTL-22759/32",
+    "shield": "round, nickel-coated copper",
+    "jacket": "extruded clear fluorinated ethylene propylene (FEP)",
+    "temperature rating": "150C",
+    "voltage rating": "600V",
+    "shield coverage": "85%"
+  },
+  "tools": [
+    "Cable cutter",
+    "Wire stripper",
+    "Measuring tape",
+    "Jacket slitting tool",
+    "Shield comb / pick",
+    "Shield termination kit"
+  ],
+  "build_notes": [
+    "Component wires are MIL-DTL-22759/32, 12 AWG, 37x28",
+    "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
+    "Shield is round, nickel-coated copper at 85% minimum coverage",
+    "Overall diameter 0.395 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
+  ],
+  "jacket": {
+    "properties": {
+      "material": "FEP",
+      "color": "clear",
+      "construction": "extruded",
+      "od": "0.395in",
+      "thickness": "0.014in",
+      "temperature rating": "200C"
+    },
+    "shield": {
+      "properties": {
+        "type": "round braid",
+        "material": "nickel-coated copper",
+        "coverage": "85%",
+        "od": "0.367in",
+        "thickness": "0.010in",
+        "temperature rating": "260C"
+      },
+      "conductors": {
+        "properties": {
+          "lay": "spirally laid",
+          "count": "8",
+          "od": "0.347in",
+          "identification method": "MIL-DTL-27500 Table IIIA, stripe marking"
+        },
+        "white": {
+          "conductor": true,
+          "properties": {
+            "wire number": "1",
+            "component_wire": "M22759/32-12",
+            "gauge": "12AWG",
+            "construction": "37x28",
+            "material": "tin-coated copper",
+            "insulation material": "crosslinked modified ETFE",
+            "od": "0.103in",
+            "resistance": "2.02ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black"
+          }
+        },
+        "blue": {
+          "conductor": true,
+          "properties": {
+            "wire number": "2",
+            "component_wire": "M22759/32-12",
+            "gauge": "12AWG",
+            "construction": "37x28",
+            "material": "tin-coated copper",
+            "insulation material": "crosslinked modified ETFE",
+            "od": "0.103in",
+            "resistance": "2.02ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black",
+            "parallelstripe": [
+              "blue"
+            ]
+          }
+        },
+        "orange": {
+          "conductor": true,
+          "properties": {
+            "wire number": "3",
+            "component_wire": "M22759/32-12",
+            "gauge": "12AWG",
+            "construction": "37x28",
+            "material": "tin-coated copper",
+            "insulation material": "crosslinked modified ETFE",
+            "od": "0.103in",
+            "resistance": "2.02ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black",
+            "parallelstripe": [
+              "orange"
+            ]
+          }
+        },
+        "green": {
+          "conductor": true,
+          "properties": {
+            "wire number": "4",
+            "component_wire": "M22759/32-12",
+            "gauge": "12AWG",
+            "construction": "37x28",
+            "material": "tin-coated copper",
+            "insulation material": "crosslinked modified ETFE",
+            "od": "0.103in",
+            "resistance": "2.02ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black",
+            "parallelstripe": [
+              "green"
+            ]
+          }
+        },
+        "red": {
+          "conductor": true,
+          "properties": {
+            "wire number": "5",
+            "component_wire": "M22759/32-12",
+            "gauge": "12AWG",
+            "construction": "37x28",
+            "material": "tin-coated copper",
+            "insulation material": "crosslinked modified ETFE",
+            "od": "0.103in",
+            "resistance": "2.02ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black",
+            "parallelstripe": [
+              "red"
+            ]
+          }
+        },
+        "black": {
+          "conductor": true,
+          "properties": {
+            "wire number": "6",
+            "component_wire": "M22759/32-12",
+            "gauge": "12AWG",
+            "construction": "37x28",
+            "material": "tin-coated copper",
+            "insulation material": "crosslinked modified ETFE",
+            "od": "0.103in",
+            "resistance": "2.02ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black",
+            "parallelstripe": [
+              "black"
+            ]
+          }
+        },
+        "yellow": {
+          "conductor": true,
+          "properties": {
+            "wire number": "7",
+            "component_wire": "M22759/32-12",
+            "gauge": "12AWG",
+            "construction": "37x28",
+            "material": "tin-coated copper",
+            "insulation material": "crosslinked modified ETFE",
+            "od": "0.103in",
+            "resistance": "2.02ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black",
+            "parallelstripe": [
+              "yellow"
+            ]
+          }
+        },
+        "violet": {
+          "conductor": true,
+          "properties": {
+            "wire number": "8",
+            "component_wire": "M22759/32-12",
+            "gauge": "12AWG",
+            "construction": "37x28",
+            "material": "tin-coated copper",
+            "insulation material": "crosslinked modified ETFE",
+            "od": "0.103in",
+            "resistance": "2.02ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black",
+            "parallelstripe": [
+              "violet"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

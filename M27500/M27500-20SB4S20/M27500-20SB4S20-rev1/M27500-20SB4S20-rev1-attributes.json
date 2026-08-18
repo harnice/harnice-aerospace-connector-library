@@ -1,0 +1,140 @@
+{
+  "specification": "MIL-DTL-27500",
+  "properties": {
+    "od": "0.159in",
+    "conductors": "4",
+    "component_wire_specification": "MIL-DTL-22759/32",
+    "shield": "round, silver-coated copper",
+    "jacket": "extruded white perfluoroalkoxy (PFA)",
+    "temperature rating": "150C",
+    "voltage rating": "600V",
+    "shield coverage": "85%"
+  },
+  "tools": [
+    "Cable cutter",
+    "Wire stripper",
+    "Measuring tape",
+    "Jacket slitting tool",
+    "Shield comb / pick",
+    "Shield termination kit"
+  ],
+  "build_notes": [
+    "Component wires are MIL-DTL-22759/32, 20 AWG, 19x32",
+    "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
+    "Shield is round, silver-coated copper at 85% minimum coverage",
+    "Overall diameter 0.159 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
+  ],
+  "jacket": {
+    "properties": {
+      "material": "PFA",
+      "color": "white",
+      "construction": "extruded",
+      "od": "0.159in",
+      "thickness": "0.010in",
+      "temperature rating": "260C"
+    },
+    "shield": {
+      "properties": {
+        "type": "round braid",
+        "material": "silver-coated copper",
+        "coverage": "85%",
+        "od": "0.139in",
+        "thickness": "0.008in",
+        "temperature rating": "200C"
+      },
+      "conductors": {
+        "properties": {
+          "lay": "spirally laid",
+          "count": "4",
+          "od": "0.123in",
+          "identification method": "MIL-DTL-27500 Table IIIA, stripe marking"
+        },
+        "white": {
+          "conductor": true,
+          "properties": {
+            "wire number": "1",
+            "component_wire": "M22759/32-20",
+            "gauge": "20AWG",
+            "construction": "19x32",
+            "material": "tin-coated copper",
+            "insulation material": "crosslinked modified ETFE",
+            "od": "0.050in",
+            "resistance": "9.88ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black"
+          }
+        },
+        "blue": {
+          "conductor": true,
+          "properties": {
+            "wire number": "2",
+            "component_wire": "M22759/32-20",
+            "gauge": "20AWG",
+            "construction": "19x32",
+            "material": "tin-coated copper",
+            "insulation material": "crosslinked modified ETFE",
+            "od": "0.050in",
+            "resistance": "9.88ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black",
+            "parallelstripe": [
+              "blue"
+            ]
+          }
+        },
+        "orange": {
+          "conductor": true,
+          "properties": {
+            "wire number": "3",
+            "component_wire": "M22759/32-20",
+            "gauge": "20AWG",
+            "construction": "19x32",
+            "material": "tin-coated copper",
+            "insulation material": "crosslinked modified ETFE",
+            "od": "0.050in",
+            "resistance": "9.88ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black",
+            "parallelstripe": [
+              "orange"
+            ]
+          }
+        },
+        "green": {
+          "conductor": true,
+          "properties": {
+            "wire number": "4",
+            "component_wire": "M22759/32-20",
+            "gauge": "20AWG",
+            "construction": "19x32",
+            "material": "tin-coated copper",
+            "insulation material": "crosslinked modified ETFE",
+            "od": "0.050in",
+            "resistance": "9.88ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black",
+            "parallelstripe": [
+              "green"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

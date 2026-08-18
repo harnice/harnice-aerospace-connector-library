@@ -1,0 +1,2 @@
+container	identifier	appearance	component_wire	construction	gauge	insulation material	material	od	resistance	temperature rating	voltage rating	wire number
+conductors	white	{'base_color':'white','outline_color':'black'}	M81044/12-16	19x29	16AWG	crosslinked polyalkene with crosslinked PVDF jacket, light wall	tin-coated copper	0.072in	4.81ohm/1000ft	150C	600V	1

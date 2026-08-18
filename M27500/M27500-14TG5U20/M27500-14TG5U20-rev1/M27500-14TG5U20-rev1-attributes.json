@@ -1,0 +1,148 @@
+{
+  "specification": "MIL-DTL-27500",
+  "properties": {
+    "od": "0.262in",
+    "conductors": "5",
+    "component_wire_specification": "MIL-DTL-22759/18",
+    "shield": "no shield",
+    "jacket": "extruded white perfluoroalkoxy (PFA)",
+    "temperature rating": "150C",
+    "voltage rating": "600V"
+  },
+  "tools": [
+    "Cable cutter",
+    "Wire stripper",
+    "Measuring tape",
+    "Jacket slitting tool"
+  ],
+  "build_notes": [
+    "Component wires are MIL-DTL-22759/18, 14 AWG, 19x27",
+    "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
+    "Overall diameter 0.262 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
+  ],
+  "jacket": {
+    "properties": {
+      "material": "PFA",
+      "color": "white",
+      "construction": "extruded",
+      "od": "0.262in",
+      "thickness": "0.014in",
+      "temperature rating": "260C"
+    },
+    "conductors": {
+      "properties": {
+        "lay": "spirally laid",
+        "count": "5",
+        "od": "0.234in",
+        "identification method": "MIL-DTL-27500 Table IIIA, stripe marking"
+      },
+      "white": {
+        "conductor": true,
+        "properties": {
+          "wire number": "1",
+          "component_wire": "M22759/18-14",
+          "gauge": "14AWG",
+          "construction": "19x27",
+          "material": "tin-coated copper",
+          "insulation material": "ETFE, extruded, thin wall",
+          "od": "0.085in",
+          "resistance": "3.06ohm/1000ft",
+          "temperature rating": "150C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black"
+        }
+      },
+      "blue": {
+        "conductor": true,
+        "properties": {
+          "wire number": "2",
+          "component_wire": "M22759/18-14",
+          "gauge": "14AWG",
+          "construction": "19x27",
+          "material": "tin-coated copper",
+          "insulation material": "ETFE, extruded, thin wall",
+          "od": "0.085in",
+          "resistance": "3.06ohm/1000ft",
+          "temperature rating": "150C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black",
+          "parallelstripe": [
+            "blue"
+          ]
+        }
+      },
+      "orange": {
+        "conductor": true,
+        "properties": {
+          "wire number": "3",
+          "component_wire": "M22759/18-14",
+          "gauge": "14AWG",
+          "construction": "19x27",
+          "material": "tin-coated copper",
+          "insulation material": "ETFE, extruded, thin wall",
+          "od": "0.085in",
+          "resistance": "3.06ohm/1000ft",
+          "temperature rating": "150C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black",
+          "parallelstripe": [
+            "orange"
+          ]
+        }
+      },
+      "green": {
+        "conductor": true,
+        "properties": {
+          "wire number": "4",
+          "component_wire": "M22759/18-14",
+          "gauge": "14AWG",
+          "construction": "19x27",
+          "material": "tin-coated copper",
+          "insulation material": "ETFE, extruded, thin wall",
+          "od": "0.085in",
+          "resistance": "3.06ohm/1000ft",
+          "temperature rating": "150C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black",
+          "parallelstripe": [
+            "green"
+          ]
+        }
+      },
+      "red": {
+        "conductor": true,
+        "properties": {
+          "wire number": "5",
+          "component_wire": "M22759/18-14",
+          "gauge": "14AWG",
+          "construction": "19x27",
+          "material": "tin-coated copper",
+          "insulation material": "ETFE, extruded, thin wall",
+          "od": "0.085in",
+          "resistance": "3.06ohm/1000ft",
+          "temperature rating": "150C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black",
+          "parallelstripe": [
+            "red"
+          ]
+        }
+      }
+    }
+  }
+}

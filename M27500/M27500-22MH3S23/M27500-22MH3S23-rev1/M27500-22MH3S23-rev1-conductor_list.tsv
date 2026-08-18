@@ -1,0 +1,4 @@
+container	identifier	appearance	component_wire	construction	gauge	insulation material	material	od	resistance	temperature rating	voltage rating	wire number
+conductors	white	{'base_color':'white','outline_color':'black'}	M81044/9-22	19x34	22AWG	crosslinked polyalkene with crosslinked PVDF jacket	tin-coated copper	0.062in	16.2ohm/1000ft	150C	600V	1
+conductors	blue	{'base_color':'white','outline_color':'black','parallelstripe':['blue']}	M81044/9-22	19x34	22AWG	crosslinked polyalkene with crosslinked PVDF jacket	tin-coated copper	0.062in	16.2ohm/1000ft	150C	600V	2
+conductors	orange	{'base_color':'white','outline_color':'black','parallelstripe':['orange']}	M81044/9-22	19x34	22AWG	crosslinked polyalkene with crosslinked PVDF jacket	tin-coated copper	0.062in	16.2ohm/1000ft	150C	600V	3

@@ -1,0 +1,3 @@
+container	identifier	appearance	component_wire	construction	gauge	insulation material	material	od	resistance	temperature rating	voltage rating	wire number
+conductors	white	{'base_color':'white','outline_color':'black'}	M22759/16-12	37x28	12AWG	ETFE, extruded, medium wall	tin-coated copper	0.114in	2.02ohm/1000ft	150C	600V	1
+conductors	blue	{'base_color':'white','outline_color':'black','parallelstripe':['blue']}	M22759/16-12	37x28	12AWG	ETFE, extruded, medium wall	tin-coated copper	0.114in	2.02ohm/1000ft	150C	600V	2
