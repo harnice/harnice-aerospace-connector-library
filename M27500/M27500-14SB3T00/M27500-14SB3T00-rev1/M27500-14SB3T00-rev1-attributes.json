@@ -58,7 +58,7 @@
           "outline_color": "black"
         }
       },
-      "white/blue": {
+      "blue": {
         "conductor": true,
         "properties": {
           "wire number": "2",
@@ -80,7 +80,7 @@
           ]
         }
       },
-      "white/orange": {
+      "orange": {
         "conductor": true,
         "properties": {
           "wire number": "3",

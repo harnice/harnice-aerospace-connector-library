@@ -1,8 +1,8 @@
 container	identifier	appearance	component_wire	construction	gauge	insulation material	material	od	resistance	temperature rating	voltage rating	wire number
 conductors	white	{'base_color':'white','outline_color':'black'}	M22759/16-16	19x29	16AWG	ETFE, extruded, medium wall	tin-coated copper	0.079in	4.81ohm/1000ft	150C	600V	1
-conductors	white/blue	{'base_color':'white','outline_color':'black','parallelstripe':['blue']}	M22759/16-16	19x29	16AWG	ETFE, extruded, medium wall	tin-coated copper	0.079in	4.81ohm/1000ft	150C	600V	2
-conductors	white/orange	{'base_color':'white','outline_color':'black','parallelstripe':['orange']}	M22759/16-16	19x29	16AWG	ETFE, extruded, medium wall	tin-coated copper	0.079in	4.81ohm/1000ft	150C	600V	3
-conductors	white/green	{'base_color':'white','outline_color':'black','parallelstripe':['green']}	M22759/16-16	19x29	16AWG	ETFE, extruded, medium wall	tin-coated copper	0.079in	4.81ohm/1000ft	150C	600V	4
-conductors	white/red	{'base_color':'white','outline_color':'black','parallelstripe':['red']}	M22759/16-16	19x29	16AWG	ETFE, extruded, medium wall	tin-coated copper	0.079in	4.81ohm/1000ft	150C	600V	5
-conductors	white/black	{'base_color':'white','outline_color':'black','parallelstripe':['black']}	M22759/16-16	19x29	16AWG	ETFE, extruded, medium wall	tin-coated copper	0.079in	4.81ohm/1000ft	150C	600V	6
-conductors	white/yellow	{'base_color':'white','outline_color':'black','parallelstripe':['yellow']}	M22759/16-16	19x29	16AWG	ETFE, extruded, medium wall	tin-coated copper	0.079in	4.81ohm/1000ft	150C	600V	7
+conductors	blue	{'base_color':'white','outline_color':'black','parallelstripe':['blue']}	M22759/16-16	19x29	16AWG	ETFE, extruded, medium wall	tin-coated copper	0.079in	4.81ohm/1000ft	150C	600V	2
+conductors	orange	{'base_color':'white','outline_color':'black','parallelstripe':['orange']}	M22759/16-16	19x29	16AWG	ETFE, extruded, medium wall	tin-coated copper	0.079in	4.81ohm/1000ft	150C	600V	3
+conductors	green	{'base_color':'white','outline_color':'black','parallelstripe':['green']}	M22759/16-16	19x29	16AWG	ETFE, extruded, medium wall	tin-coated copper	0.079in	4.81ohm/1000ft	150C	600V	4
+conductors	red	{'base_color':'white','outline_color':'black','parallelstripe':['red']}	M22759/16-16	19x29	16AWG	ETFE, extruded, medium wall	tin-coated copper	0.079in	4.81ohm/1000ft	150C	600V	5
+conductors	black	{'base_color':'white','outline_color':'black','parallelstripe':['black']}	M22759/16-16	19x29	16AWG	ETFE, extruded, medium wall	tin-coated copper	0.079in	4.81ohm/1000ft	150C	600V	6
+conductors	yellow	{'base_color':'white','outline_color':'black','parallelstripe':['yellow']}	M22759/16-16	19x29	16AWG	ETFE, extruded, medium wall	tin-coated copper	0.079in	4.81ohm/1000ft	150C	600V	7

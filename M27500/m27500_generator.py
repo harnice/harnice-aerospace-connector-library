@@ -571,8 +571,8 @@ def identification_colors(color_table, n_conductors, gauge):
     return table[:n_conductors]
 
 
-def conductor_color_name(colors, marking):
-    """Return a wire's color designation, base color first then tracer colors.
+def conductor_color_name(colors):
+    """Return a wire's identifying color designation, per MIL-DTL-27500 Table III.
 
     This is the conductor's identifier. MIL-DTL-27500 numbers the wires in the
     cable, but a harnice cable identifies each conductor by its color (see the
@@ -580,17 +580,16 @@ def conductor_color_name(colors, marking):
     technician looking at a stripped cable end actually sees. The wire number is
     kept as a property so the Table III ordering is not lost.
 
-    Under the preferred (stripe) method the base is always white, so wire 1 is
-    plain "white" and wire 2 is "white/blue". Under optional method A the Table
-    III color is the insulation color itself, so wire 2 is "blue".
+    The name is the Table III color itself, independent of how it is marked: the
+    stripe method puts that color on a white wire and the solid method colors the
+    insulation, but either way wire 2 of Table IIIA is identified as "blue". The
+    white base of a striped wire is left out of the name because every striped
+    wire in the cable shares it; the appearance still carries it. No Table III
+    sequence repeats a designation this way, so identifiers stay unique out to
+    the 15 wire depth of Tables IIIA and IIIB, including the Table IIIB cable
+    that holds "red", "white" and "red/white" at once.
     """
-    if marking == "solid":
-        return "/".join(colors)
-    if marking == "stripe":
-        if colors == ["white"]:
-            return "white"
-        return "/".join(["white"] + list(colors))
-    raise ValueError(f"Unsupported identification marking '{marking}'")
+    return "/".join(colors)
 
 
 def conductor_appearance(colors, marking):
@@ -872,7 +871,7 @@ def compile_cable_attributes(configuration):
     for wire_number, wire_colors in enumerate(colors, start=1):
         # The color is the conductor identifier, so it keys the conductor and
         # becomes the identifier column of the conductor list.
-        color_name = conductor_color_name(wire_colors, method["marking"])
+        color_name = conductor_color_name(wire_colors)
         if color_name in group:
             raise ValueError(
                 f"MIL-DTL-27500 Table {method['color_table']} repeats the color "
@@ -1161,7 +1160,7 @@ def csv_row(configuration):
         # the conductors in attributes.json and fill the conductor list's
         # identifier column, so a color found here can be searched for there.
         "wire_identification_colors": "|".join(
-            conductor_color_name(c, method["marking"]) for c in colors
+            conductor_color_name(c) for c in colors
         ),
         "shield_code": shield_code,
         "shield_description": shield_record["description"],

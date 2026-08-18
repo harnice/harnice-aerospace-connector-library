@@ -58,7 +58,7 @@
           "outline_color": "black"
         }
       },
-      "white/blue": {
+      "blue": {
         "conductor": true,
         "properties": {
           "wire number": "2",
@@ -80,7 +80,7 @@
           ]
         }
       },
-      "white/orange": {
+      "orange": {
         "conductor": true,
         "properties": {
           "wire number": "3",
@@ -102,7 +102,7 @@
           ]
         }
       },
-      "white/green": {
+      "green": {
         "conductor": true,
         "properties": {
           "wire number": "4",
@@ -124,7 +124,7 @@
           ]
         }
       },
-      "white/red": {
+      "red": {
         "conductor": true,
         "properties": {
           "wire number": "5",
@@ -146,7 +146,7 @@
           ]
         }
       },
-      "white/black": {
+      "black": {
         "conductor": true,
         "properties": {
           "wire number": "6",
@@ -168,7 +168,7 @@
           ]
         }
       },
-      "white/yellow": {
+      "yellow": {
         "conductor": true,
         "properties": {
           "wire number": "7",
