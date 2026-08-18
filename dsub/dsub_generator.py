@@ -154,6 +154,7 @@ USAGE
     # -> (11.23, 11.23)
 """
 
+import csv
 import json
 import math
 import os
@@ -1156,6 +1157,9 @@ SLASH_SHEETS = {
     ("Crimp", "Plug"): "4",
 }
 
+# IEC 60807 / DIN 41652 shell letters (size 6 has no classic letter).
+SHELL_LETTERS = {1: "E", 2: "A", 3: "B", 4: "C", 5: "D", 6: ""}
+
 # MIL-DTL-24308 Class G finish suffixes (P is Class N only).
 FINISHES = {
     "A": "pure electrodeposited aluminum",
@@ -1303,14 +1307,35 @@ def slash_sheet(connector_type, gender):
         )
 
 
-def make_part_number(part_configuration):
+def official_pin(part_configuration):
     slash = slash_sheet(
         part_configuration["connector_type"], part_configuration["gender"]
     )
     dash = dash_number(
         part_configuration["density"], part_configuration["shell_no"]
     )
-    return f"M24308_{slash}-{dash}{part_configuration['finish']}"
+    return f"M24308/{slash}-{dash}{part_configuration['finish']}"
+
+
+def common_name(part_configuration):
+    letter = SHELL_LETTERS.get(part_configuration["shell_no"], "")
+    pins = part_configuration["pin_count"]
+    if letter:
+        name = f"D{letter}-{pins}"
+    else:
+        name = f"HD-{pins}"
+    if part_configuration["density"] == "High" and letter:
+        name = f"{name} HD"
+    if (
+        part_configuration["shell_no"] == 1
+        and part_configuration["density"] == "Standard"
+    ):
+        name = f"{name} (DB-9)"
+    return name
+
+
+def make_part_number(part_configuration):
+    return official_pin(part_configuration).replace("M24308/", "M24308_", 1)
 
 
 def variant_from_configuration(part_configuration):
@@ -1574,6 +1599,70 @@ def iter_part_configurations():
             }
 
 
+CATALOG_COLUMNS = (
+    "library_pn",
+    "official_pin",
+    "mil_spec",
+    "slash_sheet",
+    "dash",
+    "common_name",
+    "gender",
+    "contacts",
+    "connector_type",
+    "density",
+    "shell_size",
+    "shell_letter",
+    "pin_count",
+    "contact_size",
+    "finish",
+    "finish_name",
+    "class",
+)
+
+
+def catalog_row(part_configuration):
+    slash = slash_sheet(
+        part_configuration["connector_type"], part_configuration["gender"]
+    )
+    dash = dash_number(
+        part_configuration["density"], part_configuration["shell_no"]
+    )
+    letter = SHELL_LETTERS.get(part_configuration["shell_no"], "")
+    gender = part_configuration["gender"]
+    return {
+        "library_pn": make_part_number(part_configuration),
+        "official_pin": official_pin(part_configuration),
+        "mil_spec": "MIL-DTL-24308",
+        "slash_sheet": slash,
+        "dash": dash,
+        "common_name": common_name(part_configuration),
+        "gender": gender,
+        "contacts": "socket" if gender == "Receptacle" else "pin",
+        "connector_type": part_configuration["connector_type"],
+        "density": part_configuration["density"],
+        "shell_size": part_configuration["shell_no"],
+        "shell_letter": letter,
+        "pin_count": part_configuration["pin_count"],
+        "contact_size": contact_size_for(part_configuration["density"]),
+        "finish": part_configuration["finish"],
+        "finish_name": FINISHES[part_configuration["finish"]],
+        "class": "G",
+    }
+
+
+def write_catalog_csv(path=None):
+    """Write dsub/dsub.csv — one row per library part."""
+    if path is None:
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dsub.csv")
+    rows = [catalog_row(cfg) for cfg in iter_part_configurations()]
+    rows.sort(key=lambda r: (int(r["slash_sheet"]), int(r["dash"]), r["finish"]))
+    with open(path, "w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=CATALOG_COLUMNS)
+        writer.writeheader()
+        writer.writerows(rows)
+    return path
+
+
 def _progress_bar(done, total, width=25):
     """Return a text progress bar like: [ x x x . . . ] (35%)."""
     if total <= 0:
@@ -1644,9 +1733,14 @@ def make_part(part_configuration):
     return part_number
 
 
-def main(step_only=False):
+def main(step_only=False, csv_only=False):
     state.set_rev(REVISION)
     state.set_product("part")
+
+    csv_path = write_catalog_csv()
+    print(f"Wrote catalog: {csv_path}")
+    if csv_only:
+        return
 
     configs = list(iter_part_configurations())
     total = len(configs)
@@ -1680,4 +1774,7 @@ def main(step_only=False):
 
 
 if __name__ == "__main__":
-    main(step_only="--step-only" in sys.argv)
+    main(
+        step_only="--step-only" in sys.argv,
+        csv_only="--csv-only" in sys.argv,
+    )
