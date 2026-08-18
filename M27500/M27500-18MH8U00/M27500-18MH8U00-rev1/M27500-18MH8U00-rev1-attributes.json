@@ -1,0 +1,203 @@
+{
+  "specification": "MIL-DTL-27500",
+  "properties": {
+    "od": "0.270in",
+    "conductors": "8",
+    "component_wire_specification": "MIL-DTL-81044/9",
+    "shield": "no shield",
+    "jacket": "no jacket",
+    "temperature rating": "150C",
+    "voltage rating": "600V"
+  },
+  "tools": [
+    "Cable cutter",
+    "Wire stripper",
+    "Measuring tape"
+  ],
+  "build_notes": [
+    "Component wires are MIL-DTL-81044/9, 18 AWG, 19x30",
+    "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
+    "Overall diameter 0.270 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
+  ],
+  "conductors": {
+    "properties": {
+      "lay": "spirally laid",
+      "count": "8",
+      "od": "0.270in",
+      "identification method": "MIL-DTL-27500 Table IIIA, stripe marking"
+    },
+    "white": {
+      "conductor": true,
+      "properties": {
+        "wire number": "1",
+        "component_wire": "M81044/9-18",
+        "gauge": "18AWG",
+        "construction": "19x30",
+        "material": "tin-coated copper",
+        "insulation material": "crosslinked polyalkene with crosslinked PVDF jacket",
+        "od": "0.080in",
+        "resistance": "6.23ohm/1000ft",
+        "temperature rating": "150C",
+        "voltage rating": "600V"
+      },
+      "appearance": {
+        "base_color": "white",
+        "outline_color": "black"
+      }
+    },
+    "white/blue": {
+      "conductor": true,
+      "properties": {
+        "wire number": "2",
+        "component_wire": "M81044/9-18",
+        "gauge": "18AWG",
+        "construction": "19x30",
+        "material": "tin-coated copper",
+        "insulation material": "crosslinked polyalkene with crosslinked PVDF jacket",
+        "od": "0.080in",
+        "resistance": "6.23ohm/1000ft",
+        "temperature rating": "150C",
+        "voltage rating": "600V"
+      },
+      "appearance": {
+        "base_color": "white",
+        "outline_color": "black",
+        "parallelstripe": [
+          "blue"
+        ]
+      }
+    },
+    "white/orange": {
+      "conductor": true,
+      "properties": {
+        "wire number": "3",
+        "component_wire": "M81044/9-18",
+        "gauge": "18AWG",
+        "construction": "19x30",
+        "material": "tin-coated copper",
+        "insulation material": "crosslinked polyalkene with crosslinked PVDF jacket",
+        "od": "0.080in",
+        "resistance": "6.23ohm/1000ft",
+        "temperature rating": "150C",
+        "voltage rating": "600V"
+      },
+      "appearance": {
+        "base_color": "white",
+        "outline_color": "black",
+        "parallelstripe": [
+          "orange"
+        ]
+      }
+    },
+    "white/green": {
+      "conductor": true,
+      "properties": {
+        "wire number": "4",
+        "component_wire": "M81044/9-18",
+        "gauge": "18AWG",
+        "construction": "19x30",
+        "material": "tin-coated copper",
+        "insulation material": "crosslinked polyalkene with crosslinked PVDF jacket",
+        "od": "0.080in",
+        "resistance": "6.23ohm/1000ft",
+        "temperature rating": "150C",
+        "voltage rating": "600V"
+      },
+      "appearance": {
+        "base_color": "white",
+        "outline_color": "black",
+        "parallelstripe": [
+          "green"
+        ]
+      }
+    },
+    "white/red": {
+      "conductor": true,
+      "properties": {
+        "wire number": "5",
+        "component_wire": "M81044/9-18",
+        "gauge": "18AWG",
+        "construction": "19x30",
+        "material": "tin-coated copper",
+        "insulation material": "crosslinked polyalkene with crosslinked PVDF jacket",
+        "od": "0.080in",
+        "resistance": "6.23ohm/1000ft",
+        "temperature rating": "150C",
+        "voltage rating": "600V"
+      },
+      "appearance": {
+        "base_color": "white",
+        "outline_color": "black",
+        "parallelstripe": [
+          "red"
+        ]
+      }
+    },
+    "white/black": {
+      "conductor": true,
+      "properties": {
+        "wire number": "6",
+        "component_wire": "M81044/9-18",
+        "gauge": "18AWG",
+        "construction": "19x30",
+        "material": "tin-coated copper",
+        "insulation material": "crosslinked polyalkene with crosslinked PVDF jacket",
+        "od": "0.080in",
+        "resistance": "6.23ohm/1000ft",
+        "temperature rating": "150C",
+        "voltage rating": "600V"
+      },
+      "appearance": {
+        "base_color": "white",
+        "outline_color": "black",
+        "parallelstripe": [
+          "black"
+        ]
+      }
+    },
+    "white/yellow": {
+      "conductor": true,
+      "properties": {
+        "wire number": "7",
+        "component_wire": "M81044/9-18",
+        "gauge": "18AWG",
+        "construction": "19x30",
+        "material": "tin-coated copper",
+        "insulation material": "crosslinked polyalkene with crosslinked PVDF jacket",
+        "od": "0.080in",
+        "resistance": "6.23ohm/1000ft",
+        "temperature rating": "150C",
+        "voltage rating": "600V"
+      },
+      "appearance": {
+        "base_color": "white",
+        "outline_color": "black",
+        "parallelstripe": [
+          "yellow"
+        ]
+      }
+    },
+    "white/violet": {
+      "conductor": true,
+      "properties": {
+        "wire number": "8",
+        "component_wire": "M81044/9-18",
+        "gauge": "18AWG",
+        "construction": "19x30",
+        "material": "tin-coated copper",
+        "insulation material": "crosslinked polyalkene with crosslinked PVDF jacket",
+        "od": "0.080in",
+        "resistance": "6.23ohm/1000ft",
+        "temperature rating": "150C",
+        "voltage rating": "600V"
+      },
+      "appearance": {
+        "base_color": "white",
+        "outline_color": "black",
+        "parallelstripe": [
+          "violet"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "specification": "MIL-DTL-27500",
+  "properties": {
+    "od": "0.115in",
+    "conductors": "3",
+    "component_wire_specification": "MIL-DTL-22759/33",
+    "shield": "no shield",
+    "jacket": "extruded white crosslinked modified ETFE (XLETFE)",
+    "temperature rating": "200C",
+    "voltage rating": "600V"
+  },
+  "tools": [
+    "Cable cutter",
+    "Wire stripper",
+    "Measuring tape",
+    "Jacket slitting tool"
+  ],
+  "build_notes": [
+    "Component wires are MIL-DTL-22759/33, 22 AWG, 19x34",
+    "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
+    "Overall diameter 0.115 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
+  ],
+  "jacket": {
+    "properties": {
+      "material": "XLETFE",
+      "color": "white",
+      "construction": "extruded",
+      "od": "0.115in",
+      "thickness": "0.010in",
+      "temperature rating": "200C"
+    },
+    "conductors": {
+      "properties": {
+        "lay": "spirally laid",
+        "count": "3",
+        "od": "0.095in",
+        "identification method": "MIL-DTL-27500 Table IIIA, stripe marking"
+      },
+      "white": {
+        "conductor": true,
+        "properties": {
+          "wire number": "1",
+          "component_wire": "M22759/33-22",
+          "gauge": "22AWG",
+          "construction": "19x34",
+          "material": "silver-coated high-strength copper alloy",
+          "insulation material": "crosslinked modified ETFE",
+          "od": "0.043in",
+          "resistance": "17.5ohm/1000ft",
+          "temperature rating": "200C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black"
+        }
+      },
+      "white/blue": {
+        "conductor": true,
+        "properties": {
+          "wire number": "2",
+          "component_wire": "M22759/33-22",
+          "gauge": "22AWG",
+          "construction": "19x34",
+          "material": "silver-coated high-strength copper alloy",
+          "insulation material": "crosslinked modified ETFE",
+          "od": "0.043in",
+          "resistance": "17.5ohm/1000ft",
+          "temperature rating": "200C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black",
+          "parallelstripe": [
+            "blue"
+          ]
+        }
+      },
+      "white/orange": {
+        "conductor": true,
+        "properties": {
+          "wire number": "3",
+          "component_wire": "M22759/33-22",
+          "gauge": "22AWG",
+          "construction": "19x34",
+          "material": "silver-coated high-strength copper alloy",
+          "insulation material": "crosslinked modified ETFE",
+          "od": "0.043in",
+          "resistance": "17.5ohm/1000ft",
+          "temperature rating": "200C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black",
+          "parallelstripe": [
+            "orange"
+          ]
+        }
+      }
+    }
+  }
+}

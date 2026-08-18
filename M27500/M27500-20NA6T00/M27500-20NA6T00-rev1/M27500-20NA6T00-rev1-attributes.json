@@ -1,0 +1,173 @@
+{
+  "specification": "MIL-DTL-27500",
+  "properties": {
+    "od": "0.194in",
+    "conductors": "6",
+    "component_wire_specification": "MIL-DTL-81381/13",
+    "shield": "round, tin-coated copper",
+    "jacket": "no jacket",
+    "temperature rating": "150C",
+    "voltage rating": "600V",
+    "shield coverage": "85%"
+  },
+  "tools": [
+    "Cable cutter",
+    "Wire stripper",
+    "Measuring tape",
+    "Shield comb / pick",
+    "Shield termination kit"
+  ],
+  "build_notes": [
+    "Component wires are MIL-DTL-81381/13, 20 AWG, 19x32",
+    "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
+    "Shield is round, tin-coated copper at 85% minimum coverage",
+    "Overall diameter 0.194 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
+  ],
+  "shield": {
+    "properties": {
+      "type": "round braid",
+      "material": "tin-coated copper",
+      "coverage": "85%",
+      "od": "0.194in",
+      "thickness": "0.010in",
+      "temperature rating": "150C"
+    },
+    "conductors": {
+      "properties": {
+        "lay": "spirally laid",
+        "count": "6",
+        "od": "0.174in",
+        "identification method": "MIL-DTL-27500 Table IIIA, stripe marking"
+      },
+      "white": {
+        "conductor": true,
+        "properties": {
+          "wire number": "1",
+          "component_wire": "M81381/13-20",
+          "gauge": "20AWG",
+          "construction": "19x32",
+          "material": "silver-coated high-strength copper alloy",
+          "insulation material": "FEP/polyimide/FEP tape with aromatic polyimide coating",
+          "od": "0.057in",
+          "resistance": "10.7ohm/1000ft",
+          "temperature rating": "200C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black"
+        }
+      },
+      "white/blue": {
+        "conductor": true,
+        "properties": {
+          "wire number": "2",
+          "component_wire": "M81381/13-20",
+          "gauge": "20AWG",
+          "construction": "19x32",
+          "material": "silver-coated high-strength copper alloy",
+          "insulation material": "FEP/polyimide/FEP tape with aromatic polyimide coating",
+          "od": "0.057in",
+          "resistance": "10.7ohm/1000ft",
+          "temperature rating": "200C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black",
+          "parallelstripe": [
+            "blue"
+          ]
+        }
+      },
+      "white/orange": {
+        "conductor": true,
+        "properties": {
+          "wire number": "3",
+          "component_wire": "M81381/13-20",
+          "gauge": "20AWG",
+          "construction": "19x32",
+          "material": "silver-coated high-strength copper alloy",
+          "insulation material": "FEP/polyimide/FEP tape with aromatic polyimide coating",
+          "od": "0.057in",
+          "resistance": "10.7ohm/1000ft",
+          "temperature rating": "200C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black",
+          "parallelstripe": [
+            "orange"
+          ]
+        }
+      },
+      "white/green": {
+        "conductor": true,
+        "properties": {
+          "wire number": "4",
+          "component_wire": "M81381/13-20",
+          "gauge": "20AWG",
+          "construction": "19x32",
+          "material": "silver-coated high-strength copper alloy",
+          "insulation material": "FEP/polyimide/FEP tape with aromatic polyimide coating",
+          "od": "0.057in",
+          "resistance": "10.7ohm/1000ft",
+          "temperature rating": "200C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black",
+          "parallelstripe": [
+            "green"
+          ]
+        }
+      },
+      "white/red": {
+        "conductor": true,
+        "properties": {
+          "wire number": "5",
+          "component_wire": "M81381/13-20",
+          "gauge": "20AWG",
+          "construction": "19x32",
+          "material": "silver-coated high-strength copper alloy",
+          "insulation material": "FEP/polyimide/FEP tape with aromatic polyimide coating",
+          "od": "0.057in",
+          "resistance": "10.7ohm/1000ft",
+          "temperature rating": "200C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black",
+          "parallelstripe": [
+            "red"
+          ]
+        }
+      },
+      "white/black": {
+        "conductor": true,
+        "properties": {
+          "wire number": "6",
+          "component_wire": "M81381/13-20",
+          "gauge": "20AWG",
+          "construction": "19x32",
+          "material": "silver-coated high-strength copper alloy",
+          "insulation material": "FEP/polyimide/FEP tape with aromatic polyimide coating",
+          "od": "0.057in",
+          "resistance": "10.7ohm/1000ft",
+          "temperature rating": "200C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black",
+          "parallelstripe": [
+            "black"
+          ]
+        }
+      }
+    }
+  }
+}

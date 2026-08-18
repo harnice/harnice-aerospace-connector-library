@@ -1,0 +1,148 @@
+{
+  "specification": "MIL-DTL-27500",
+  "properties": {
+    "od": "0.193in",
+    "conductors": "5",
+    "component_wire_specification": "MIL-DTL-22759/32",
+    "shield": "no shield",
+    "jacket": "extruded white fluorinated ethylene propylene (FEP)",
+    "temperature rating": "150C",
+    "voltage rating": "600V"
+  },
+  "tools": [
+    "Cable cutter",
+    "Wire stripper",
+    "Measuring tape",
+    "Jacket slitting tool"
+  ],
+  "build_notes": [
+    "Component wires are MIL-DTL-22759/32, 18 AWG, 19x30",
+    "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
+    "Overall diameter 0.193 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
+  ],
+  "jacket": {
+    "properties": {
+      "material": "FEP",
+      "color": "white",
+      "construction": "extruded",
+      "od": "0.193in",
+      "thickness": "0.014in",
+      "temperature rating": "200C"
+    },
+    "conductors": {
+      "properties": {
+        "lay": "spirally laid",
+        "count": "5",
+        "od": "0.165in",
+        "identification method": "MIL-DTL-27500 Table IIIA, stripe marking"
+      },
+      "white": {
+        "conductor": true,
+        "properties": {
+          "wire number": "1",
+          "component_wire": "M22759/32-18",
+          "gauge": "18AWG",
+          "construction": "19x30",
+          "material": "tin-coated copper",
+          "insulation material": "crosslinked modified ETFE",
+          "od": "0.060in",
+          "resistance": "6.23ohm/1000ft",
+          "temperature rating": "150C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black"
+        }
+      },
+      "white/blue": {
+        "conductor": true,
+        "properties": {
+          "wire number": "2",
+          "component_wire": "M22759/32-18",
+          "gauge": "18AWG",
+          "construction": "19x30",
+          "material": "tin-coated copper",
+          "insulation material": "crosslinked modified ETFE",
+          "od": "0.060in",
+          "resistance": "6.23ohm/1000ft",
+          "temperature rating": "150C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black",
+          "parallelstripe": [
+            "blue"
+          ]
+        }
+      },
+      "white/orange": {
+        "conductor": true,
+        "properties": {
+          "wire number": "3",
+          "component_wire": "M22759/32-18",
+          "gauge": "18AWG",
+          "construction": "19x30",
+          "material": "tin-coated copper",
+          "insulation material": "crosslinked modified ETFE",
+          "od": "0.060in",
+          "resistance": "6.23ohm/1000ft",
+          "temperature rating": "150C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black",
+          "parallelstripe": [
+            "orange"
+          ]
+        }
+      },
+      "white/green": {
+        "conductor": true,
+        "properties": {
+          "wire number": "4",
+          "component_wire": "M22759/32-18",
+          "gauge": "18AWG",
+          "construction": "19x30",
+          "material": "tin-coated copper",
+          "insulation material": "crosslinked modified ETFE",
+          "od": "0.060in",
+          "resistance": "6.23ohm/1000ft",
+          "temperature rating": "150C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black",
+          "parallelstripe": [
+            "green"
+          ]
+        }
+      },
+      "white/red": {
+        "conductor": true,
+        "properties": {
+          "wire number": "5",
+          "component_wire": "M22759/32-18",
+          "gauge": "18AWG",
+          "construction": "19x30",
+          "material": "tin-coated copper",
+          "insulation material": "crosslinked modified ETFE",
+          "od": "0.060in",
+          "resistance": "6.23ohm/1000ft",
+          "temperature rating": "150C",
+          "voltage rating": "600V"
+        },
+        "appearance": {
+          "base_color": "white",
+          "outline_color": "black",
+          "parallelstripe": [
+            "red"
+          ]
+        }
+      }
+    }
+  }
+}

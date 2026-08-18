@@ -1,0 +1,162 @@
+{
+  "specification": "MIL-DTL-27500",
+  "properties": {
+    "od": "0.266in",
+    "conductors": "5",
+    "component_wire_specification": "MIL-DTL-22759/16",
+    "shield": "round, silver-coated copper",
+    "jacket": "extruded white ethylene-tetrafluoroethylene copolymer (ETFE)",
+    "temperature rating": "150C",
+    "voltage rating": "600V",
+    "shield coverage": "85%"
+  },
+  "tools": [
+    "Cable cutter",
+    "Wire stripper",
+    "Measuring tape",
+    "Jacket slitting tool",
+    "Shield comb / pick",
+    "Shield termination kit"
+  ],
+  "build_notes": [
+    "Component wires are MIL-DTL-22759/16, 16 AWG, 19x29",
+    "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
+    "Shield is round, silver-coated copper at 85% minimum coverage",
+    "Overall diameter 0.266 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
+  ],
+  "jacket": {
+    "properties": {
+      "material": "ETFE",
+      "color": "white",
+      "construction": "extruded",
+      "od": "0.266in",
+      "thickness": "0.014in",
+      "temperature rating": "150C"
+    },
+    "shield": {
+      "properties": {
+        "type": "round braid",
+        "material": "silver-coated copper",
+        "coverage": "85%",
+        "od": "0.238in",
+        "thickness": "0.010in",
+        "temperature rating": "200C"
+      },
+      "conductors": {
+        "properties": {
+          "lay": "spirally laid",
+          "count": "5",
+          "od": "0.218in",
+          "identification method": "MIL-DTL-27500 Table IIIA, stripe marking"
+        },
+        "white": {
+          "conductor": true,
+          "properties": {
+            "wire number": "1",
+            "component_wire": "M22759/16-16",
+            "gauge": "16AWG",
+            "construction": "19x29",
+            "material": "tin-coated copper",
+            "insulation material": "ETFE, extruded, medium wall",
+            "od": "0.079in",
+            "resistance": "4.81ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black"
+          }
+        },
+        "white/blue": {
+          "conductor": true,
+          "properties": {
+            "wire number": "2",
+            "component_wire": "M22759/16-16",
+            "gauge": "16AWG",
+            "construction": "19x29",
+            "material": "tin-coated copper",
+            "insulation material": "ETFE, extruded, medium wall",
+            "od": "0.079in",
+            "resistance": "4.81ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black",
+            "parallelstripe": [
+              "blue"
+            ]
+          }
+        },
+        "white/orange": {
+          "conductor": true,
+          "properties": {
+            "wire number": "3",
+            "component_wire": "M22759/16-16",
+            "gauge": "16AWG",
+            "construction": "19x29",
+            "material": "tin-coated copper",
+            "insulation material": "ETFE, extruded, medium wall",
+            "od": "0.079in",
+            "resistance": "4.81ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black",
+            "parallelstripe": [
+              "orange"
+            ]
+          }
+        },
+        "white/green": {
+          "conductor": true,
+          "properties": {
+            "wire number": "4",
+            "component_wire": "M22759/16-16",
+            "gauge": "16AWG",
+            "construction": "19x29",
+            "material": "tin-coated copper",
+            "insulation material": "ETFE, extruded, medium wall",
+            "od": "0.079in",
+            "resistance": "4.81ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black",
+            "parallelstripe": [
+              "green"
+            ]
+          }
+        },
+        "white/red": {
+          "conductor": true,
+          "properties": {
+            "wire number": "5",
+            "component_wire": "M22759/16-16",
+            "gauge": "16AWG",
+            "construction": "19x29",
+            "material": "tin-coated copper",
+            "insulation material": "ETFE, extruded, medium wall",
+            "od": "0.079in",
+            "resistance": "4.81ohm/1000ft",
+            "temperature rating": "150C",
+            "voltage rating": "600V"
+          },
+          "appearance": {
+            "base_color": "white",
+            "outline_color": "black",
+            "parallelstripe": [
+              "red"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
