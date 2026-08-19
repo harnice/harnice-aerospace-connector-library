@@ -1665,6 +1665,18 @@ JAM24_NUT_LENGTH_MM = 5.59
 # (19 - 15.75) / 2 = 1.625 mm. Cut with BRepAlgoAPI_Cut, not revolved.
 PIN_CAVITY_DEPTH_MM = 15.0
 PIN_CAVITY_WALL_MM = (19.0 - 15.75) / 2.0
+# Socket (S) STEP only: annular groove on the mating face, 0.1 in deep.
+# Outer lip matches the pin-cup wall so the ring sits just inside the rim.
+SOCKET_RING_DEPTH_MM = 0.1 * MM_PER_IN
+SOCKET_RING_WALL_MM = PIN_CAVITY_WALL_MM
+SOCKET_RING_WIDTH_MM = 0.1 * MM_PER_IN
+# Master key at +Z on the mating inner wall. Plug (/26) is additive;
+# jam-nut receptacle (/24) is subtractive. Widths from Glenair Series III
+# main key / main keyway.
+KEY_WIDTH_MM = 2.54
+KEYWAY_WIDTH_MM = 3.20
+KEY_RADIAL_MM = 1.50
+KEY_BOOLEAN_OVERLAP_MM = 0.4
 FULLY_MATED_RED = "#B91C1C"
 SHELL_24_ENVELOPE_MM = {
     "A": {"body": 16.99, "nut": 30.51, "numeric": 9},
@@ -1772,6 +1784,42 @@ def pin_mating_cavity(stations):
     return {"dia_mm": 2.0 * radius, "depth_mm": PIN_CAVITY_DEPTH_MM}
 
 
+def socket_mating_ring(stations):
+    """Annular groove on the mating face (STEP only), or None.
+
+    Subtractive ring 0.1 in deep, inset one pin-cup wall from the OD, 0.1 in
+    radial width, leaving a center island so the origin stays on the flat face.
+    """
+    _x_face, r_face = stations[-1]
+    r_outer = r_face - SOCKET_RING_WALL_MM
+    r_inner = r_outer - SOCKET_RING_WIDTH_MM
+    if r_inner <= 0.2:
+        return None
+    return {
+        "outer_dia_mm": 2.0 * r_outer,
+        "inner_dia_mm": 2.0 * r_inner,
+        "depth_mm": SOCKET_RING_DEPTH_MM,
+    }
+
+
+def step_origin_x_mm(stations, contact_type):
+    """X of the STEP origin in envelope coordinates.
+
+    Pins: floor of the mating cup (base of the subtractive extrusion).
+    Sockets: mating-face plane (flat end).
+    """
+    x_face = stations[-1][0]
+    if str(contact_type).upper() == "P":
+        cavity = pin_mating_cavity(stations)
+        if cavity is not None:
+            return x_face - cavity["depth_mm"]
+    return x_face
+
+
+def shift_stations(stations, origin_x):
+    return [(x - origin_x, radius) for x, radius in stations]
+
+
 def pin_mating_cavity_stations(stations):
     """Fallback profile if OpenCascade is unavailable."""
     cavity = pin_mating_cavity(stations)
@@ -1810,9 +1858,60 @@ def _ocp_cut(body, tool, label):
     return cut
 
 
-def _write_revolution_with_cavity_step(path, part_number, stations, cavity):
-    """Revolve about +X, then cut the mating bore (Neutrik male recipe)."""
-    body = _ocp_positive_solid(stations)
+def _ocp_box(xmin, ymin, zmin, dx, dy, dz):
+    from OCP.BRepPrimAPI import BRepPrimAPI_MakeBox
+    from OCP.gp import gp_Pnt
+
+    return BRepPrimAPI_MakeBox(gp_Pnt(xmin, ymin, zmin), dx, dy, dz).Shape()
+
+
+def _mating_inner_wall(stations, contact_type):
+    """Inner cylindrical wall of the pin cup or socket rim: (r, x0, x1)."""
+    x_face = float(stations[-1][0])
+    if str(contact_type).upper() == "P":
+        cavity = pin_mating_cavity(stations)
+        if cavity is None:
+            return None
+        return (
+            cavity["dia_mm"] / 2.0,
+            x_face - cavity["depth_mm"],
+            x_face,
+        )
+    ring = socket_mating_ring(stations)
+    if ring is None:
+        return None
+    return (
+        ring["outer_dia_mm"] / 2.0,
+        x_face - ring["depth_mm"],
+        x_face,
+    )
+
+
+def _key_prism(stations, shell_type, contact_type):
+    """Box at +Z on the mating inner wall. Plug fuses; receptacle cuts."""
+    loc = _mating_inner_wall(stations, contact_type)
+    if loc is None:
+        return None
+    r_inner, x0, x1 = loc
+    additive = str(shell_type) == "26"
+    overlap = KEY_BOOLEAN_OVERLAP_MM
+    width = KEY_WIDTH_MM if additive else KEYWAY_WIDTH_MM
+    xmin = x0 if additive else x0 - overlap
+    dx = (x1 - x0) if additive else (x1 - x0) + 2.0 * overlap
+    ymin = -width / 2.0
+    if additive:
+        zmin = r_inner - KEY_RADIAL_MM
+        dz = KEY_RADIAL_MM + overlap
+    else:
+        zmin = r_inner - overlap
+        dz = PIN_CAVITY_WALL_MM + overlap + 1.0
+    return _ocp_box(xmin, ymin, zmin, dx, width, dz), additive
+
+
+def _apply_pin_cavity(body, stations, part_number):
+    cavity = pin_mating_cavity(stations)
+    if cavity is None:
+        return body
     x_face = float(stations[-1][0])
     depth = float(cavity["depth_mm"])
     radius = float(cavity["dia_mm"]) / 2.0
@@ -1822,9 +1921,57 @@ def _write_revolution_with_cavity_step(path, part_number, stations, cavity):
         radius,
         depth + 1.0,
     )
-    body = _ocp_cut(body, tool, f"{part_number} cavity")
+    return _ocp_cut(body, tool, f"{part_number} cavity")
+
+
+def _apply_socket_ring(body, stations, part_number):
+    ring = socket_mating_ring(stations)
+    if ring is None:
+        return body
+    x_face = float(stations[-1][0])
+    depth = float(ring["depth_mm"])
+    tool = _ocp_tube(
+        (x_face - depth, 0.0, 0.0),
+        (1.0, 0.0, 0.0),
+        float(ring["inner_dia_mm"]) / 2.0,
+        float(ring["outer_dia_mm"]) / 2.0,
+        depth + 1.0,
+    )
+    return _ocp_cut(body, tool, f"{part_number} ring")
+
+
+def _apply_key(body, stations, shell_type, contact_type, part_number):
+    spec = _key_prism(stations, shell_type, contact_type)
+    if spec is None:
+        return body
+    tool, additive = spec
+    if additive:
+        return step_utils._ocp_fuse(body, tool)
+    return _ocp_cut(body, tool, f"{part_number} keyway")
+
+
+def _write_mating_step(path, part_number, stations, shell_type, contact_type):
+    """Revolve about +X, cut pin cup or socket ring, then key/keyway at +Z."""
+    body = _ocp_positive_solid(stations)
+    if str(contact_type).upper() == "P":
+        body = _apply_pin_cavity(body, stations, part_number)
+    else:
+        body = _apply_socket_ring(body, stations, part_number)
+    body = _apply_key(body, stations, shell_type, contact_type, part_number)
     step_utils._ocp_write_shape(body, path, part_number)
     return path
+
+
+def _ocp_tube(origin, direction, r_inner, r_outer, height):
+    """Hollow cylinder used as the socket-face ring cutter."""
+    outer = step_utils._ocp_cylinder(origin, direction, r_outer, height)
+    inner = step_utils._ocp_cylinder(
+        (origin[0] - 0.5, origin[1], origin[2]),
+        direction,
+        r_inner,
+        height + 1.0,
+    )
+    return _ocp_cut(outer, inner, "ring tool")
 
 
 def silhouette_closed_mm(stations):
@@ -1954,22 +2101,22 @@ def write_part_step(rev_dir, part_number, shell_type, shell_size, contact_type="
     gender = "pin" if str(contact_type).upper() == "P" else "socket"
     description = f"D38999/{shell_type} low-fidelity envelope ({gender} mating face)"
     stations = envelope_stations(shell_type, shell_size)
-    if str(contact_type).upper() != "P":
-        step_utils.write_revolution_step(path, part_number, stations, description=description)
-        return path
-    cavity = pin_mating_cavity(stations)
-    if cavity is None:
-        step_utils.write_revolution_step(path, part_number, stations, description=description)
-        return path
+    origin_x = step_origin_x_mm(stations, contact_type)
+    stations = shift_stations(stations, origin_x)
     try:
-        return _write_revolution_with_cavity_step(path, part_number, stations, cavity)
+        return _write_mating_step(path, part_number, stations, shell_type, contact_type)
     except ImportError:
-        step_utils.write_revolution_step(
-            path,
-            part_number,
-            pin_mating_cavity_stations(stations),
-            description=description,
-        )
+        if str(contact_type).upper() == "P":
+            step_utils.write_revolution_step(
+                path,
+                part_number,
+                pin_mating_cavity_stations(stations),
+                description=description,
+            )
+        else:
+            step_utils.write_revolution_step(
+                path, part_number, stations, description=description
+            )
         return path
 
 
