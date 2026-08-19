@@ -1660,6 +1660,11 @@ COUPLING_NUT_LENGTH_MM = 16.0
 JAM24_LENGTH_MM = 32.51
 JAM24_K_MM = 22.61
 JAM24_NUT_LENGTH_MM = 5.59
+# Pin (P) STEP only: same mating-face cup as Neutrik NC*MXX males.
+# Neutrik: Ø15.75 × 15 mm bore in a Ø19 shell (drawing 20006264). Wall
+# (19 - 15.75) / 2 = 1.625 mm. Cut with BRepAlgoAPI_Cut, not revolved.
+PIN_CAVITY_DEPTH_MM = 15.0
+PIN_CAVITY_WALL_MM = (19.0 - 15.75) / 2.0
 FULLY_MATED_RED = "#B91C1C"
 SHELL_24_ENVELOPE_MM = {
     "A": {"body": 16.99, "nut": 30.51, "numeric": 9},
@@ -1752,6 +1757,74 @@ def envelope_stations(shell_type, shell_size):
     if shell_type == "26":
         return series_iii_26_envelope_stations(shell_size)
     raise ValueError(f"Unsupported shell type '{shell_type}'")
+
+
+def pin_mating_cavity(stations):
+    """Blind bore from the mating face (STEP only), or None.
+
+    Same construction as Neutrik NC*MXX males: cylinder on +X, open at the
+    mating face, wall 1.625 mm, depth 15 mm.
+    """
+    _x_face, r_face = stations[-1]
+    radius = r_face - PIN_CAVITY_WALL_MM
+    if radius <= 0.2:
+        return None
+    return {"dia_mm": 2.0 * radius, "depth_mm": PIN_CAVITY_DEPTH_MM}
+
+
+def pin_mating_cavity_stations(stations):
+    """Fallback profile if OpenCascade is unavailable."""
+    cavity = pin_mating_cavity(stations)
+    if cavity is None:
+        return list(stations)
+    x_face = stations[-1][0]
+    radius = cavity["dia_mm"] / 2.0
+    depth = cavity["depth_mm"]
+    return list(stations) + [
+        (x_face, radius),
+        (x_face - depth, radius),
+    ]
+
+
+def _ocp_positive_solid(stations):
+    from OCP.BRepGProp import BRepGProp
+    from OCP.GProp import GProp_GProps
+
+    body = step_utils._ocp_revolution_solid(stations)
+    props = GProp_GProps()
+    BRepGProp.VolumeProperties_s(body, props)
+    if props.Mass() < 0:
+        body.Reverse()
+    return body
+
+
+def _ocp_cut(body, tool, label):
+    from OCP.BRepAlgoAPI import BRepAlgoAPI_Cut
+
+    op = BRepAlgoAPI_Cut(body, tool)
+    op.SetFuzzyValue(0.05)
+    op.Build()
+    cut = op.Shape()
+    if not op.IsDone() or cut.IsNull():
+        raise RuntimeError(f"{label} cut failed")
+    return cut
+
+
+def _write_revolution_with_cavity_step(path, part_number, stations, cavity):
+    """Revolve about +X, then cut the mating bore (Neutrik male recipe)."""
+    body = _ocp_positive_solid(stations)
+    x_face = float(stations[-1][0])
+    depth = float(cavity["depth_mm"])
+    radius = float(cavity["dia_mm"]) / 2.0
+    tool = step_utils._ocp_cylinder(
+        (x_face - depth, 0.0, 0.0),
+        (1.0, 0.0, 0.0),
+        radius,
+        depth + 1.0,
+    )
+    body = _ocp_cut(body, tool, f"{part_number} cavity")
+    step_utils._ocp_write_shape(body, path, part_number)
+    return path
 
 
 def silhouette_closed_mm(stations):
@@ -1876,15 +1949,28 @@ def _csys_overlay_svg(csys_children):
     return "\n".join(lines)
 
 
-def write_part_step(rev_dir, part_number, shell_type, shell_size):
+def write_part_step(rev_dir, part_number, shell_type, shell_size, contact_type="S"):
     path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-model.step")
-    step_utils.write_revolution_step(
-        path,
-        part_number,
-        envelope_stations(shell_type, shell_size),
-        description=f"D38999/{shell_type} low-fidelity envelope",
-    )
-    return path
+    gender = "pin" if str(contact_type).upper() == "P" else "socket"
+    description = f"D38999/{shell_type} low-fidelity envelope ({gender} mating face)"
+    stations = envelope_stations(shell_type, shell_size)
+    if str(contact_type).upper() != "P":
+        step_utils.write_revolution_step(path, part_number, stations, description=description)
+        return path
+    cavity = pin_mating_cavity(stations)
+    if cavity is None:
+        step_utils.write_revolution_step(path, part_number, stations, description=description)
+        return path
+    try:
+        return _write_revolution_with_cavity_step(path, part_number, stations, cavity)
+    except ImportError:
+        step_utils.write_revolution_step(
+            path,
+            part_number,
+            pin_mating_cavity_stations(stations),
+            description=description,
+        )
+        return path
 
 
 def series_iii_26_connector_svg(part_number, shell_size, finish=None):
@@ -2141,7 +2227,13 @@ def build_part(part_number, rev_dir):
         os.chdir(cwd)
 
 
-def main(step_only=False, svg_only=False, shell_types=None, use_cli=False):
+def main(
+    step_only=False,
+    svg_only=False,
+    shell_types=None,
+    contact_types=None,
+    use_cli=False,
+):
     state.set_rev(REVISION)
     state.set_product("part")
 
@@ -2150,12 +2242,14 @@ def main(step_only=False, svg_only=False, shell_types=None, use_cli=False):
 
     if shell_types is None:
         shell_types = ["24", "26"]
+    if contact_types is None:
+        contact_types = ["P", "S"]
 
     part_configurations = []
     for shell_type in shell_types:
         for finish in ["F", "K", "W", "Z"]:
             for insert_arrangement in INSERT_ARRANGEMENT_CODES:
-                for contact_type in ["P", "S"]:
+                for contact_type in contact_types:
                     for key in ["N", "A", "B", "C"]:
                         part_configurations.append(
                             {
@@ -2204,6 +2298,7 @@ def main(step_only=False, svg_only=False, shell_types=None, use_cli=False):
                     part_number,
                     part_configuration.get("shell_type"),
                     attributes.get("shell_size"),
+                    part_configuration.get("contact_type"),
                 )
             print(_progress_bar(i, total))
             continue
@@ -2261,6 +2356,7 @@ def main(step_only=False, svg_only=False, shell_types=None, use_cli=False):
             part_number,
             part_configuration.get("shell_type"),
             attributes.get("shell_size"),
+            part_configuration.get("contact_type"),
         )
 
         # RENDER THE PART
@@ -2283,9 +2379,15 @@ if __name__ == "__main__":
         shell_types = ["24"]
     elif "--26-only" in sys.argv:
         shell_types = ["26"]
+    contact_types = ["P", "S"]
+    if "--pins-only" in sys.argv:
+        contact_types = ["P"]
+    elif "--sockets-only" in sys.argv:
+        contact_types = ["S"]
     main(
         step_only="--step-only" in sys.argv,
         svg_only="--svg-only" in sys.argv,
         shell_types=shell_types,
+        contact_types=contact_types,
         use_cli="--cli" in sys.argv,
     )
