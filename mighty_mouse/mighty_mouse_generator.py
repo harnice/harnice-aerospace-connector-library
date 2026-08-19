@@ -526,6 +526,13 @@ def connector_csys():
 
 
 INCH_TO_MM = 25.4
+MM_PER_IN = INCH_TO_MM
+
+# Pin STEP only: shallow scoop-proof cup (~Series 800 mating engagement).
+# Origin at the cup floor; rim at +PIN_CAVITY_DEPTH_MM. No keying / annulus
+# (Mighty Mouse plugs here have no backshell interface).
+PIN_CAVITY_DEPTH_MM = 0.3 * MM_PER_IN
+PIN_CAVITY_WALL_MM = (19.0 - 15.75) / 2.0
 
 
 def envelope_stations(shell_size, shell_style):
@@ -548,15 +555,120 @@ def envelope_stations(shell_size, shell_style):
     ]
 
 
-def write_part_step(rev_dir, part_number, shell_size, shell_style):
-    path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-model.step")
-    step_utils.write_revolution_step(
-        path,
-        part_number,
-        envelope_stations(shell_size, shell_style),
-        description="Glenair Series 800 Mighty Mouse low-fidelity envelope",
+def pin_mating_cavity(stations):
+    """Scoop-proof cup from the mating face (pin STEP), or None."""
+    _x_face, r_face = stations[-1]
+    radius = r_face - PIN_CAVITY_WALL_MM
+    if radius <= 0.2:
+        return None
+    return {"dia_mm": 2.0 * radius, "depth_mm": PIN_CAVITY_DEPTH_MM}
+
+
+def step_origin_x_mm(stations, contact_type):
+    """X of the STEP origin in envelope coordinates.
+
+    Pin: cup floor. Socket: coplanar mating face.
+    """
+    x_face = stations[-1][0]
+    if str(contact_type).upper() == "P":
+        cavity = pin_mating_cavity(stations)
+        if cavity is not None:
+            return x_face - cavity["depth_mm"]
+    return x_face
+
+
+def shift_stations(stations, origin_x):
+    return [(x - origin_x, radius) for x, radius in stations]
+
+
+def pin_mating_cavity_stations(stations):
+    """Fallback profile if OpenCascade is unavailable."""
+    cavity = pin_mating_cavity(stations)
+    if cavity is None:
+        return list(stations)
+    x_face = stations[-1][0]
+    radius = cavity["dia_mm"] / 2.0
+    depth = cavity["depth_mm"]
+    return list(stations) + [
+        (x_face, radius),
+        (x_face - depth, radius),
+    ]
+
+
+def _ocp_positive_solid(stations):
+    from OCP.BRepGProp import BRepGProp
+    from OCP.GProp import GProp_GProps
+
+    body = step_utils._ocp_revolution_solid(stations)
+    props = GProp_GProps()
+    BRepGProp.VolumeProperties_s(body, props)
+    if props.Mass() < 0:
+        body.Reverse()
+    return body
+
+
+def _ocp_cut(body, tool, label):
+    from OCP.BRepAlgoAPI import BRepAlgoAPI_Cut
+
+    op = BRepAlgoAPI_Cut(body, tool)
+    op.SetFuzzyValue(0.05)
+    op.Build()
+    cut = op.Shape()
+    if not op.IsDone() or cut.IsNull():
+        raise RuntimeError(f"{label} cut failed")
+    return cut
+
+
+def _apply_pin_cavity(body, stations, part_number):
+    """Boolean scoop-proof cup at the mating face (pin only)."""
+    cavity = pin_mating_cavity(stations)
+    if cavity is None:
+        return body
+    x_face = float(stations[-1][0])
+    depth = float(cavity["depth_mm"])
+    tool = step_utils._ocp_cylinder(
+        (x_face - depth, 0.0, 0.0),
+        (1.0, 0.0, 0.0),
+        float(cavity["dia_mm"]) / 2.0,
+        depth + 1.0,
     )
+    return _ocp_cut(body, tool, f"{part_number} cavity")
+
+
+def _write_mating_step(path, part_number, stations, contact_type):
+    """Solid envelope; pin STEPs get a shallow mating-face cup."""
+    body = _ocp_positive_solid(stations)
+    if str(contact_type).upper() == "P":
+        body = _apply_pin_cavity(body, stations, part_number)
+    step_utils._ocp_write_shape(body, path, part_number)
     return path
+
+
+def write_part_step(rev_dir, part_number, shell_size, shell_style, contact_type="S"):
+    """Write STEP envelope; pins include a ~0.3 in mating-face cup."""
+    path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-model.step")
+    gender = "pin" if str(contact_type).upper() == "P" else "socket"
+    description = (
+        f"Glenair Series 800 Mighty Mouse low-fidelity envelope ({gender} mating face)"
+    )
+    stations = envelope_stations(shell_size, shell_style)
+    origin_x = step_origin_x_mm(stations, contact_type)
+    stations = shift_stations(stations, origin_x)
+    try:
+        return _write_mating_step(path, part_number, stations, contact_type)
+    except ImportError:
+        if str(contact_type).upper() == "P":
+            step_utils.write_revolution_step(
+                path,
+                part_number,
+                pin_mating_cavity_stations(stations),
+                description=description,
+            )
+        else:
+            step_utils.write_revolution_step(
+                path, part_number, stations, description=description
+            )
+        return path
 
 
 def connector_mating_face_inches(shell_size, shell_style):
@@ -858,6 +970,7 @@ def main(step_only=False):
                 part_number,
                 part_configuration["shell_size"],
                 part_configuration["shell_style"],
+                part_configuration["contact_type"],
             )
             print(_progress_bar(i, total), flush=True)
             continue
@@ -913,6 +1026,7 @@ def main(step_only=False):
             part_number,
             part_configuration["shell_size"],
             part_configuration["shell_style"],
+            part_configuration["contact_type"],
         )
 
         subprocess.run(
