@@ -70,11 +70,14 @@ delete_pngs = True
 # SVG px per inch — must match harnice part.py csys rendering (96 px/in)
 PX_PER_IN = 96.0
 
-# Origin is the right end of the banding knurl. The knurl itself extends −X
-# so a terminated cable segment overlaps it. Straight (/88) body length from
-# that origin to the connector face: Glenair drawing / Milnec L Max = 1.35
-# (34.3 mm). Banding platform length is not tabulated on the Glenair /88–90
-# sheet; 0.35 in is an estimate for drawing/csys silhouette only.
+# Origin is the right end of the banding knurl (drawings / attributes csys).
+# The knurl itself extends −X so a terminated cable segment overlaps it.
+# Straight (/88) body length from that origin to the connector face: Glenair
+# drawing / Milnec L Max = 1.35 (34.3 mm). Banding platform length is not
+# tabulated on the Glenair /88–90 sheet; 0.35 in is an estimate for
+# drawing/csys silhouette only.
+# STEP models are shifted so the connector mating face is at (0,0,0) with +X
+# toward the connector; drawings keep the knurl-end origin above.
 STRAIGHT_BODY_IN = 1.35
 BAND_PLATFORM_IN = 0.35
 
@@ -831,17 +834,70 @@ def backshell_envelope_mm(orientation, shell_size, entry_size):
     raise ValueError(f"Unknown orientation '{orientation}'")
 
 
+def _ocp_move_connector_face_to_origin(shape, face_xyz, axis_xy):
+    """Translate ``face_xyz`` to the origin and align ``axis_xy`` with +X.
+
+    After this, the connector mating face is at (0,0,0) and +X points along the
+    coupling axis toward the connector (backshell body lies in −X).
+    """
+    from OCP.BRepBuilderAPI import BRepBuilderAPI_Transform
+    from OCP.gp import gp_Ax1, gp_Dir, gp_Pnt, gp_Trsf, gp_Vec
+
+    fx, fy, fz = float(face_xyz[0]), float(face_xyz[1]), float(face_xyz[2])
+    ux, uy = float(axis_xy[0]), float(axis_xy[1])
+    trsf = gp_Trsf()
+    trsf.SetTranslation(gp_Vec(-fx, -fy, -fz))
+    shape = BRepBuilderAPI_Transform(shape, trsf, True).Shape()
+    angle = math.atan2(uy, ux)
+    if abs(angle) > 1e-9:
+        rot = gp_Trsf()
+        rot.SetRotation(gp_Ax1(gp_Pnt(0.0, 0.0, 0.0), gp_Dir(0.0, 0.0, 1.0)), -angle)
+        shape = BRepBuilderAPI_Transform(shape, rot, True).Shape()
+    return shape
+
+
 def write_part_step(rev_dir, part_number, orientation, shell_size, entry_size):
+    """Write STEP with origin on the connector mating face (+X toward connector)."""
     kind, geom, _radii = backshell_envelope_mm(orientation, shell_size, entry_size)
     path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-model.step")
-    description = f"M85049/{orientation} low-fidelity envelope"
+    description = f"M85049/{orientation} low-fidelity envelope (connector-face origin)"
     if kind == "revolution":
-        step_utils.write_revolution_step(path, part_number, geom, description=description)
-    elif kind == "elbow":
-        step_utils.write_elbow_step(path, part_number, description=description, **geom)
-    else:
-        raise ValueError(f"Unknown M85049 envelope kind {kind!r}")
-    return path
+        face_x = float(geom[-1][0])
+        stations = [(x - face_x, radius) for x, radius in geom]
+        step_utils.write_revolution_step(
+            path, part_number, stations, description=description
+        )
+        return path
+    if kind == "elbow":
+        layout = step_utils._elbow_layout(
+            geom["entry"],
+            geom["corner"],
+            geom["angle_deg"],
+            geom["exit_length"],
+            geom["nut_length"],
+        )
+        try:
+            shape = step_utils._ocp_elbow_solid(
+                geom["entry"],
+                geom["r_entry"],
+                geom["r_body"],
+                geom["r_nut"],
+                geom["nut_length"],
+                layout,
+            )
+            shape = _ocp_move_connector_face_to_origin(
+                shape, layout["p_face"], (layout["ux"], layout["uy"])
+            )
+            step_utils._ocp_write_shape(shape, path, part_number)
+            return path
+        except ImportError:
+            # Fallback mesh path still uses the knurl-frame elbow writer.
+            step_utils.write_elbow_step(
+                path, part_number, description=description, **geom
+            )
+            return path
+    raise ValueError(f"Unknown M85049 envelope kind {kind!r}")
+
 
 
 def backshell_svg(part_number, orientation, shell_size, entry_size, finish=None):
