@@ -1546,15 +1546,30 @@ def envelope_prisms_mm(variant):
     ]
 
 
+# Plug STEP set-in (~standard D-sub mating engagement). Origin at cup floor.
+# Receptacle STEPs: solid face at the origin. Drawings keep cable-side origin.
+PIN_CAVITY_DEPTH_MM = 0.25 * MM_PER_IN
+PIN_CAVITY_WALL_MM = (19.0 - 15.75) / 2.0
+
+
 def write_part_step(rev_dir, part_number, variant):
+    """Write STEP with mating-face origin; plugs get a shallow set-in cup."""
+    from dsub_step_mating import write_mating_prism_step
+
     path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-model.step")
-    step_utils.write_prism_segments_step(
+    is_pin = str(variant.gender).lower() == "plug"
+    gender = "pin" if is_pin else "socket"
+    description = f"MIL-DTL-24308 low-fidelity envelope ({gender} mating face)"
+    return write_mating_prism_step(
+        step_utils,
         path,
         part_number,
         envelope_prisms_mm(variant),
-        description="MIL-DTL-24308 low-fidelity envelope",
+        is_pin,
+        PIN_CAVITY_DEPTH_MM,
+        PIN_CAVITY_WALL_MM,
+        description,
     )
-    return path
 
 
 def compile_part_attributes(part_configuration):
