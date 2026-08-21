@@ -904,11 +904,6 @@ def component_wire_lb_per_ft(symbol, gauge):
 # copper-family shields use 0.321. Jacket fill is 0.92 extruded / 0.70 tape or braid.
 SHIELD_FILL = 0.62
 
-CABLE_MASS_ESTIMATE_NOTE = (
-    "Finished cable mass includes slash-sheet component-wire weight plus an "
-    "estimated shield/jacket; MIL-DTL-27500 does not tabulate finished cable weight"
-)
-
 
 def cable_mass_lb_per_ft(identification, gauge, symbol, n_conductors, shield_code, jacket_code):
     spec = BASIC_WIRE_SPECS[symbol]
@@ -1141,47 +1136,18 @@ def compile_cable_attributes(configuration):
         "specification": "MIL-DTL-27500",
         "properties": properties,
         "tools": cable_tools(shield_code, jacket_code),
-        "build_notes": cable_build_notes(
-            identification, gauge, symbol, n_conductors, shield_code, jacket_code, overall_od
-        ),
     }
     attributes.update(node)
     return attributes
 
 
 def cable_tools(shield_code, jacket_code):
-    tools = ["Cable cutter", "Wire stripper", "Measuring tape"]
+    tools = ["Cable cutter", "Wire stripper"]
     if jacket_code != "00":
         tools.append("Jacket slitting tool")
     if shield_code != "U":
-        tools.extend(["Shield comb / pick", "Shield termination kit"])
+        tools.extend(["Shield comb / pick"])
     return tools
-
-
-def cable_build_notes(
-    identification, gauge, symbol, n_conductors, shield_code, jacket_code, overall_od
-):
-    spec = BASIC_WIRE_SPECS[symbol]
-    method = IDENTIFICATION_METHODS[identification]
-    shield_record = DOUBLE_SHIELD_CODES.get(shield_code) or SHIELD_CODES[shield_code]
-    notes = [
-        f"Component wires are {spec['spec']}, {gauge} AWG, {STRANDING[gauge]}",
-        (
-            f"Wire identification per MIL-DTL-27500 Table {method['color_table']} "
-            f"using the {method['marking']} method"
-        ),
-    ]
-    if shield_code != "U":
-        notes.append(
-            f"Shield is {shield_record['description']} at {method['coverage']} minimum coverage"
-        )
-    notes.append(
-        f"Overall diameter {overall_od:.3f} in is estimated from the component "
-        f"wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
-    )
-    if shield_code != "U" or jacket_code != "00":
-        notes.append(CABLE_MASS_ESTIMATE_NOTE)
-    return notes
 
 
 # ===========================================================================

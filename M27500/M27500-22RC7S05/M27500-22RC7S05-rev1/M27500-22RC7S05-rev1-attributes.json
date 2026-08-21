@@ -15,17 +15,8 @@
   "tools": [
     "Cable cutter",
     "Wire stripper",
-    "Measuring tape",
     "Jacket slitting tool",
-    "Shield comb / pick",
-    "Shield termination kit"
-  ],
-  "build_notes": [
-    "Component wires are MIL-DTL-22759/11, 22 AWG, 19x34",
-    "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
-    "Shield is round, silver-coated copper at 85% minimum coverage",
-    "Overall diameter 0.194 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD",
-    "Finished cable mass includes slash-sheet component-wire weight plus an estimated shield/jacket; MIL-DTL-27500 does not tabulate finished cable weight"
+    "Shield comb / pick"
   ],
   "jacket": {
     "properties": {

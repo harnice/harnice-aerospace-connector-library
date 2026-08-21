@@ -13,13 +13,7 @@
   },
   "tools": [
     "Cable cutter",
-    "Wire stripper",
-    "Measuring tape"
-  ],
-  "build_notes": [
-    "Component wires are MIL-DTL-81044/12, 22 AWG, 19x34",
-    "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
-    "Overall diameter 0.130 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
+    "Wire stripper"
   ],
   "conductors": {
     "properties": {

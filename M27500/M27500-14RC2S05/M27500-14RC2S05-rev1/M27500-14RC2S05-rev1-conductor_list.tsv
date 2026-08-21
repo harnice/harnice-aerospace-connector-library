@@ -1,3 +1,3 @@
-container	identifier	appearance	component_wire	construction	gauge	insulation material	material	od	resistance	temperature rating	voltage rating	wire number
-conductors	white	{'base_color':'white','outline_color':'black'}	M22759/11-14	19x27	14AWG	PTFE	silver-coated copper	0.090in	2.88ohm/1000ft	200C	600V	1
-conductors	blue	{'base_color':'white','outline_color':'black','parallelstripe':['blue']}	M22759/11-14	19x27	14AWG	PTFE	silver-coated copper	0.090in	2.88ohm/1000ft	200C	600V	2
+container	identifier	appearance	component_wire	construction	gauge	insulation material	mass	mass_source	material	od	resistance	temperature rating	voltage rating	wire number
+conductors	white	{'base_color':'white','outline_color':'black'}	M22759/11-14	19x27	14AWG	PTFE	0.0151lbs/ft	M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)	silver-coated copper	0.090in	2.88ohm/1000ft	200C	600V	1
+conductors	blue	{'base_color':'white','outline_color':'black','parallelstripe':['blue']}	M22759/11-14	19x27	14AWG	PTFE	0.0151lbs/ft	M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)	silver-coated copper	0.090in	2.88ohm/1000ft	200C	600V	2
