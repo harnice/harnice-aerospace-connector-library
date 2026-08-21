@@ -1,6 +1,8 @@
 {
   "specification": "MIL-DTL-27500",
   "properties": {
+    "mass": "0.0107lbs/ft",
+    "mass_source": "M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)",
     "od": "0.122in",
     "conductors": "2",
     "component_wire_specification": "MIL-DTL-22759/16",
@@ -29,6 +31,8 @@
     "white": {
       "conductor": true,
       "properties": {
+        "mass": "0.0054lbs/ft",
+        "mass_source": "M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)",
         "wire number": "1",
         "component_wire": "M22759/16-20",
         "gauge": "20AWG",
@@ -48,6 +52,8 @@
     "blue": {
       "conductor": true,
       "properties": {
+        "mass": "0.0054lbs/ft",
+        "mass_source": "M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)",
         "wire number": "2",
         "component_wire": "M22759/16-20",
         "gauge": "20AWG",

@@ -1,6 +1,8 @@
 {
   "specification": "MIL-DTL-27500",
   "properties": {
+    "mass": "0.2401lbs/ft",
+    "mass_source": "Component wires: M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/). Shield and jacket mass are a geometric estimate from the same core-packing / braid-wall / jacket-wall model used for OD; MIL-DTL-27500 does not tabulate finished cable weight.",
     "od": "0.449in",
     "conductors": "9",
     "component_wire_specification": "MIL-DTL-22759/11",
@@ -18,7 +20,8 @@
   "build_notes": [
     "Component wires are MIL-DTL-22759/11, 12 AWG, 37x28",
     "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
-    "Overall diameter 0.449 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
+    "Overall diameter 0.449 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD",
+    "Finished cable mass includes slash-sheet component-wire weight plus an estimated shield/jacket; MIL-DTL-27500 does not tabulate finished cable weight"
   ],
   "jacket": {
     "properties": {
@@ -39,6 +42,8 @@
       "white": {
         "conductor": true,
         "properties": {
+          "mass": "0.0241lbs/ft",
+          "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
           "wire number": "1",
           "component_wire": "M22759/11-12",
           "gauge": "12AWG",
@@ -58,6 +63,8 @@
       "blue": {
         "conductor": true,
         "properties": {
+          "mass": "0.0241lbs/ft",
+          "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
           "wire number": "2",
           "component_wire": "M22759/11-12",
           "gauge": "12AWG",
@@ -80,6 +87,8 @@
       "orange": {
         "conductor": true,
         "properties": {
+          "mass": "0.0241lbs/ft",
+          "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
           "wire number": "3",
           "component_wire": "M22759/11-12",
           "gauge": "12AWG",
@@ -102,6 +111,8 @@
       "green": {
         "conductor": true,
         "properties": {
+          "mass": "0.0241lbs/ft",
+          "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
           "wire number": "4",
           "component_wire": "M22759/11-12",
           "gauge": "12AWG",
@@ -124,6 +135,8 @@
       "red": {
         "conductor": true,
         "properties": {
+          "mass": "0.0241lbs/ft",
+          "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
           "wire number": "5",
           "component_wire": "M22759/11-12",
           "gauge": "12AWG",
@@ -146,6 +159,8 @@
       "black": {
         "conductor": true,
         "properties": {
+          "mass": "0.0241lbs/ft",
+          "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
           "wire number": "6",
           "component_wire": "M22759/11-12",
           "gauge": "12AWG",
@@ -168,6 +183,8 @@
       "yellow": {
         "conductor": true,
         "properties": {
+          "mass": "0.0241lbs/ft",
+          "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
           "wire number": "7",
           "component_wire": "M22759/11-12",
           "gauge": "12AWG",
@@ -190,6 +207,8 @@
       "violet": {
         "conductor": true,
         "properties": {
+          "mass": "0.0241lbs/ft",
+          "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
           "wire number": "8",
           "component_wire": "M22759/11-12",
           "gauge": "12AWG",
@@ -212,6 +231,8 @@
       "gray": {
         "conductor": true,
         "properties": {
+          "mass": "0.0241lbs/ft",
+          "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
           "wire number": "9",
           "component_wire": "M22759/11-12",
           "gauge": "12AWG",

@@ -1,6 +1,8 @@
 {
   "specification": "MIL-DTL-27500",
   "properties": {
+    "mass": "0.0744lbs/ft",
+    "mass_source": "Component wires: M22759/32 slash-sheet max weight, lbs/1000 ft (Glenair wire diameter lookup tables, https://www.glenair.com/guardian-conduit-system/pdf/wire-diameter-lookup-tables.pdf). Shield and jacket mass are a geometric estimate from the same core-packing / braid-wall / jacket-wall model used for OD; MIL-DTL-27500 does not tabulate finished cable weight.",
     "od": "0.262in",
     "conductors": "5",
     "component_wire_specification": "MIL-DTL-22759/32",
@@ -18,7 +20,8 @@
   "build_notes": [
     "Component wires are MIL-DTL-22759/32, 14 AWG, 19x27",
     "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
-    "Overall diameter 0.262 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
+    "Overall diameter 0.262 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD",
+    "Finished cable mass includes slash-sheet component-wire weight plus an estimated shield/jacket; MIL-DTL-27500 does not tabulate finished cable weight"
   ],
   "jacket": {
     "properties": {
@@ -39,6 +42,8 @@
       "white": {
         "conductor": true,
         "properties": {
+          "mass": "0.0130lbs/ft",
+          "mass_source": "M22759/32 slash-sheet max weight, lbs/1000 ft (Glenair wire diameter lookup tables, https://www.glenair.com/guardian-conduit-system/pdf/wire-diameter-lookup-tables.pdf)",
           "wire number": "1",
           "component_wire": "M22759/32-14",
           "gauge": "14AWG",
@@ -58,6 +63,8 @@
       "blue": {
         "conductor": true,
         "properties": {
+          "mass": "0.0130lbs/ft",
+          "mass_source": "M22759/32 slash-sheet max weight, lbs/1000 ft (Glenair wire diameter lookup tables, https://www.glenair.com/guardian-conduit-system/pdf/wire-diameter-lookup-tables.pdf)",
           "wire number": "2",
           "component_wire": "M22759/32-14",
           "gauge": "14AWG",
@@ -80,6 +87,8 @@
       "orange": {
         "conductor": true,
         "properties": {
+          "mass": "0.0130lbs/ft",
+          "mass_source": "M22759/32 slash-sheet max weight, lbs/1000 ft (Glenair wire diameter lookup tables, https://www.glenair.com/guardian-conduit-system/pdf/wire-diameter-lookup-tables.pdf)",
           "wire number": "3",
           "component_wire": "M22759/32-14",
           "gauge": "14AWG",
@@ -102,6 +111,8 @@
       "green": {
         "conductor": true,
         "properties": {
+          "mass": "0.0130lbs/ft",
+          "mass_source": "M22759/32 slash-sheet max weight, lbs/1000 ft (Glenair wire diameter lookup tables, https://www.glenair.com/guardian-conduit-system/pdf/wire-diameter-lookup-tables.pdf)",
           "wire number": "4",
           "component_wire": "M22759/32-14",
           "gauge": "14AWG",
@@ -124,6 +135,8 @@
       "red": {
         "conductor": true,
         "properties": {
+          "mass": "0.0130lbs/ft",
+          "mass_source": "M22759/32 slash-sheet max weight, lbs/1000 ft (Glenair wire diameter lookup tables, https://www.glenair.com/guardian-conduit-system/pdf/wire-diameter-lookup-tables.pdf)",
           "wire number": "5",
           "component_wire": "M22759/32-14",
           "gauge": "14AWG",

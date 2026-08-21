@@ -1,4 +1,6 @@
 {
+  "mass": "0.2458lbs",
+  "mass_source": "Estimated. Glenair does not publish a full AS85049/88\u201390 weight table. Scaled from listed M85049/88-25W03 at 1.552 oz using C^2 * body length (F straight / G 45deg / H 90deg) from https://www.glenair.com/mil-spec/as85049-qualified-backshells-and-connector-accessories/pdf/as85049-88-and-as85049-89-and-as85049-90.pdf Stainless finish F is scaled by density ratio 8.0/2.70.",
   "tools": [
     "Band-it clamp tool",
     "Torque wrench",

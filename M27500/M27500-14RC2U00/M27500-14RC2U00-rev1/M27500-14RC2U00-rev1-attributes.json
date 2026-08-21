@@ -1,6 +1,8 @@
 {
   "specification": "MIL-DTL-27500",
   "properties": {
+    "mass": "0.0302lbs/ft",
+    "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
     "od": "0.184in",
     "conductors": "2",
     "component_wire_specification": "MIL-DTL-22759/11",
@@ -29,6 +31,8 @@
     "white": {
       "conductor": true,
       "properties": {
+        "mass": "0.0151lbs/ft",
+        "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
         "wire number": "1",
         "component_wire": "M22759/11-14",
         "gauge": "14AWG",
@@ -48,6 +52,8 @@
     "blue": {
       "conductor": true,
       "properties": {
+        "mass": "0.0151lbs/ft",
+        "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
         "wire number": "2",
         "component_wire": "M22759/11-14",
         "gauge": "14AWG",

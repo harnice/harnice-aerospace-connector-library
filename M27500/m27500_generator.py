@@ -1,6 +1,7 @@
 import argparse
 import csv
 import json
+import math
 import os
 import subprocess
 import sys
@@ -35,11 +36,28 @@ DATE_STARTED = "8/17/26"
 #   M81381/13 — FDH Aero / Thermax MIL-DTL-81381 catalog
 #   https://fdhaero.com/item/m81381-13-wire-medium-weight-high-strength-conductor/
 #
-# MIL-DTL-27500 does NOT tabulate finished cable outside diameter; that is a
-# function of the component wire OD, conductor count, shield braid and jacket
-# wall. Component wire ODs below are datasheet values. The cable buildup
-# (core packing, braid wall, jacket wall) is a geometric estimate — see
-# "Cable diameter buildup model" and treat overall OD as low-fidelity.
+# Component-wire mass (`weight_lb_per_kft`) is the slash-sheet maximum
+# lbs/1000 ft:
+#   M22759/11 — Ryan Electronics / Glenair
+#   https://www.ryanelectronics.com/products/m2275911/
+#   M22759/16 — Glenair
+#   https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf
+#   M22759/18 — Glenair M22759 wires catalog
+#   https://www.glenair.com/wire-and-cable/m22759-wires/pdf/m22759-wires.pdf
+#   M22759/32 and /33 — Glenair wire-diameter lookup tables
+#   https://www.glenair.com/guardian-conduit-system/pdf/wire-diameter-lookup-tables.pdf
+#   M81044/9, /12 — Ryan Electronics
+#   https://www.ryanelectronics.com/products/m810449/
+#   https://www.ryanelectronics.com/products/m8104412/
+#   M81381/13 — FDH Aero / Thermax
+#   https://fdhaero.com/item/m81381-13-wire-medium-weight-high-strength-conductor/
+#
+# MIL-DTL-27500 does NOT tabulate finished cable outside diameter or finished
+# cable weight; those are a function of the component wire OD, conductor
+# count, shield braid and jacket wall. Component wire ODs and lbs/1000 ft
+# below are datasheet values. The cable buildup (core packing, braid wall,
+# jacket wall) is a geometric estimate — see "Cable diameter buildup model"
+# and treat overall OD and shield/jacket mass as low-fidelity.
 # ---------------------------------------------------------------------------
 
 
@@ -84,6 +102,24 @@ BASIC_WIRE_SPECS = {
             10: 1.19,
             8: 0.658,
         },
+        "weight_lb_per_kft": {
+            28: 1.36,
+            26: 1.90,
+            24: 2.58,
+            22: 3.72,
+            20: 5.43,
+            18: 8.14,
+            16: 10.0,
+            14: 15.1,
+            12: 24.1,
+            10: 37.8,
+            8: 65.5,
+        },
+        "weight_source": (
+            "M22759/11 slash-sheet max weight, lbs/1000 ft "
+            "(Glenair M22759 wires / Ryan Electronics, "
+            "https://www.ryanelectronics.com/products/m2275911/)"
+        ),
     },
     "TE": {
         "spec": "MIL-DTL-22759/16",
@@ -114,6 +150,21 @@ BASIC_WIRE_SPECS = {
             10: 1.26,
             8: 0.701,
         },
+        "weight_lb_per_kft": {
+            24: 2.57,
+            22: 3.68,
+            20: 5.36,
+            18: 7.89,
+            16: 9.95,
+            14: 14.9,
+            12: 22.6,
+            10: 35.1,
+            8: 63.5,
+        },
+        "weight_source": (
+            "M22759/16 slash-sheet max weight, lbs/1000 ft "
+            "(Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)"
+        ),
     },
     "TG": {
         "spec": "MIL-DTL-22759/18",
@@ -144,6 +195,22 @@ BASIC_WIRE_SPECS = {
             12: 2.02,
             10: 1.26,
         },
+        "weight_lb_per_kft": {
+            26: 1.45,
+            24: 2.09,
+            22: 3.05,
+            20: 4.58,
+            18: 6.92,
+            16: 8.75,
+            14: 13.7,
+            12: 21.0,
+            10: 33.1,
+        },
+        "weight_source": (
+            "M22759/18 slash-sheet max weight, lbs/1000 ft "
+            "(Glenair M22759 wires catalog, "
+            "https://www.glenair.com/wire-and-cable/m22759-wires/pdf/m22759-wires.pdf)"
+        ),
     },
     "SB": {
         "spec": "MIL-DTL-22759/32",
@@ -176,6 +243,23 @@ BASIC_WIRE_SPECS = {
             14: 3.06,
             12: 2.02,
         },
+        "weight_lb_per_kft": {
+            30: 0.66,
+            28: 0.91,
+            26: 1.40,
+            24: 2.00,
+            22: 2.80,
+            20: 4.30,
+            18: 6.50,
+            16: 8.30,
+            14: 13.00,
+            12: 19.70,
+        },
+        "weight_source": (
+            "M22759/32 slash-sheet max weight, lbs/1000 ft "
+            "(Glenair wire diameter lookup tables, "
+            "https://www.glenair.com/guardian-conduit-system/pdf/wire-diameter-lookup-tables.pdf)"
+        ),
     },
     "SC": {
         "spec": "MIL-DTL-22759/33",
@@ -200,6 +284,19 @@ BASIC_WIRE_SPECS = {
             22: 17.5,
             20: 10.7,
         },
+        "weight_lb_per_kft": {
+            30: 0.67,
+            28: 0.93,
+            26: 1.43,
+            24: 2.04,
+            22: 2.96,
+            20: 4.49,
+        },
+        "weight_source": (
+            "M22759/33 slash-sheet weight, lbs/1000 ft, from Glenair "
+            "M27500-xxSC2U00 pairs in "
+            "https://www.glenair.com/guardian-conduit-system/pdf/wire-diameter-lookup-tables.pdf"
+        ),
     },
     "MH": {
         "spec": "MIL-DTL-81044/9",
@@ -230,6 +327,21 @@ BASIC_WIRE_SPECS = {
             10: 1.26,
             8: 0.701,
         },
+        "weight_lb_per_kft": {
+            24: 3.20,
+            22: 4.50,
+            20: 6.50,
+            18: 9.55,
+            16: 12.1,
+            14: 18.4,
+            12: 27.8,
+            10: 43.0,
+            8: 76.5,
+        },
+        "weight_source": (
+            "M81044/9 slash-sheet max weight, lbs/1000 ft "
+            "(Ryan Electronics, https://www.ryanelectronics.com/products/m810449/)"
+        ),
     },
     "ML": {
         "spec": "MIL-DTL-81044/12",
@@ -262,6 +374,22 @@ BASIC_WIRE_SPECS = {
             14: 3.06,
             12: 2.02,
         },
+        "weight_lb_per_kft": {
+            30: 0.81,
+            28: 1.10,
+            26: 1.58,
+            24: 2.25,
+            22: 3.19,
+            20: 4.82,
+            18: 7.25,
+            16: 9.15,
+            14: 14.2,
+            12: 21.7,
+        },
+        "weight_source": (
+            "M81044/12 slash-sheet max weight, lbs/1000 ft "
+            "(Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)"
+        ),
     },
     "NA": {
         "spec": "MIL-DTL-81381/13",
@@ -285,6 +413,18 @@ BASIC_WIRE_SPECS = {
             22: 17.5,
             20: 10.7,
         },
+        "weight_lb_per_kft": {
+            28: 1.10,
+            26: 1.54,
+            24: 2.15,
+            22: 3.10,
+            20: 4.65,
+        },
+        "weight_source": (
+            "M81381/13 slash-sheet max weight, lbs/1000 ft "
+            "(FDH Aero / Thermax, "
+            "https://fdhaero.com/item/m81381-13-wire-medium-weight-high-strength-conductor/)"
+        ),
     },
 }
 
@@ -318,19 +458,19 @@ STRANDING = {
 # double shield implies a jacket between the two shields, so double shield
 # codes are only legal against double jacket codes (Table I B 51-74).
 SHIELD_CODES = {
-    "U": {"description": "no shield", "material": None, "style": None, "temperature_c": None, "double": None},
-    "T": {"description": "round, tin-coated copper", "material": "tin-coated copper", "style": "round braid", "temperature_c": 150, "double": "V"},
-    "S": {"description": "round, silver-coated copper", "material": "silver-coated copper", "style": "round braid", "temperature_c": 200, "double": "W"},
-    "N": {"description": "round, nickel-coated copper", "material": "nickel-coated copper", "style": "round braid", "temperature_c": 260, "double": "Y"},
-    "F": {"description": "round, stainless steel", "material": "stainless steel", "style": "round braid", "temperature_c": 400, "double": "Z"},
-    "C": {"description": "round, heavy nickel-coated copper", "material": "heavy nickel-coated copper", "style": "round braid", "temperature_c": 400, "double": "R"},
-    "M": {"description": "round, silver-coated high strength copper alloy", "material": "silver-coated high-strength copper alloy", "style": "round braid", "temperature_c": 200, "double": "K"},
-    "P": {"description": "round, nickel-coated high strength copper alloy", "material": "nickel-coated high-strength copper alloy", "style": "round braid", "temperature_c": 260, "double": "L"},
-    "G": {"description": "flat, silver-coated copper", "material": "silver-coated copper", "style": "flat braid", "temperature_c": 200, "double": "A"},
-    "H": {"description": "flat, silver-coated high strength copper alloy", "material": "silver-coated high-strength copper alloy", "style": "flat braid", "temperature_c": 200, "double": "B"},
-    "J": {"description": "flat, tin-coated copper", "material": "tin-coated copper", "style": "flat braid", "temperature_c": 150, "double": "D"},
-    "E": {"description": "flat, nickel-coated high strength copper alloy", "material": "nickel-coated high-strength copper alloy", "style": "flat braid", "temperature_c": 260, "double": "X"},
-    "I": {"description": "flat, nickel-chromium alloy", "material": "nickel-chromium alloy", "style": "flat braid", "temperature_c": 400, "double": "Q"},
+    "U": {"description": "no shield", "material": None, "style": None, "temperature_c": None, "double": None, "density_lb_in3": 0.0},
+    "T": {"description": "round, tin-coated copper", "material": "tin-coated copper", "style": "round braid", "temperature_c": 150, "double": "V", "density_lb_in3": 0.321},
+    "S": {"description": "round, silver-coated copper", "material": "silver-coated copper", "style": "round braid", "temperature_c": 200, "double": "W", "density_lb_in3": 0.321},
+    "N": {"description": "round, nickel-coated copper", "material": "nickel-coated copper", "style": "round braid", "temperature_c": 260, "double": "Y", "density_lb_in3": 0.321},
+    "F": {"description": "round, stainless steel", "material": "stainless steel", "style": "round braid", "temperature_c": 400, "double": "Z", "density_lb_in3": 0.284},
+    "C": {"description": "round, heavy nickel-coated copper", "material": "heavy nickel-coated copper", "style": "round braid", "temperature_c": 400, "double": "R", "density_lb_in3": 0.321},
+    "M": {"description": "round, silver-coated high strength copper alloy", "material": "silver-coated high-strength copper alloy", "style": "round braid", "temperature_c": 200, "double": "K", "density_lb_in3": 0.321},
+    "P": {"description": "round, nickel-coated high strength copper alloy", "material": "nickel-coated high-strength copper alloy", "style": "round braid", "temperature_c": 260, "double": "L", "density_lb_in3": 0.321},
+    "G": {"description": "flat, silver-coated copper", "material": "silver-coated copper", "style": "flat braid", "temperature_c": 200, "double": "A", "density_lb_in3": 0.321},
+    "H": {"description": "flat, silver-coated high strength copper alloy", "material": "silver-coated high-strength copper alloy", "style": "flat braid", "temperature_c": 200, "double": "B", "density_lb_in3": 0.321},
+    "J": {"description": "flat, tin-coated copper", "material": "tin-coated copper", "style": "flat braid", "temperature_c": 150, "double": "D", "density_lb_in3": 0.321},
+    "E": {"description": "flat, nickel-coated high strength copper alloy", "material": "nickel-coated high-strength copper alloy", "style": "flat braid", "temperature_c": 260, "double": "X", "density_lb_in3": 0.321},
+    "I": {"description": "flat, nickel-chromium alloy", "material": "nickel-chromium alloy", "style": "flat braid", "temperature_c": 400, "double": "Q", "density_lb_in3": 0.284},
 }
 # Table I A also lists "*" (single) / "#" (double) for flat nickel-coated
 # copper. Those characters are omitted here because they are not safe in a
@@ -348,30 +488,32 @@ DOUBLE_SHIELD_CODES = {
 # ===========================================================================
 # `construction` drives the jacket wall estimate in the diameter buildup.
 # `double` is the equivalent double-jacket numeric code.
+# `density_lb_in3` is a typical polymer density used only for the geometric
+# shield/jacket mass adder; MIL-DTL-27500 does not tabulate jacket mass.
 JACKET_CODES = {
-    "00": {"description": "no jacket", "material": None, "color": None, "construction": None, "temperature_c": None, "double": "00"},
-    "01": {"description": "extruded white polyvinylchloride (PVC)", "material": "PVC", "color": "white", "construction": "extruded", "temperature_c": 90, "double": "51"},
-    "02": {"description": "extruded clear polyamide", "material": "polyamide", "color": "clear", "construction": "extruded", "temperature_c": 105, "double": "52"},
-    "03": {"description": "white polyamide braid impregnated with clear polyamide finisher over polyester tape", "material": "polyamide", "color": "white", "construction": "braid", "temperature_c": 105, "double": "53"},
-    "04": {"description": "polyester braid impregnated with high temperature finishers over polyester tape", "material": "polyester", "color": "natural", "construction": "braid", "temperature_c": 150, "double": "54"},
-    "05": {"description": "extruded clear fluorinated ethylene propylene (FEP)", "material": "FEP", "color": "clear", "construction": "extruded", "temperature_c": 200, "double": "55"},
-    "06": {"description": "extruded or taped and heat sealed white polytetrafluoroethylene (PTFE)", "material": "PTFE", "color": "white", "construction": "extruded", "temperature_c": 260, "double": "56"},
-    "07": {"description": "white PTFE treated glass braid over presintered PTFE tape", "material": "PTFE-coated glass", "color": "white", "construction": "braid", "temperature_c": 260, "double": "57"},
-    "08": {"description": "crosslinked white extruded polyvinylidene fluoride (PVDF)", "material": "PVDF", "color": "white", "construction": "extruded", "temperature_c": 150, "double": "58"},
-    "09": {"description": "extruded white fluorinated ethylene propylene (FEP)", "material": "FEP", "color": "white", "construction": "extruded", "temperature_c": 200, "double": "59"},
-    "10": {"description": "extruded clear polyvinylidene fluoride (PVDF)", "material": "PVDF", "color": "clear", "construction": "extruded", "temperature_c": 125, "double": "60"},
-    "11": {"description": "natural polyimide/FEP tape, heat sealed, FEP outer surface", "material": "polyimide/FEP tape", "color": "natural", "construction": "tape", "temperature_c": 200, "double": "61"},
-    "12": {"description": "natural polyimide/FEP tape, heat sealed, polyimide outer surface", "material": "polyimide/FEP tape", "color": "natural", "construction": "tape", "temperature_c": 200, "double": "62"},
-    "14": {"description": "extruded white ethylene-tetrafluoroethylene copolymer (ETFE)", "material": "ETFE", "color": "white", "construction": "extruded", "temperature_c": 150, "double": "64"},
-    "15": {"description": "extruded clear ethylene-tetrafluoroethylene copolymer (ETFE)", "material": "ETFE", "color": "clear", "construction": "extruded", "temperature_c": 150, "double": "65"},
-    "16": {"description": "aromatic polyamide braid with high temperature finisher over presintered PTFE tape", "material": "aromatic polyamide", "color": "natural", "construction": "braid", "temperature_c": 200, "double": "66"},
-    "17": {"description": "extruded white ethylene chlorotrifluoroethylene (ECTFE)", "material": "ECTFE", "color": "white", "construction": "extruded", "temperature_c": 150, "double": "67"},
-    "18": {"description": "extruded clear ethylene chlorotrifluoroethylene (ECTFE)", "material": "ECTFE", "color": "clear", "construction": "extruded", "temperature_c": 150, "double": "68"},
-    "20": {"description": "extruded white perfluoroalkoxy (PFA)", "material": "PFA", "color": "white", "construction": "extruded", "temperature_c": 260, "double": "70"},
-    "21": {"description": "extruded clear perfluoroalkoxy (PFA)", "material": "PFA", "color": "clear", "construction": "extruded", "temperature_c": 260, "double": "71"},
-    "22": {"description": "polyimide/clear FEP tape, heat sealed, opaque polyimide outer surface", "material": "polyimide/FEP tape", "color": "opaque", "construction": "tape", "temperature_c": 200, "double": "72"},
-    "23": {"description": "extruded white crosslinked modified ETFE (XLETFE)", "material": "XLETFE", "color": "white", "construction": "extruded", "temperature_c": 200, "double": "73"},
-    "24": {"description": "white PTFE tape over natural polyimide/FEP tape, heat sealed", "material": "PTFE over polyimide/FEP tape", "color": "white", "construction": "tape", "temperature_c": 200, "double": "74"},
+    "00": {"description": "no jacket", "material": None, "color": None, "construction": None, "temperature_c": None, "double": "00", "density_lb_in3": 0.0},
+    "01": {"description": "extruded white polyvinylchloride (PVC)", "material": "PVC", "color": "white", "construction": "extruded", "temperature_c": 90, "double": "51", "density_lb_in3": 0.051},
+    "02": {"description": "extruded clear polyamide", "material": "polyamide", "color": "clear", "construction": "extruded", "temperature_c": 105, "double": "52", "density_lb_in3": 0.041},
+    "03": {"description": "white polyamide braid impregnated with clear polyamide finisher over polyester tape", "material": "polyamide", "color": "white", "construction": "braid", "temperature_c": 105, "double": "53", "density_lb_in3": 0.041},
+    "04": {"description": "polyester braid impregnated with high temperature finishers over polyester tape", "material": "polyester", "color": "natural", "construction": "braid", "temperature_c": 150, "double": "54", "density_lb_in3": 0.05},
+    "05": {"description": "extruded clear fluorinated ethylene propylene (FEP)", "material": "FEP", "color": "clear", "construction": "extruded", "temperature_c": 200, "double": "55", "density_lb_in3": 0.078},
+    "06": {"description": "extruded or taped and heat sealed white polytetrafluoroethylene (PTFE)", "material": "PTFE", "color": "white", "construction": "extruded", "temperature_c": 260, "double": "56", "density_lb_in3": 0.078},
+    "07": {"description": "white PTFE treated glass braid over presintered PTFE tape", "material": "PTFE-coated glass", "color": "white", "construction": "braid", "temperature_c": 260, "double": "57", "density_lb_in3": 0.072},
+    "08": {"description": "crosslinked white extruded polyvinylidene fluoride (PVDF)", "material": "PVDF", "color": "white", "construction": "extruded", "temperature_c": 150, "double": "58", "density_lb_in3": 0.064},
+    "09": {"description": "extruded white fluorinated ethylene propylene (FEP)", "material": "FEP", "color": "white", "construction": "extruded", "temperature_c": 200, "double": "59", "density_lb_in3": 0.078},
+    "10": {"description": "extruded clear polyvinylidene fluoride (PVDF)", "material": "PVDF", "color": "clear", "construction": "extruded", "temperature_c": 125, "double": "60", "density_lb_in3": 0.064},
+    "11": {"description": "natural polyimide/FEP tape, heat sealed, FEP outer surface", "material": "polyimide/FEP tape", "color": "natural", "construction": "tape", "temperature_c": 200, "double": "61", "density_lb_in3": 0.051},
+    "12": {"description": "natural polyimide/FEP tape, heat sealed, polyimide outer surface", "material": "polyimide/FEP tape", "color": "natural", "construction": "tape", "temperature_c": 200, "double": "62", "density_lb_in3": 0.051},
+    "14": {"description": "extruded white ethylene-tetrafluoroethylene copolymer (ETFE)", "material": "ETFE", "color": "white", "construction": "extruded", "temperature_c": 150, "double": "64", "density_lb_in3": 0.061},
+    "15": {"description": "extruded clear ethylene-tetrafluoroethylene copolymer (ETFE)", "material": "ETFE", "color": "clear", "construction": "extruded", "temperature_c": 150, "double": "65", "density_lb_in3": 0.061},
+    "16": {"description": "aromatic polyamide braid with high temperature finisher over presintered PTFE tape", "material": "aromatic polyamide", "color": "natural", "construction": "braid", "temperature_c": 200, "double": "66", "density_lb_in3": 0.044},
+    "17": {"description": "extruded white ethylene chlorotrifluoroethylene (ECTFE)", "material": "ECTFE", "color": "white", "construction": "extruded", "temperature_c": 150, "double": "67", "density_lb_in3": 0.061},
+    "18": {"description": "extruded clear ethylene chlorotrifluoroethylene (ECTFE)", "material": "ECTFE", "color": "clear", "construction": "extruded", "temperature_c": 150, "double": "68", "density_lb_in3": 0.061},
+    "20": {"description": "extruded white perfluoroalkoxy (PFA)", "material": "PFA", "color": "white", "construction": "extruded", "temperature_c": 260, "double": "70", "density_lb_in3": 0.078},
+    "21": {"description": "extruded clear perfluoroalkoxy (PFA)", "material": "PFA", "color": "clear", "construction": "extruded", "temperature_c": 260, "double": "71", "density_lb_in3": 0.078},
+    "22": {"description": "polyimide/clear FEP tape, heat sealed, opaque polyimide outer surface", "material": "polyimide/FEP tape", "color": "opaque", "construction": "tape", "temperature_c": 200, "double": "72", "density_lb_in3": 0.051},
+    "23": {"description": "extruded white crosslinked modified ETFE (XLETFE)", "material": "XLETFE", "color": "white", "construction": "extruded", "temperature_c": 200, "double": "73", "density_lb_in3": 0.061},
+    "24": {"description": "white PTFE tape over natural polyimide/FEP tape, heat sealed", "material": "PTFE over polyimide/FEP tape", "color": "white", "construction": "tape", "temperature_c": 200, "double": "74", "density_lb_in3": 0.07},
 }
 
 DOUBLE_JACKET_CODES = {
@@ -748,6 +890,58 @@ def cable_layers(wire_od_in, n_conductors, shield_code, jacket_code):
     return layers, od
 
 
+def _annulus_lb_per_ft(od_in, wall_in, density, fill):
+    inner = max(od_in - 2.0 * wall_in, 0.0)
+    area = math.pi / 4.0 * (od_in ** 2 - inner ** 2)
+    return area * 12.0 * density * fill
+
+
+def component_wire_lb_per_ft(symbol, gauge):
+    return BASIC_WIRE_SPECS[symbol]["weight_lb_per_kft"][int(gauge)] / 1000.0
+
+
+# 85% coverage × braid packing. Stainless / nichrome use 0.284 lb/in^3;
+# copper-family shields use 0.321. Jacket fill is 0.92 extruded / 0.70 tape or braid.
+SHIELD_FILL = 0.62
+
+CABLE_MASS_ESTIMATE_NOTE = (
+    "Finished cable mass includes slash-sheet component-wire weight plus an "
+    "estimated shield/jacket; MIL-DTL-27500 does not tabulate finished cable weight"
+)
+
+
+def cable_mass_lb_per_ft(identification, gauge, symbol, n_conductors, shield_code, jacket_code):
+    spec = BASIC_WIRE_SPECS[symbol]
+    gauge = int(gauge)
+    n_conductors = int(n_conductors)
+    mass = n_conductors * component_wire_lb_per_ft(symbol, gauge)
+    layers, _ = cable_layers(
+        spec["wire_od_in"][gauge], n_conductors, shield_code, jacket_code
+    )
+    coverage = float(IDENTIFICATION_METHODS[identification]["coverage"].rstrip("%")) / 100.0
+    for layer in layers:
+        if layer["kind"] == "shield":
+            density = layer["record"]["density_lb_in3"]
+            fill = SHIELD_FILL * (coverage / 0.85)
+        else:
+            density = layer["record"]["density_lb_in3"]
+            construction = layer["record"]["construction"]
+            fill = 0.92 if construction == "extruded" else 0.70
+        mass += _annulus_lb_per_ft(layer["od_in"], layer["wall_in"], density, fill)
+    return mass
+
+
+def cable_mass_source(symbol, shield_code, jacket_code):
+    wire = BASIC_WIRE_SPECS[symbol]["weight_source"]
+    if shield_code == "U" and jacket_code == "00":
+        return wire
+    return (
+        f"Component wires: {wire}. Shield and jacket mass are a geometric "
+        "estimate from the same core-packing / braid-wall / jacket-wall model "
+        "used for OD; MIL-DTL-27500 does not tabulate finished cable weight."
+    )
+
+
 # ===========================================================================
 # Part number composition and configuration legality
 # ===========================================================================
@@ -881,6 +1075,8 @@ def compile_cable_attributes(configuration):
         group[color_name] = {
             "conductor": True,
             "properties": {
+                "mass": f"{component_wire_lb_per_ft(symbol, gauge):.4f}lbs/ft",
+                "mass_source": spec["weight_source"],
                 "wire number": str(wire_number),
                 "component_wire": f"{spec['spec'].replace('MIL-DTL-', 'M')}-{gauge}",
                 "gauge": f"{gauge}AWG",
@@ -928,6 +1124,8 @@ def compile_cable_attributes(configuration):
     jacket_record = DOUBLE_JACKET_CODES.get(jacket_code) or JACKET_CODES[jacket_code]
 
     properties = {
+        "mass": f"{cable_mass_lb_per_ft(identification, gauge, symbol, n_conductors, shield_code, jacket_code):.4f}lbs/ft",
+        "mass_source": cable_mass_source(symbol, shield_code, jacket_code),
         "od": f"{overall_od:.3f}in",
         "conductors": str(n_conductors),
         "component_wire_specification": spec["spec"],
@@ -981,6 +1179,8 @@ def cable_build_notes(
         f"Overall diameter {overall_od:.3f} in is estimated from the component "
         f"wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
     )
+    if shield_code != "U" or jacket_code != "00":
+        notes.append(CABLE_MASS_ESTIMATE_NOTE)
     return notes
 
 

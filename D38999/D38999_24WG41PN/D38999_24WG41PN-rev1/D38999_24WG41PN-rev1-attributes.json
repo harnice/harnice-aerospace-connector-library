@@ -1,4 +1,6 @@
 {
+  "mass": "0.1090lbs",
+  "mass_source": "Amphenol Tri-Start Series III weight chart, ounces including contacts: https://www.amphenol-aerospace.com/Products/MIL-DTL-38999-Connectors/MIL-DTL-38999-Series-III-TV Finishes F/W/Z use the aluminum column; K uses stainless. Inserts not on the chart use the nearest same-shell-size tabulated arrangement.",
   "tools": [
     "M22520/2-01 crimp tool",
     "M81969/14-05 extraction tool",

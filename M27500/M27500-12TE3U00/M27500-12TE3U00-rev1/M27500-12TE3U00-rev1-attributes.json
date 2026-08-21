@@ -1,6 +1,8 @@
 {
   "specification": "MIL-DTL-27500",
   "properties": {
+    "mass": "0.0678lbs/ft",
+    "mass_source": "M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)",
     "od": "0.251in",
     "conductors": "3",
     "component_wire_specification": "MIL-DTL-22759/16",
@@ -29,6 +31,8 @@
     "white": {
       "conductor": true,
       "properties": {
+        "mass": "0.0226lbs/ft",
+        "mass_source": "M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)",
         "wire number": "1",
         "component_wire": "M22759/16-12",
         "gauge": "12AWG",
@@ -48,6 +52,8 @@
     "blue": {
       "conductor": true,
       "properties": {
+        "mass": "0.0226lbs/ft",
+        "mass_source": "M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)",
         "wire number": "2",
         "component_wire": "M22759/16-12",
         "gauge": "12AWG",
@@ -70,6 +76,8 @@
     "orange": {
       "conductor": true,
       "properties": {
+        "mass": "0.0226lbs/ft",
+        "mass_source": "M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)",
         "wire number": "3",
         "component_wire": "M22759/16-12",
         "gauge": "12AWG",

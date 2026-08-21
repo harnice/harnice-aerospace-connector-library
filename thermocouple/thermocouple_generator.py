@@ -563,10 +563,28 @@ def thermocouple_svg(part_number, tc_type, gender):
 </svg>'''
 
 
+
+# Omega does not publish a gram weight. ~15.5 g male / ~16.1 g female from
+# the OST envelope (glass-filled nylon body plus pins/screws) using dimensions
+# from https://assets.omega.com/pdf/connectors/thermocouple-and-rtd-connectors/OSTW_HST_OSTW.pdf
+MASS_SOURCE = (
+    "Estimated. Omega does not publish a gram weight. ~15.5 g from the OST "
+    "envelope (glass-filled nylon body plus pins/screws) using dimensions from "
+    "https://assets.omega.com/pdf/connectors/thermocouple-and-rtd-connectors/OSTW_HST_OSTW.pdf"
+)
+
+
+def part_mass_lbs(gender):
+    grams = 16.1 if gender == "F" else 15.5
+    return grams / 453.59237
+
+
 def compile_part_attributes(part_configuration):
     gender = part_configuration["gender"]
     length_mm = connector_length_mm(gender)
     return {
+        "mass": f"{part_mass_lbs(gender):.4f}lbs",
+        "mass_source": MASS_SOURCE,
         "tools": ["Phillips/slot screwdriver"],
         "build_notes": [],
         "csys_children": flagnote_csys_children(

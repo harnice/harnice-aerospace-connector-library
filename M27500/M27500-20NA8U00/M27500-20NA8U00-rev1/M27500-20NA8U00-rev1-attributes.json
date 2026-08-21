@@ -1,6 +1,8 @@
 {
   "specification": "MIL-DTL-27500",
   "properties": {
+    "mass": "0.0372lbs/ft",
+    "mass_source": "M81381/13 slash-sheet max weight, lbs/1000 ft (FDH Aero / Thermax, https://fdhaero.com/item/m81381-13-wire-medium-weight-high-strength-conductor/)",
     "od": "0.192in",
     "conductors": "8",
     "component_wire_specification": "MIL-DTL-81381/13",
@@ -29,6 +31,8 @@
     "white": {
       "conductor": true,
       "properties": {
+        "mass": "0.0047lbs/ft",
+        "mass_source": "M81381/13 slash-sheet max weight, lbs/1000 ft (FDH Aero / Thermax, https://fdhaero.com/item/m81381-13-wire-medium-weight-high-strength-conductor/)",
         "wire number": "1",
         "component_wire": "M81381/13-20",
         "gauge": "20AWG",
@@ -48,6 +52,8 @@
     "blue": {
       "conductor": true,
       "properties": {
+        "mass": "0.0047lbs/ft",
+        "mass_source": "M81381/13 slash-sheet max weight, lbs/1000 ft (FDH Aero / Thermax, https://fdhaero.com/item/m81381-13-wire-medium-weight-high-strength-conductor/)",
         "wire number": "2",
         "component_wire": "M81381/13-20",
         "gauge": "20AWG",
@@ -70,6 +76,8 @@
     "orange": {
       "conductor": true,
       "properties": {
+        "mass": "0.0047lbs/ft",
+        "mass_source": "M81381/13 slash-sheet max weight, lbs/1000 ft (FDH Aero / Thermax, https://fdhaero.com/item/m81381-13-wire-medium-weight-high-strength-conductor/)",
         "wire number": "3",
         "component_wire": "M81381/13-20",
         "gauge": "20AWG",
@@ -92,6 +100,8 @@
     "green": {
       "conductor": true,
       "properties": {
+        "mass": "0.0047lbs/ft",
+        "mass_source": "M81381/13 slash-sheet max weight, lbs/1000 ft (FDH Aero / Thermax, https://fdhaero.com/item/m81381-13-wire-medium-weight-high-strength-conductor/)",
         "wire number": "4",
         "component_wire": "M81381/13-20",
         "gauge": "20AWG",
@@ -114,6 +124,8 @@
     "red": {
       "conductor": true,
       "properties": {
+        "mass": "0.0047lbs/ft",
+        "mass_source": "M81381/13 slash-sheet max weight, lbs/1000 ft (FDH Aero / Thermax, https://fdhaero.com/item/m81381-13-wire-medium-weight-high-strength-conductor/)",
         "wire number": "5",
         "component_wire": "M81381/13-20",
         "gauge": "20AWG",
@@ -136,6 +148,8 @@
     "black": {
       "conductor": true,
       "properties": {
+        "mass": "0.0047lbs/ft",
+        "mass_source": "M81381/13 slash-sheet max weight, lbs/1000 ft (FDH Aero / Thermax, https://fdhaero.com/item/m81381-13-wire-medium-weight-high-strength-conductor/)",
         "wire number": "6",
         "component_wire": "M81381/13-20",
         "gauge": "20AWG",
@@ -158,6 +172,8 @@
     "yellow": {
       "conductor": true,
       "properties": {
+        "mass": "0.0047lbs/ft",
+        "mass_source": "M81381/13 slash-sheet max weight, lbs/1000 ft (FDH Aero / Thermax, https://fdhaero.com/item/m81381-13-wire-medium-weight-high-strength-conductor/)",
         "wire number": "7",
         "component_wire": "M81381/13-20",
         "gauge": "20AWG",
@@ -180,6 +196,8 @@
     "violet": {
       "conductor": true,
       "properties": {
+        "mass": "0.0047lbs/ft",
+        "mass_source": "M81381/13 slash-sheet max weight, lbs/1000 ft (FDH Aero / Thermax, https://fdhaero.com/item/m81381-13-wire-medium-weight-high-strength-conductor/)",
         "wire number": "8",
         "component_wire": "M81381/13-20",
         "gauge": "20AWG",

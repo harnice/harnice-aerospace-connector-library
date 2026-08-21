@@ -58,6 +58,10 @@ delete_pngs = True
 #   Milnec M85049/88 Type Banding Backshell datasheet
 #   https://www.milnec.com/m85049/m85049-88-datasheet.pdf
 #
+# Mass: Glenair does not publish a full /88–90 weight table. Scaled from
+# listed M85049/88-25W03 at 1.552 oz using C^2 * body length (F/G/H) from
+# the same Glenair sheet. Stainless finish F uses density ratio 8.0/2.70.
+#
 # Assembly torque (not on Glenair /88–90 sheet) — SAE-AS85049 coupling thread
 # strength, as published by Amphenol backshell catalogs:
 #   https://www.amphenol.co.jp/military/catalog/pdf_howtoselectbackshell/Torque.pdf
@@ -1359,6 +1363,34 @@ def circular_backshell_assembly_wrench_part_number(shell_size, finish):
     return f"Glenair 600-079-{dash}"
 
 
+
+# Mass: Glenair does not publish a full AS85049/88–90 weight table.
+# Scaled from listed M85049/88-25W03 at 1.552054 oz using C^2 * body length
+# (F=/88, G=/89, H=/90) from the Glenair AS85049/88–90 dimension table used
+# by SHELL_DATA above.
+# https://www.glenair.com/mil-spec/as85049-qualified-backshells-and-connector-accessories/pdf/as85049-88-and-as85049-89-and-as85049-90.pdf
+# Stainless finish F is scaled by density ratio 8.0/2.70. Entry 02 is +4%.
+MASS_SOURCE = (
+    "Estimated. Glenair does not publish a full AS85049/88–90 weight table. "
+    "Scaled from listed M85049/88-25W03 at 1.552 oz using C^2 * body length "
+    "(F straight / G 45deg / H 90deg) from "
+    "https://www.glenair.com/mil-spec/as85049-qualified-backshells-and-connector-accessories/pdf/as85049-88-and-as85049-89-and-as85049-90.pdf "
+    "Stainless finish F is scaled by density ratio 8.0/2.70."
+)
+_MASS_K_OZ = 1.552054 / (1.890 ** 2 * 1.200)
+
+
+def part_mass_lbs(basic, shell_size, finish, entry_size):
+    data = SHELL_DATA[int(shell_size)]
+    length = {"88": data["f_in"], "89": data["g_in"], "90": data["h_in"]}[str(basic)]
+    oz = _MASS_K_OZ * data["c_in"] ** 2 * length
+    if str(entry_size) == "02":
+        oz *= 1.04
+    if finish == "F":
+        oz *= 8.0 / 2.70
+    return oz / 16.0
+
+
 def compile_part_attributes(part_configuration):
     shell_size = part_configuration["shell_size"]
     entry_size = part_configuration["entry_size"]
@@ -1375,6 +1407,8 @@ def compile_part_attributes(part_configuration):
     wrench = circular_backshell_assembly_wrench_part_number(shell_size, finish)
 
     attributes = {
+        "mass": f"{part_mass_lbs(part_configuration['basic'], shell_size, finish, entry_size):.4f}lbs",
+        "mass_source": MASS_SOURCE,
         "tools": [
             "Band-it clamp tool",
             "Torque wrench",

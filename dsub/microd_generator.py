@@ -781,6 +781,78 @@ def write_part_step(rev_dir, part_number, part_configuration):
     )
 
 
+
+# ITT Cannon / Glenair Micro-D metal-shell weights, grams (solder-cup and
+# pigtail body). Stainless adder is the published stainless-steel adder.
+# Pigtail wire: ITT grams/inch table.
+# https://www.milnec.com/pdf/mil-dtl-83513/m83513-catalog-specs.pdf
+MASS_SOURCE = (
+    "ITT Cannon / Glenair Micro-D metal-shell weights, grams, and ITT wire "
+    "grams/inch for pigtails: "
+    "https://www.milnec.com/pdf/mil-dtl-83513/m83513-catalog-specs.pdf "
+    "Stainless finish P adds the published stainless-steel adder."
+)
+_MICROD_SOLDER_G = {
+    9: {"P": 1.7, "S": 1.7},
+    15: {"P": 2.3, "S": 2.2},
+    21: {"P": 3.0, "S": 2.6},
+    25: {"P": 3.3, "S": 3.0},
+    31: {"P": 3.9, "S": 3.6},
+    37: {"P": 4.4, "S": 4.1},
+    51: {"P": 5.1, "S": 4.8},
+    100: {"P": 9.1, "S": 8.2},
+}
+_MICROD_PIGTAIL_BODY_G = {
+    9: {"P": 1.6, "S": 1.6},
+    15: {"P": 2.2, "S": 2.1},
+    21: {"P": 2.9, "S": 2.5},
+    25: {"P": 3.2, "S": 2.9},
+    31: {"P": 3.8, "S": 3.5},
+    37: {"P": 4.2, "S": 3.9},
+    51: {"P": 4.9, "S": 4.7},
+    100: {"P": 8.6, "S": 7.9},
+}
+_MICROD_SS_ADDER_G = {
+    9: {"P": 1.9, "S": 2.0},
+    15: {"P": 2.4, "S": 2.4},
+    21: {"P": 2.9, "S": 2.8},
+    25: {"P": 3.2, "S": 2.9},
+    31: {"P": 3.4, "S": 3.2},
+    37: {"P": 3.6, "S": 4.1},
+    51: {"P": 4.0, "S": 3.8},
+    100: {"P": 8.3, "S": 8.0},
+}
+_MICROD_WIRE_G_PER_IN = {
+    "01": 0.072, "02": 0.072, "03": 0.072, "04": 0.072,
+    "05": 0.045, "06": 0.045, "07": 0.045, "08": 0.045,
+    "09": 0.053, "10": 0.053, "11": 0.053, "12": 0.053,
+    "13": 0.072, "14": 0.072, "15": 0.053, "16": 0.053,
+}
+_MICROD_WIRE_LEN_IN = {
+    "01": 18, "02": 36, "03": 18, "04": 36,
+    "05": 0.5, "06": 1.0, "07": 0.5, "08": 1.0,
+    "09": 18, "10": 36, "11": 18, "12": 36,
+    "13": 72, "14": 72, "15": 72, "16": 72,
+}
+_MICROD_INSERT_CONTACTS = {
+    "A": 9, "B": 15, "C": 21, "D": 25, "E": 31, "F": 37, "G": 51, "H": 100,
+}
+
+
+def part_mass_lbs(connector_type, gender, shell_size, finish, wire_type=None):
+    contact = "S" if gender == "Receptacle" else "P"
+    size = int(shell_size)
+    if connector_type == "Pigtail":
+        grams = _MICROD_PIGTAIL_BODY_G[size][contact]
+        length = _MICROD_WIRE_LEN_IN[wire_type]
+        grams += size * length * _MICROD_WIRE_G_PER_IN[wire_type]
+    else:
+        grams = _MICROD_SOLDER_G[size][contact]
+    if finish == "P":
+        grams += _MICROD_SS_ADDER_G[size][contact]
+    return grams / 453.59237
+
+
 def compile_part_attributes(part_configuration):
     shell_size = part_configuration["shell_size"]
     contacts = [
@@ -794,6 +866,8 @@ def compile_part_attributes(part_configuration):
         tools = []
 
     return {
+        "mass": f"{part_mass_lbs(part_configuration['connector_type'], part_configuration['gender'], shell_size, part_configuration['finish'], part_configuration.get('wire_type')):.4f}lbs",
+        "mass_source": MASS_SOURCE,
         "tools": tools,
         "build_notes": [],
         "csys_children": {

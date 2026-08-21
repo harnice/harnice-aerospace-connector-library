@@ -1652,6 +1652,39 @@ def write_part_step(rev_dir, part_number, variant):
     )
 
 
+
+# Typical QPL steel-shell masses (grams, contacts included). Aluminum finish A
+# uses 0.58x. High-density adds 0.12 g per extra contact over the
+# standard-density count of the same shell.
+MASS_SOURCE = (
+    "Typical QPL steel-shell masses by shell size, grams including contacts; "
+    "not a single manufacturer weight table. Aluminum finish A is scaled 0.58x; "
+    "high-density adds 0.12 g per extra contact over the standard-density count."
+)
+_DSUB_STEEL_G = {
+    # shell_no: (plug, receptacle)
+    1: (8.5, 8.0),
+    2: (13.0, 12.2),
+    3: (19.5, 18.2),
+    4: (28.0, 26.0),
+    5: (41.0, 38.0),
+    6: (54.0, 50.0),
+}
+_DSUB_STD_PINS = {1: 9, 2: 15, 3: 25, 4: 37, 5: 50, 6: 104}
+_DSUB_HD_PINS = {1: 15, 2: 26, 3: 44, 4: 62, 5: 78, 6: 104}
+
+
+def part_mass_lbs(gender, density, shell_no, pin_count, finish):
+    plug_g, rec_g = _DSUB_STEEL_G[int(shell_no)]
+    grams = rec_g if gender == "Receptacle" else plug_g
+    std = _DSUB_STD_PINS[int(shell_no)]
+    extra = max(int(pin_count) - std, 0)
+    grams += extra * 0.12
+    if finish == "A":
+        grams *= 0.58
+    return grams / 453.59237
+
+
 def compile_part_attributes(part_configuration):
     variant = variant_from_configuration(part_configuration)
     size = contact_size_for(variant.density)
@@ -1668,6 +1701,8 @@ def compile_part_attributes(part_configuration):
         tools = ["Soldering iron"]
 
     attributes = {
+        "mass": f"{part_mass_lbs(variant.gender, variant.density, variant.shell_no, variant.pin_count, part_configuration['finish']):.4f}lbs",
+        "mass_source": MASS_SOURCE,
         "tools": tools,
         "build_notes": [],
         "csys_children": {

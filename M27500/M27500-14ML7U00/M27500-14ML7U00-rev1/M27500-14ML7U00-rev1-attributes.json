@@ -1,6 +1,8 @@
 {
   "specification": "MIL-DTL-27500",
   "properties": {
+    "mass": "0.0994lbs/ft",
+    "mass_source": "M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)",
     "od": "0.272in",
     "conductors": "7",
     "component_wire_specification": "MIL-DTL-81044/12",
@@ -29,6 +31,8 @@
     "white": {
       "conductor": true,
       "properties": {
+        "mass": "0.0142lbs/ft",
+        "mass_source": "M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)",
         "wire number": "1",
         "component_wire": "M81044/12-14",
         "gauge": "14AWG",
@@ -48,6 +52,8 @@
     "blue": {
       "conductor": true,
       "properties": {
+        "mass": "0.0142lbs/ft",
+        "mass_source": "M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)",
         "wire number": "2",
         "component_wire": "M81044/12-14",
         "gauge": "14AWG",
@@ -70,6 +76,8 @@
     "orange": {
       "conductor": true,
       "properties": {
+        "mass": "0.0142lbs/ft",
+        "mass_source": "M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)",
         "wire number": "3",
         "component_wire": "M81044/12-14",
         "gauge": "14AWG",
@@ -92,6 +100,8 @@
     "green": {
       "conductor": true,
       "properties": {
+        "mass": "0.0142lbs/ft",
+        "mass_source": "M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)",
         "wire number": "4",
         "component_wire": "M81044/12-14",
         "gauge": "14AWG",
@@ -114,6 +124,8 @@
     "red": {
       "conductor": true,
       "properties": {
+        "mass": "0.0142lbs/ft",
+        "mass_source": "M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)",
         "wire number": "5",
         "component_wire": "M81044/12-14",
         "gauge": "14AWG",
@@ -136,6 +148,8 @@
     "black": {
       "conductor": true,
       "properties": {
+        "mass": "0.0142lbs/ft",
+        "mass_source": "M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)",
         "wire number": "6",
         "component_wire": "M81044/12-14",
         "gauge": "14AWG",
@@ -158,6 +172,8 @@
     "yellow": {
       "conductor": true,
       "properties": {
+        "mass": "0.0142lbs/ft",
+        "mass_source": "M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)",
         "wire number": "7",
         "component_wire": "M81044/12-14",
         "gauge": "14AWG",

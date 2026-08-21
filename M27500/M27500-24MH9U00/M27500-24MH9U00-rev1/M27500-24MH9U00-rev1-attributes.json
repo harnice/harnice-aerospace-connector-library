@@ -1,6 +1,8 @@
 {
   "specification": "MIL-DTL-27500",
   "properties": {
+    "mass": "0.0288lbs/ft",
+    "mass_source": "M81044/9 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m810449/)",
     "od": "0.199in",
     "conductors": "9",
     "component_wire_specification": "MIL-DTL-81044/9",
@@ -29,6 +31,8 @@
     "white": {
       "conductor": true,
       "properties": {
+        "mass": "0.0032lbs/ft",
+        "mass_source": "M81044/9 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m810449/)",
         "wire number": "1",
         "component_wire": "M81044/9-24",
         "gauge": "24AWG",
@@ -48,6 +52,8 @@
     "blue": {
       "conductor": true,
       "properties": {
+        "mass": "0.0032lbs/ft",
+        "mass_source": "M81044/9 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m810449/)",
         "wire number": "2",
         "component_wire": "M81044/9-24",
         "gauge": "24AWG",
@@ -70,6 +76,8 @@
     "orange": {
       "conductor": true,
       "properties": {
+        "mass": "0.0032lbs/ft",
+        "mass_source": "M81044/9 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m810449/)",
         "wire number": "3",
         "component_wire": "M81044/9-24",
         "gauge": "24AWG",
@@ -92,6 +100,8 @@
     "green": {
       "conductor": true,
       "properties": {
+        "mass": "0.0032lbs/ft",
+        "mass_source": "M81044/9 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m810449/)",
         "wire number": "4",
         "component_wire": "M81044/9-24",
         "gauge": "24AWG",
@@ -114,6 +124,8 @@
     "red": {
       "conductor": true,
       "properties": {
+        "mass": "0.0032lbs/ft",
+        "mass_source": "M81044/9 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m810449/)",
         "wire number": "5",
         "component_wire": "M81044/9-24",
         "gauge": "24AWG",
@@ -136,6 +148,8 @@
     "black": {
       "conductor": true,
       "properties": {
+        "mass": "0.0032lbs/ft",
+        "mass_source": "M81044/9 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m810449/)",
         "wire number": "6",
         "component_wire": "M81044/9-24",
         "gauge": "24AWG",
@@ -158,6 +172,8 @@
     "yellow": {
       "conductor": true,
       "properties": {
+        "mass": "0.0032lbs/ft",
+        "mass_source": "M81044/9 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m810449/)",
         "wire number": "7",
         "component_wire": "M81044/9-24",
         "gauge": "24AWG",
@@ -180,6 +196,8 @@
     "violet": {
       "conductor": true,
       "properties": {
+        "mass": "0.0032lbs/ft",
+        "mass_source": "M81044/9 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m810449/)",
         "wire number": "8",
         "component_wire": "M81044/9-24",
         "gauge": "24AWG",
@@ -202,6 +220,8 @@
     "gray": {
       "conductor": true,
       "properties": {
+        "mass": "0.0032lbs/ft",
+        "mass_source": "M81044/9 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m810449/)",
         "wire number": "9",
         "component_wire": "M81044/9-24",
         "gauge": "24AWG",

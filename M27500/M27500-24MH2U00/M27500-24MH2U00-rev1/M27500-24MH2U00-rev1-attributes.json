@@ -1,6 +1,8 @@
 {
   "specification": "MIL-DTL-27500",
   "properties": {
+    "mass": "0.0064lbs/ft",
+    "mass_source": "M81044/9 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m810449/)",
     "od": "0.110in",
     "conductors": "2",
     "component_wire_specification": "MIL-DTL-81044/9",
@@ -29,6 +31,8 @@
     "white": {
       "conductor": true,
       "properties": {
+        "mass": "0.0032lbs/ft",
+        "mass_source": "M81044/9 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m810449/)",
         "wire number": "1",
         "component_wire": "M81044/9-24",
         "gauge": "24AWG",
@@ -48,6 +52,8 @@
     "blue": {
       "conductor": true,
       "properties": {
+        "mass": "0.0032lbs/ft",
+        "mass_source": "M81044/9 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m810449/)",
         "wire number": "2",
         "component_wire": "M81044/9-24",
         "gauge": "24AWG",

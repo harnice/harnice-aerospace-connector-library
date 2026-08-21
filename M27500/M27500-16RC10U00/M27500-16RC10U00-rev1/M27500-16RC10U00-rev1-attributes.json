@@ -1,6 +1,8 @@
 {
   "specification": "MIL-DTL-27500",
   "properties": {
+    "mass": "0.1000lbs/ft",
+    "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
     "od": "0.292in",
     "conductors": "10",
     "component_wire_specification": "MIL-DTL-22759/11",
@@ -29,6 +31,8 @@
     "white": {
       "conductor": true,
       "properties": {
+        "mass": "0.0100lbs/ft",
+        "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
         "wire number": "1",
         "component_wire": "M22759/11-16",
         "gauge": "16AWG",
@@ -48,6 +52,8 @@
     "blue": {
       "conductor": true,
       "properties": {
+        "mass": "0.0100lbs/ft",
+        "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
         "wire number": "2",
         "component_wire": "M22759/11-16",
         "gauge": "16AWG",
@@ -70,6 +76,8 @@
     "orange": {
       "conductor": true,
       "properties": {
+        "mass": "0.0100lbs/ft",
+        "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
         "wire number": "3",
         "component_wire": "M22759/11-16",
         "gauge": "16AWG",
@@ -92,6 +100,8 @@
     "green": {
       "conductor": true,
       "properties": {
+        "mass": "0.0100lbs/ft",
+        "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
         "wire number": "4",
         "component_wire": "M22759/11-16",
         "gauge": "16AWG",
@@ -114,6 +124,8 @@
     "red": {
       "conductor": true,
       "properties": {
+        "mass": "0.0100lbs/ft",
+        "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
         "wire number": "5",
         "component_wire": "M22759/11-16",
         "gauge": "16AWG",
@@ -136,6 +148,8 @@
     "black": {
       "conductor": true,
       "properties": {
+        "mass": "0.0100lbs/ft",
+        "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
         "wire number": "6",
         "component_wire": "M22759/11-16",
         "gauge": "16AWG",
@@ -158,6 +172,8 @@
     "yellow": {
       "conductor": true,
       "properties": {
+        "mass": "0.0100lbs/ft",
+        "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
         "wire number": "7",
         "component_wire": "M22759/11-16",
         "gauge": "16AWG",
@@ -180,6 +196,8 @@
     "violet": {
       "conductor": true,
       "properties": {
+        "mass": "0.0100lbs/ft",
+        "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
         "wire number": "8",
         "component_wire": "M22759/11-16",
         "gauge": "16AWG",
@@ -202,6 +220,8 @@
     "gray": {
       "conductor": true,
       "properties": {
+        "mass": "0.0100lbs/ft",
+        "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
         "wire number": "9",
         "component_wire": "M22759/11-16",
         "gauge": "16AWG",
@@ -224,6 +244,8 @@
     "brown": {
       "conductor": true,
       "properties": {
+        "mass": "0.0100lbs/ft",
+        "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
         "wire number": "10",
         "component_wire": "M22759/11-16",
         "gauge": "16AWG",
