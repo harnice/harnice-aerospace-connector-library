@@ -1660,6 +1660,22 @@ COUPLING_NUT_LENGTH_MM = 16.0
 JAM24_LENGTH_MM = 32.51
 JAM24_K_MM = 22.61
 JAM24_NUT_LENGTH_MM = 5.59
+# Mating-face STEP features (low-fi). Wall matches Neutrik male cup rim.
+# Pin (24 and 26): deep scoop-proof cup; origin at the cup floor.
+# /24 socket: coplanar rim + center island with a 0.1 in annular groove.
+# /26 socket: flat coplanar barrel face (no annular groove).
+PIN_CAVITY_DEPTH_MM = 15.0
+PIN_CAVITY_WALL_MM = (19.0 - 15.75) / 2.0
+SOCKET_RING_DEPTH_MM = 0.1 * MM_PER_IN
+SOCKET_RING_WALL_MM = PIN_CAVITY_WALL_MM
+SOCKET_RING_WIDTH_MM = 0.1 * MM_PER_IN
+# Master key at +Z. /24: subtractive keyway halfway through the outer-ring
+# wall (never through). /26: additive bump on the barrel OD.
+KEY_WIDTH_MM = 2.54
+KEYWAY_WIDTH_MM = 3.20
+KEY_RADIAL_MM = 1.50
+KEY_BOOLEAN_OVERLAP_MM = 0.4
+PLUG26_NUT_WALL_MM = 0.6
 FULLY_MATED_RED = "#B91C1C"
 SHELL_24_ENVELOPE_MM = {
     "A": {"body": 16.99, "nut": 30.51, "numeric": 9},
@@ -1752,6 +1768,289 @@ def envelope_stations(shell_type, shell_size):
     if shell_type == "26":
         return series_iii_26_envelope_stations(shell_size)
     raise ValueError(f"Unsupported shell type '{shell_type}'")
+
+
+def pin_mating_cavity(stations):
+    """Deep scoop-proof cup from the mating face (pin STEP), or None."""
+    _x_face, r_face = stations[-1]
+    radius = r_face - PIN_CAVITY_WALL_MM
+    if radius <= 0.2:
+        return None
+    return {"dia_mm": 2.0 * radius, "depth_mm": PIN_CAVITY_DEPTH_MM}
+
+
+def socket_mating_ring(stations):
+    """Annular groove on a coplanar socket face (STEP only), or None.
+
+    Rim and center island stay at the mating plane; only the ring between
+    them is cut SOCKET_RING_DEPTH_MM deep.
+    """
+    _x_face, r_face = stations[-1]
+    r_outer = r_face - SOCKET_RING_WALL_MM
+    r_inner = r_outer - SOCKET_RING_WIDTH_MM
+    if r_inner <= 0.2:
+        return None
+    return {
+        "outer_dia_mm": 2.0 * r_outer,
+        "inner_dia_mm": 2.0 * r_inner,
+        "depth_mm": SOCKET_RING_DEPTH_MM,
+    }
+
+
+def step_origin_x_mm(stations, contact_type, shell_type="24"):
+    """X of the STEP origin in envelope coordinates.
+
+    Pin (24 and 26): cup floor (rim of the outer/inner ring at +depth).
+    Socket: coplanar mating face (rim / center island plane).
+    """
+    del shell_type  # face treatment is by contact type; kept for call-site clarity
+    x_face = stations[-1][0]
+    if str(contact_type).upper() == "P":
+        cavity = pin_mating_cavity(stations)
+        if cavity is not None:
+            return x_face - cavity["depth_mm"]
+    return x_face
+
+
+def shift_stations(stations, origin_x):
+    return [(x - origin_x, radius) for x, radius in stations]
+
+
+def pin_mating_cavity_stations(stations):
+    """Fallback profile if OpenCascade is unavailable."""
+    cavity = pin_mating_cavity(stations)
+    if cavity is None:
+        return list(stations)
+    x_face = stations[-1][0]
+    radius = cavity["dia_mm"] / 2.0
+    depth = cavity["depth_mm"]
+    return list(stations) + [
+        (x_face, radius),
+        (x_face - depth, radius),
+    ]
+
+
+def _ocp_positive_solid(stations):
+    from OCP.BRepGProp import BRepGProp
+    from OCP.GProp import GProp_GProps
+
+    body = step_utils._ocp_revolution_solid(stations)
+    props = GProp_GProps()
+    BRepGProp.VolumeProperties_s(body, props)
+    if props.Mass() < 0:
+        body.Reverse()
+    return body
+
+
+def _ocp_cut(body, tool, label):
+    from OCP.BRepAlgoAPI import BRepAlgoAPI_Cut
+
+    op = BRepAlgoAPI_Cut(body, tool)
+    op.SetFuzzyValue(0.05)
+    op.Build()
+    cut = op.Shape()
+    if not op.IsDone() or cut.IsNull():
+        raise RuntimeError(f"{label} cut failed")
+    return cut
+
+
+def _ocp_box(xmin, ymin, zmin, dx, dy, dz):
+    from OCP.BRepPrimAPI import BRepPrimAPI_MakeBox
+    from OCP.gp import gp_Pnt
+
+    return BRepPrimAPI_MakeBox(gp_Pnt(xmin, ymin, zmin), dx, dy, dz).Shape()
+
+
+def _ocp_tube(origin, direction, r_inner, r_outer, height):
+    """Hollow cylinder (outer minus inner)."""
+    outer = step_utils._ocp_cylinder(origin, direction, r_outer, height)
+    inner = step_utils._ocp_cylinder(
+        (origin[0] - 0.5, origin[1], origin[2]),
+        direction,
+        r_inner,
+        height + 1.0,
+    )
+    return _ocp_cut(outer, inner, "tube tool")
+
+
+def _plug26_layout(stations):
+    """Barrel / coupling-nut layout for a /26 plug after origin shift.
+
+    stations are the outer envelope: rear body (CC) then nut (DD) to face.
+    Section sketch: open annulus under the outer ring (red L), short key bump
+    on the barrel OD (blue box) that does not fill the channel.
+    """
+    if len(stations) < 4:
+        raise ValueError("26 envelope needs body+nut stations")
+    x_face = float(stations[-1][0])
+    r_nut = float(stations[-1][1])
+    r_body = float(stations[0][1])
+    body_end = x_face
+    for i in range(1, len(stations)):
+        if abs(stations[i][1] - r_nut) < 1e-6 and abs(stations[i - 1][1] - r_body) < 1e-6:
+            body_end = float(stations[i][0])
+            break
+    # Outer-ring wall thickness equals the open annulus width (user marks).
+    r_hollow = (r_body + r_nut) * 0.5
+    gap = r_hollow - r_body
+    key_radial = min(KEY_RADIAL_MM, max(0.6, gap * 0.55))
+    nut_len = x_face - body_end
+    key_axial = min(6.0, max(3.0, nut_len * 0.3))
+    return {
+        "x_face": x_face,
+        "x_rear": float(stations[0][0]),
+        "body_end": body_end,
+        "r_body": r_body,
+        "r_nut": r_nut,
+        "r_hollow": r_hollow,
+        "key_radial": key_radial,
+        "key_axial": key_axial,
+    }
+
+
+def _build_plug26_solid(stations):
+    """One solid: outer ring + open annulus channel + barrel (section sketch).
+
+    Keep the radial step at body_end as a connecting flange, then open the
+    annulus between barrel OD and nut ID so the red L-channel stays empty.
+    """
+    layout = _plug26_layout(stations)
+    x_face = layout["x_face"]
+    body_end = layout["body_end"]
+    r_body = layout["r_body"]
+    r_hollow = layout["r_hollow"]
+    body = _ocp_positive_solid(stations)
+    nut_len = x_face - body_end
+    if nut_len <= 0.2:
+        return body, layout
+    flange = 0.25
+    tool = _ocp_tube(
+        (body_end + flange, 0.0, 0.0),
+        (1.0, 0.0, 0.0),
+        r_body + 0.05,
+        r_hollow,
+        nut_len - flange + KEY_BOOLEAN_OVERLAP_MM,
+    )
+    body = _ocp_cut(body, tool, "26 annulus channel")
+    return body, layout
+
+
+def _apply_face_features(body, stations, shell_type, contact_type, part_number, face_radius=None):
+    """Pin scoop-proof cup or /24 socket annular ring at the mating face.
+
+    /26 sockets: flat coplanar barrel + outer-ring faces (no annular groove).
+    """
+    if face_radius is not None:
+        stations = list(stations[:-1]) + [(stations[-1][0], face_radius)]
+    x_face = float(stations[-1][0])
+    if str(contact_type).upper() == "P":
+        cavity = pin_mating_cavity(stations)
+        if cavity is None:
+            return body
+        depth = float(cavity["depth_mm"])
+        tool = step_utils._ocp_cylinder(
+            (x_face - depth, 0.0, 0.0),
+            (1.0, 0.0, 0.0),
+            float(cavity["dia_mm"]) / 2.0,
+            depth + 1.0,
+        )
+        return _ocp_cut(body, tool, f"{part_number} cavity")
+    if str(shell_type) == "26":
+        return body
+    ring = socket_mating_ring(stations)
+    if ring is None:
+        return body
+    depth = float(ring["depth_mm"])
+    tool = _ocp_tube(
+        (x_face - depth, 0.0, 0.0),
+        (1.0, 0.0, 0.0),
+        float(ring["inner_dia_mm"]) / 2.0,
+        float(ring["outer_dia_mm"]) / 2.0,
+        depth + 1.0,
+    )
+    return _ocp_cut(body, tool, f"{part_number} ring")
+
+
+def _key_prism_24(stations, contact_type):
+    """Subtractive keyway on the /24 outer-ring ID — halfway through the wall."""
+    x_face = float(stations[-1][0])
+    r_face = float(stations[-1][1])
+    wall = PIN_CAVITY_WALL_MM
+    r_id = r_face - wall
+    if str(contact_type).upper() == "P":
+        cavity = pin_mating_cavity(stations)
+        if cavity is None:
+            return None
+        axial = float(cavity["depth_mm"])
+    else:
+        ring = socket_mating_ring(stations)
+        if ring is None:
+            return None
+        axial = float(ring["depth_mm"])
+        r_id = float(ring["outer_dia_mm"]) / 2.0
+    overlap = KEY_BOOLEAN_OVERLAP_MM
+    half_wall = wall / 2.0
+    return _ocp_box(
+        x_face - axial - overlap,
+        -KEYWAY_WIDTH_MM / 2.0,
+        r_id - overlap,
+        axial + 2.0 * overlap,
+        KEYWAY_WIDTH_MM,
+        half_wall + overlap,
+    )
+
+
+def _key_prism_26(layout, contact_type):
+    """Short additive key bump on the /26 barrel OD at +Z (blue box in sketch)."""
+    del contact_type
+    x_face = layout["x_face"]
+    r_body = layout["r_body"]
+    key_radial = layout["key_radial"]
+    axial = layout["key_axial"]
+    overlap = KEY_BOOLEAN_OVERLAP_MM
+    return _ocp_box(
+        x_face - axial,
+        -KEY_WIDTH_MM / 2.0,
+        r_body - overlap,
+        axial + overlap,
+        KEY_WIDTH_MM,
+        key_radial + overlap,
+    )
+
+
+def _apply_key(body, stations, shell_type, contact_type, part_number, layout=None):
+    if str(shell_type) == "26":
+        if layout is None:
+            layout = _plug26_layout(stations)
+        tool = _key_prism_26(layout, contact_type)
+        return step_utils._ocp_fuse(body, tool)
+    tool = _key_prism_24(stations, contact_type)
+    if tool is None:
+        return body
+    return _ocp_cut(body, tool, f"{part_number} keyway")
+
+
+def _write_mating_step(path, part_number, stations, shell_type, contact_type):
+    """Build the STEP solid: envelope, mating face feature, then key at +Z."""
+    if str(shell_type) == "26":
+        body, layout = _build_plug26_solid(stations)
+        body = _apply_face_features(
+            body,
+            stations,
+            shell_type,
+            contact_type,
+            part_number,
+            face_radius=layout["r_body"],
+        )
+        body = _apply_key(
+            body, stations, shell_type, contact_type, part_number, layout=layout
+        )
+    else:
+        body = _ocp_positive_solid(stations)
+        body = _apply_face_features(body, stations, shell_type, contact_type, part_number)
+        body = _apply_key(body, stations, shell_type, contact_type, part_number)
+    step_utils._ocp_write_shape(body, path, part_number)
+    return path
 
 
 def silhouette_closed_mm(stations):
@@ -1876,15 +2175,28 @@ def _csys_overlay_svg(csys_children):
     return "\n".join(lines)
 
 
-def write_part_step(rev_dir, part_number, shell_type, shell_size):
+def write_part_step(rev_dir, part_number, shell_type, shell_size, contact_type="S"):
     path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-model.step")
-    step_utils.write_revolution_step(
-        path,
-        part_number,
-        envelope_stations(shell_type, shell_size),
-        description=f"D38999/{shell_type} low-fidelity envelope",
-    )
-    return path
+    gender = "pin" if str(contact_type).upper() == "P" else "socket"
+    description = f"D38999/{shell_type} low-fidelity envelope ({gender} mating face)"
+    stations = envelope_stations(shell_type, shell_size)
+    origin_x = step_origin_x_mm(stations, contact_type, shell_type)
+    stations = shift_stations(stations, origin_x)
+    try:
+        return _write_mating_step(path, part_number, stations, shell_type, contact_type)
+    except ImportError:
+        if str(contact_type).upper() == "P":
+            step_utils.write_revolution_step(
+                path,
+                part_number,
+                pin_mating_cavity_stations(stations),
+                description=description,
+            )
+        else:
+            step_utils.write_revolution_step(
+                path, part_number, stations, description=description
+            )
+        return path
 
 
 def series_iii_26_connector_svg(part_number, shell_size, finish=None):
@@ -2141,7 +2453,13 @@ def build_part(part_number, rev_dir):
         os.chdir(cwd)
 
 
-def main(step_only=False, svg_only=False, shell_types=None, use_cli=False):
+def main(
+    step_only=False,
+    svg_only=False,
+    shell_types=None,
+    contact_types=None,
+    use_cli=False,
+):
     state.set_rev(REVISION)
     state.set_product("part")
 
@@ -2150,12 +2468,14 @@ def main(step_only=False, svg_only=False, shell_types=None, use_cli=False):
 
     if shell_types is None:
         shell_types = ["24", "26"]
+    if contact_types is None:
+        contact_types = ["P", "S"]
 
     part_configurations = []
     for shell_type in shell_types:
         for finish in ["F", "K", "W", "Z"]:
             for insert_arrangement in INSERT_ARRANGEMENT_CODES:
-                for contact_type in ["P", "S"]:
+                for contact_type in contact_types:
                     for key in ["N", "A", "B", "C"]:
                         part_configurations.append(
                             {
@@ -2204,6 +2524,7 @@ def main(step_only=False, svg_only=False, shell_types=None, use_cli=False):
                     part_number,
                     part_configuration.get("shell_type"),
                     attributes.get("shell_size"),
+                    part_configuration.get("contact_type"),
                 )
             print(_progress_bar(i, total))
             continue
@@ -2261,6 +2582,7 @@ def main(step_only=False, svg_only=False, shell_types=None, use_cli=False):
             part_number,
             part_configuration.get("shell_type"),
             attributes.get("shell_size"),
+            part_configuration.get("contact_type"),
         )
 
         # RENDER THE PART
@@ -2283,9 +2605,15 @@ if __name__ == "__main__":
         shell_types = ["24"]
     elif "--26-only" in sys.argv:
         shell_types = ["26"]
+    contact_types = ["P", "S"]
+    if "--pins-only" in sys.argv:
+        contact_types = ["P"]
+    elif "--sockets-only" in sys.argv:
+        contact_types = ["S"]
     main(
         step_only="--step-only" in sys.argv,
         svg_only="--svg-only" in sys.argv,
         shell_types=shell_types,
+        contact_types=contact_types,
         use_cli="--cli" in sys.argv,
     )
