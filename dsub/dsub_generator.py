@@ -135,6 +135,86 @@ LIMITATIONS -- READ BEFORE TRUSTING A NUMBER FOR MANUFACTURING
     <0.5mm, but that was only spot-checked on the A-E envelope, not on
     F/G/H/J/K/L).
 
+GLENAIR CROSS-CHECK (2026-08-19) — every shell × gender × density
+------------------------------------------------------------------
+Source (downloaded 2026-08-19):
+  Glenair, "HiPer-D® M24308 Connectors and Accessories" (Series 28
+  catalog PDF). U.S. CAGE 06324.
+  URL: https://www.glenair.com/catalogs/hiper-d-connectors-and-accessories.pdf
+  CDN mirror used during the check:
+  https://cdn.glenair.com/catalogs/hiper-d-connectors-and-accessories.pdf
+  Product family: machined aluminum HiPer-D® — intermateable /
+  intermountable with stamped MIL-DTL-24308, not a drop-in dimensional
+  clone of the Amphenol Pcd stamped shell.
+
+Tables read from that catalog (catalog section B page footers):
+  - 280-019S socket / receptacle, standard M24308-type flange — face
+    dims A–G, shells 1–6 (catalog ~B-10; includes SD/HD insert rows)
+  - 280-086P pin / plug, standard M24308-type flange + banding porch —
+    face dims A–J, shells 1–6 (catalog ~B-19 / 280-086P DIMENSIONS)
+  - 280-018P pin face table (A–G) was consulted only to confirm letter
+    roles; the 280-086P A–J table was the plug numeric source for the
+    shell-by-shell Δ below.
+  Hermetic CODE RED 287-* sheets (e.g. 287-500 / 287-587 on
+  https://www.glenair.com/hermetic-connectors/mil-dtl-24308/) use a
+  different letter stack and were NOT used as the M24308 envelope
+  reference.
+
+IMPORTANT: Glenair HiPer-D figure letters are NOT the same letters as the
+Amphenol Pcd A–L table that feeds this module. Remap before comparing:
+
+    Our (Amphenol) letter     Glenair HiPer-D letter     Physical meaning
+    ------------------------  -------------------------  ---------------------
+    A                         A                          overall length + ears
+    E                         B                          flange height (short)
+    C                         C                          mounting-hole spacing
+    B                         D                          shell body width
+    D                         E (rcpt) / F (plug 086P)   shell body height
+    J (overall depth stand-in) G (rcpt) / J (plug 086P)  mating-axis depth*
+
+*HiPer-D is a thicker machined product; depth letters are not expected to
+match stamped M24308 / Amphenol J exactly.
+
+Method: for every variant this generator emits (Crimp×Plug/Receptacle×
+Standard/High×shells 1–6, and Solder Cup×Standard where present), take
+Amphenol midpoints and subtract the Glenair mm column after the remap
+above.
+
+Front-face results (A / E↔B / C / B↔D / D↔E|F):
+  - Shells 1–4, all densities & genders: |Δ| ≤ 0.05 mm on A, B, C, D, E.
+    Effectively exact agreement on the mating-face envelope.
+  - Shell 5–6 receptacles: A/B/C/D/E likewise within 0.05 mm of Glenair
+    (including the taller 50/78/104-pin flange E = 15.37 / 16.97 mm).
+  - Shell 5–6 plugs: Amphenol (and this module) keep plug E = 12.55 mm
+    and D = 8.355 mm — the same short-axis values as shells 1–4.
+    Glenair HiPer-D plugs grow E/B and D/F with the 3-row shells
+    (Δ ≈ −2.8 mm on shell 5, −4.4 mm on shell 6). That is a stamped-vs-
+    machined / catalog-family difference, not an OCR error in our A–E
+    table. Envelope code uses our Amphenol plug values as published.
+
+Depth (our J vs Glenair G/J):
+  - Our J is a constant 10.46–10.97 mm mid ≈ 10.715 mm (Amphenol crimp /
+    solder tables). Glenair receptacle G ≈ 10.97 mm on shells 1–4
+    (Δ ≈ −0.26 mm) and 13.56 / 15.14 mm on shells 5–6 (Δ ≈ −2.8 / −4.4 mm
+    because our J never steps up). Glenair plug J ≈ 11.73 mm on shells
+    1–4 (Δ ≈ −1.0 mm). Do NOT “fix” our J to HiPer-D — stamped
+    M24308 overall depth is the Amphenol/ITT/Positronic figure this
+    library targets; HiPer-D is deliberately thicker.
+
+Letters not cross-checked to Glenair face tables:
+  - Our F, G, H, K, L (Amphenol side-view / hardware letters) do not
+    share names or roles with HiPer-D F/G/H. G-as-shroud for shells 1–4
+    (~5.8–6.3 mm) remains an Amphenol-side-view read; Glenair’s G is
+    overall depth. No Glenair cell was used to overwrite F/G/H/K/L.
+
+Solder-cup MAX_total_depth (9.91 / 11.23 mm): no Glenair HiPer-D
+equivalent in the face tables above; left on the Amphenol/ITT read.
+
+Bottom line: every M24308 front-face envelope this library emits for
+shells 1–4 matches Glenair HiPer-D after letter remap. Shells 5–6
+receptacles match; plugs keep Amphenol’s shorter flange/body height.
+Mating-axis depth stays on the stamped-shell (Amphenol) J/MAX figures.
+
 USAGE
 -----
     from dsub_dimensions import get_dimension, list_variants

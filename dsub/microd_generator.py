@@ -48,10 +48,24 @@ each column is now understood to represent.
 
 CROSS-VALIDATION AGAINST MIL-DTL-83513/1H AND GLENAIR M83513/01–/02
 ---------------------------------------------------------------------
-Glenair sheet (same figure letters A–J as the QPL datasheet) and the
-Amphenol "Solder & Wire Type" table share the same millimetre values, but
-Amphenol's printed A–G labels are a collapsed / reordered subset of
-Glenair's A–J. Numeric matches for a 21-position plug:
+Official slash-sheet context (letter names differ from Amphenol's A–G):
+  MIL-DTL-83513/1H w/Amendment 1 (14 December 2011), Figure 1 — QPL
+  plug metal-shell solder-cup geometry. No public stable URL; DLA ASSIST
+  / DoD document server. Used only to confirm that Amphenol A/B/C match
+  official A / face-width / overall-depth numbers at 9 and 100 positions.
+
+Glenair QPL sheets (same figure letters A–J as the military drawing;
+downloaded 2026-08-19, U.S. CAGE 06324):
+  - MIL-DTL-83513/01 & /02 solder-cup metal shell, catalog sheet L-4:
+    https://www.glenair.com/micro-d/micro-d-connectors-and-hardware/pdf/1-and-2.pdf
+  - MIL-DTL-83513/03 & /04 pre-wired metal shell, Table I on L-6:
+    https://www.glenair.com/micro-d/micro-d-connectors-and-hardware/pdf/3-and-4.pdf
+    (/03–/04 Table I is dimensionally identical to /01–/02 for A–J.)
+  Parent index: https://www.glenair.com/micro-d/micro-d-connectors-and-hardware/
+
+Glenair and the Amphenol "Solder & Wire Type" table share the same
+millimetre values, but Amphenol's printed A–G labels are a collapsed /
+reordered subset of Glenair's A–J. Numeric matches for a 21-position plug:
 
     Amphenol A  = Glenair A   overall length with mounting ears (27.56 mm)
     Amphenol B  = Glenair B   shell width along the pin row (21.97 mm)
@@ -65,6 +79,39 @@ Earlier comments that called Amphenol B the "short axis" were wrong: B is
 the long axis of the D-shell. The STEP/SVG envelope must use B×D (our
 letters) for the shell and A×E for the flange.
 
+GLENAIR CROSS-CHECK (2026-08-19) — every QPL layout
+----------------------------------------------------
+Full cell-by-cell pass against the two Glenair PDFs cited above (L-4 /
+L-6). Letter map for the diff (ours → Glenair figure letter):
+    A→A, B→B, C→C, D→J, E→E, F→H, G→D
+
+Method: for every QPL insert (9/15/21/25/31/37/51/100) × Plug/Receptacle,
+compare our float to Glenair's published millimetre column. Shell 69 has
+no Glenair/QPL letter and was not scored.
+
+Results — pass ( |Δ| ≤ 0.05 mm ) unless noted:
+  - A, B, D(=J), F(=H): exact match on all scored layouts except
+    shell 25 A (ours 30.10 vs Glenair printed 30.01). 1.185 in × 25.4 =
+    30.099 → our 30.10 is the better inch conversion; keep 30.10.
+  - C: within +0.05 mm on 9–51 (Amphenol rounding). Shell 100 Plug exact
+    (35.13). Shell 100 Receptacle was WRONG (38.10 vs Glenair 36.86) —
+    corrected to 36.86 in `_ROWS` below.
+  - E: systematically −0.05 mm on sizes 9–37 (ours 7.82 vs Glenair 7.87 =
+    0.310 in). Size 51 exact (8.92). Size 100 was 10.10 vs Glenair 10.01 —
+    corrected to 10.01.
+  - G(=Glenair D, shroud): Plug +0.03 mm on 9–51 (4.70 vs 4.67); size 100
+    Plug was 6.88 vs 6.86 — corrected to 6.86. Receptacle +0.08 mm on
+    9–37 (6.43 vs 6.35) left as Amphenol OCR (envelope impact < 0.1 mm).
+    Size 100 Receptacle was WRONG (10.01 vs Glenair 8.46) — corrected
+    to 8.46 (the old 10.01 was Glenair E mis-filed into G).
+
+Envelope impact of the shell-100 fix: receptacle overall depth and
+mating-shroud depth now follow Glenair C/D. Regenerate M83513_*100*
+STEPs after pulling this change.
+
+Shell 69: Amphenol-catalog-only; not in Glenair /01–/04 QPL letters A–H.
+No Glenair row to compare.
+
 LETTER MEANINGS (this module's Amphenol-derived keys)
 -------------------------------------------------------
     A - overall length (MAX), along the pin row, including mounting ears
@@ -72,7 +119,7 @@ LETTER MEANINGS (this module's Amphenol-derived keys)
     C - overall mating-axis depth, Plug vs Receptacle (Glenair C)
     D - D-shell height, short axis (Glenair J) — constant 6.86 mm for 9–37
     E - flange height (Glenair E)
-    F - Glenair H (pigtail-family depth stand-in; see connector_depth_mm)
+    F - Glenair H (size-scaling length; not used in the STEP envelope)
     G - mating-shroud depth (Glenair D), Plug vs Receptacle
 
 MATERIAL / COLOR
@@ -85,13 +132,11 @@ source that states it.
 
 LIMITATIONS
 ------------
-  - Single-source catalog dataset, spot-checked against MIL-DTL-83513/1H
-    on A/B/C only.
-  - Physical meaning of F and G are inferred, not confirmed -- see above.
-  - Two values had obvious OCR digit-drop errors, corrected against the
-    mm figure printed alongside them or the shell-to-shell step pattern
-    (both flagged per-row in `note`): shell 25's A, and shell 31/shell
-    100's B.
+  - Primary transcription was Amphenol India Rev 04-22; Glenair /01–/04
+    is now the QPL cross-check for every scored cell (see above).
+  - Residual ±0.05–0.08 mm on a few E/G cells are Amphenol OCR vs Glenair
+    print; only shell-100 C/E/G receptacle (and G plug) were large enough
+    to correct in `_ROWS`.
   - This covers the metal-shell MDC-AL family (/01-/04 equivalent) only.
     Micro-D also exists in stainless steel (dimensionally identical per
     the catalog) and PCB-mount variants (/10 through /33) -- not included
@@ -219,17 +264,20 @@ _ROWS = [
         55.12,
         45.72,
         35.13,
-        38.10,
+        36.86,
         9.14,
-        10.10,
-        36.63,
-        6.88,
         10.01,
+        36.63,
+        6.86,
+        8.46,
         note="B corrected from OCR '15.72mm' to 45.72mm "
         "(=1.800in x 25.4) -- an obvious dropped leading "
         "digit; 15.72mm would make the largest shell's "
         "width smaller than every other shell size's, "
-        "which isn't physically plausible.",
+        "which isn't physically plausible. C_rcpt / G_rcpt / E "
+        "aligned to Glenair M83513/02-H* (was OCR 38.10 / 10.01 / "
+        "10.10; Glenair C Max 36.86, D Max 8.46, E Max 10.01). "
+        "G_plug set to Glenair D Max 6.86 (was 6.88).",
     ),
 ]
 
