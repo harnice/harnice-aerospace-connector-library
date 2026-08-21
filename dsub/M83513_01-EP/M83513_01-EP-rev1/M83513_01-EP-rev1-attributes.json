@@ -6,6 +6,22 @@
   ],
   "build_notes": [],
   "csys_children": {
+    "backshell_mate_3d": {
+      "x": -0.7339,
+      "y": 0.0,
+      "z": 0.0,
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0
+    },
+    "bundle_mate_3d": {
+      "x": -0.7339,
+      "y": 0.0,
+      "z": 0.0,
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0
+    },
     "flagnote-1-leader_dest": {
       "angle": 0.0,
       "distance": 0.8838582677165354,

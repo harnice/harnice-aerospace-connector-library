@@ -584,6 +584,32 @@ def shift_stations(stations, origin_x):
     return [(x - origin_x, radius) for x, radius in stations]
 
 
+def csys_6dof_mm(x_mm, y_mm, z_mm, rx=0.0, ry=0.0, rz=0.0):
+    """Child csys pose in inches/degrees relative to the STEP (part) origin.
+
+    (x, y, z) locates the child origin. (rx, ry, rz) are intrinsic XYZ Euler
+    rotations of the child axes, so the pose fully constrains 6 DOF.
+    """
+    return {
+        "x": round(float(x_mm) / MM_PER_IN, 4),
+        "y": round(float(y_mm) / MM_PER_IN, 4),
+        "z": round(float(z_mm) / MM_PER_IN, 4),
+        "rx": round(float(rx), 4),
+        "ry": round(float(ry), 4),
+        "rz": round(float(rz), 4),
+    }
+
+
+def rear_accessory_csys_3d(shell_size, shell_style, contact_type):
+    """Cable-entry / banding-platform face in the STEP frame (inches).
+
+    Identity orientation: +X toward the mating face, matching the part origin.
+    """
+    stations = envelope_stations(shell_size, shell_style)
+    origin_x = step_origin_x_mm(stations, contact_type)
+    return csys_6dof_mm(stations[0][0] - origin_x, 0.0, 0.0)
+
+
 def pin_mating_cavity_stations(stations):
     """Fallback profile if OpenCascade is unavailable."""
     cavity = pin_mating_cavity(stations)
@@ -945,7 +971,13 @@ def compile_part_attributes(part_configuration):
     tools.append("Glenair 601-101 Band-Master ATS micro banding tool")
 
     tmin, tmax = COUPLING_TORQUE_IN_LBS[shell_size]
-    csys = {"connector": connector_csys()}
+    csys = {
+        # 800-006 has an integral banding platform, not a backshell interface.
+        "bundle_mate_3d": rear_accessory_csys_3d(
+            shell_size, shell_style, part_configuration["contact_type"]
+        ),
+        "connector": connector_csys(),
+    }
     csys.update(flagnote_csys_children(shell_size, shell_style))
 
     return {
