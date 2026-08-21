@@ -1,4 +1,6 @@
 {
+  "mass": "0.1000lbs",
+  "mass_source": "ITT Cannon / Glenair Micro-D metal-shell weights, grams, and ITT wire grams/inch for pigtails: https://www.milnec.com/pdf/mil-dtl-83513/m83513-catalog-specs.pdf Stainless finish P adds the published stainless-steel adder.",
   "tools": [],
   "build_notes": [],
   "csys_children": {

@@ -63,6 +63,9 @@ delete_pngs = True
 # Specifications / materials and finishes:
 #   https://www.glenair.com/mighty-mouse/series-800-un-thread-mating/pdf/specifications-materials-and-finishes.pdf
 #
+# Connector weights (Series 800 cable-plug maximum, grams):
+#   https://www.glenair.com/mighty-mouse/series-800-un-thread-mating/pdf/connector-weights.pdf
+#
 # Coupling torque (Series 800 table):
 #   https://www.glenair.com/mighty-mouse/pdf/general-information-and-reference/recommended-torque-and-demate-values.pdf
 #
@@ -875,6 +878,53 @@ def flagnote_csys_children(shell_size, shell_style):
     return children
 
 
+
+# Glenair Series 800 cable-plug maximum weight, grams.
+# https://www.glenair.com/mighty-mouse/series-800-un-thread-mating/pdf/connector-weights.pdf
+# Table is aluminum. Style 16 (wave-spring nut) is ~12% heavier from the
+# larger hex. Stainless (Z1) uses density ratio 8.0/2.70.
+MASS_SOURCE = (
+    "Glenair Series 800 cable-plug maximum weights, grams: "
+    "https://www.glenair.com/mighty-mouse/series-800-un-thread-mating/pdf/connector-weights.pdf "
+    "Table is aluminum. Style 16 is scaled +12% for the larger hex nut; "
+    "stainless Z1 is scaled by density ratio 8.0/2.70."
+)
+MASS_PLUG_G = {
+    "5-3": {"P": 3.6, "S": 3.7},
+    "6-1": {"P": 4.3, "S": 4.4},
+    "6-4": {"P": 4.8, "S": 5.2},
+    "6-6": {"P": 4.9, "S": 5.3},
+    "6-7": {"P": 4.8, "S": 4.7},
+    "6-23": {"P": 4.3, "S": 4.6},
+    "7-1": {"P": 5.7, "S": 5.9},
+    "7-10": {"P": 6.9, "S": 7.4},
+    "7-25": {"P": 5.6, "S": 5.9},
+    "8-2": {"P": 7.4, "S": 8.1},
+    "8-13": {"P": 6.7, "S": 7.2},
+    "8-28": {"P": 7.6, "S": 8.6},
+    "9-4": {"P": 8.7, "S": 8.8},
+    "9-19": {"P": 10.5, "S": 11.2},
+    "9-210": {"P": 8.5, "S": 8.8},
+    "10-2": {"P": 9.5, "S": 10.8},
+    "10-5": {"P": 9.7, "S": 11.1},
+    "10-26": {"P": 7.9, "S": 8.6},
+    "12-2": {"P": 10.5, "S": 10.6},
+    "12-3": {"P": 10.7, "S": 10.8},
+    "12-7": {"P": 14.3, "S": 16.9},
+    "12-37": {"P": 12.5, "S": 16.1},
+    "12-220": {"P": 11.3, "S": 12.2},
+}
+
+
+def part_mass_lbs(shell_style, finish, insert_arrangement, contact_type):
+    grams = MASS_PLUG_G[insert_arrangement][contact_type]
+    if str(shell_style) == "16":
+        grams *= 1.12
+    if finish == "Z1":
+        grams *= 8.0 / 2.70
+    return grams / 453.59237
+
+
 def compile_part_attributes(part_configuration):
     shell_size = part_configuration["shell_size"]
     shell_style = part_configuration["shell_style"]
@@ -899,6 +949,8 @@ def compile_part_attributes(part_configuration):
     csys.update(flagnote_csys_children(shell_size, shell_style))
 
     return {
+        "mass": f"{part_mass_lbs(shell_style, part_configuration['finish'], insert_arrangement, part_configuration['contact_type']):.4f}lbs",
+        "mass_source": MASS_SOURCE,
         "tools": tools,
         "build_notes": [
             f"Torque coupling nut to {tmin}-{tmax} in-lbs during harness installation",

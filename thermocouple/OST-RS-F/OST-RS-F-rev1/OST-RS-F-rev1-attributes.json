@@ -1,4 +1,6 @@
 {
+  "mass": "0.0355lbs",
+  "mass_source": "Estimated. Omega does not publish a gram weight. ~15.5 g from the OST envelope (glass-filled nylon body plus pins/screws) using dimensions from https://assets.omega.com/pdf/connectors/thermocouple-and-rtd-connectors/OSTW_HST_OSTW.pdf",
   "tools": [
     "Phillips/slot screwdriver"
   ],

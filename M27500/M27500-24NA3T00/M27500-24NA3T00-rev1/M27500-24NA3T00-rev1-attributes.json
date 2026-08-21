@@ -1,6 +1,8 @@
 {
   "specification": "MIL-DTL-27500",
   "properties": {
+    "mass": "0.0126lbs/ft",
+    "mass_source": "Component wires: M81381/13 slash-sheet max weight, lbs/1000 ft (FDH Aero / Thermax, https://fdhaero.com/item/m81381-13-wire-medium-weight-high-strength-conductor/). Shield and jacket mass are a geometric estimate from the same core-packing / braid-wall / jacket-wall model used for OD; MIL-DTL-27500 does not tabulate finished cable weight.",
     "od": "0.111in",
     "conductors": "3",
     "component_wire_specification": "MIL-DTL-81381/13",
@@ -13,15 +15,7 @@
   "tools": [
     "Cable cutter",
     "Wire stripper",
-    "Measuring tape",
-    "Shield comb / pick",
-    "Shield termination kit"
-  ],
-  "build_notes": [
-    "Component wires are MIL-DTL-81381/13, 24 AWG, 19x36",
-    "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
-    "Shield is round, tin-coated copper at 85% minimum coverage",
-    "Overall diameter 0.111 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
+    "Shield comb / pick"
   ],
   "shield": {
     "properties": {
@@ -42,6 +36,8 @@
       "white": {
         "conductor": true,
         "properties": {
+          "mass": "0.0022lbs/ft",
+          "mass_source": "M81381/13 slash-sheet max weight, lbs/1000 ft (FDH Aero / Thermax, https://fdhaero.com/item/m81381-13-wire-medium-weight-high-strength-conductor/)",
           "wire number": "1",
           "component_wire": "M81381/13-24",
           "gauge": "24AWG",
@@ -61,6 +57,8 @@
       "blue": {
         "conductor": true,
         "properties": {
+          "mass": "0.0022lbs/ft",
+          "mass_source": "M81381/13 slash-sheet max weight, lbs/1000 ft (FDH Aero / Thermax, https://fdhaero.com/item/m81381-13-wire-medium-weight-high-strength-conductor/)",
           "wire number": "2",
           "component_wire": "M81381/13-24",
           "gauge": "24AWG",
@@ -83,6 +81,8 @@
       "orange": {
         "conductor": true,
         "properties": {
+          "mass": "0.0022lbs/ft",
+          "mass_source": "M81381/13 slash-sheet max weight, lbs/1000 ft (FDH Aero / Thermax, https://fdhaero.com/item/m81381-13-wire-medium-weight-high-strength-conductor/)",
           "wire number": "3",
           "component_wire": "M81381/13-24",
           "gauge": "24AWG",

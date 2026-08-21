@@ -1,4 +1,6 @@
 {
+  "mass": "0.0683lbs",
+  "mass_source": "Typical QPL steel-shell masses by shell size, grams including contacts; not a single manufacturer weight table. Aluminum finish A is scaled 0.58x; high-density adds 0.12 g per extra contact over the standard-density count.",
   "tools": [
     "M22520/2-01 crimp tool",
     "M81969/39-01 extraction tool"

@@ -1,6 +1,8 @@
 {
   "specification": "MIL-DTL-27500",
   "properties": {
+    "mass": "0.0666lbs/ft",
+    "mass_source": "Component wires: M22759/18 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires catalog, https://www.glenair.com/wire-and-cable/m22759-wires/pdf/m22759-wires.pdf). Shield and jacket mass are a geometric estimate from the same core-packing / braid-wall / jacket-wall model used for OD; MIL-DTL-27500 does not tabulate finished cable weight.",
     "od": "0.266in",
     "conductors": "2",
     "component_wire_specification": "MIL-DTL-22759/18",
@@ -13,16 +15,8 @@
   "tools": [
     "Cable cutter",
     "Wire stripper",
-    "Measuring tape",
     "Jacket slitting tool",
-    "Shield comb / pick",
-    "Shield termination kit"
-  ],
-  "build_notes": [
-    "Component wires are MIL-DTL-22759/18, 12 AWG, 37x28",
-    "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
-    "Shield is round, tin-coated copper at 85% minimum coverage",
-    "Overall diameter 0.266 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
+    "Shield comb / pick"
   ],
   "jacket": {
     "properties": {
@@ -52,6 +46,8 @@
         "white": {
           "conductor": true,
           "properties": {
+            "mass": "0.0210lbs/ft",
+            "mass_source": "M22759/18 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires catalog, https://www.glenair.com/wire-and-cable/m22759-wires/pdf/m22759-wires.pdf)",
             "wire number": "1",
             "component_wire": "M22759/18-12",
             "gauge": "12AWG",
@@ -71,6 +67,8 @@
         "blue": {
           "conductor": true,
           "properties": {
+            "mass": "0.0210lbs/ft",
+            "mass_source": "M22759/18 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires catalog, https://www.glenair.com/wire-and-cable/m22759-wires/pdf/m22759-wires.pdf)",
             "wire number": "2",
             "component_wire": "M22759/18-12",
             "gauge": "12AWG",

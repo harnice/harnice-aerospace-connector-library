@@ -1,6 +1,8 @@
 {
   "specification": "MIL-DTL-27500",
   "properties": {
+    "mass": "0.0276lbs/ft",
+    "mass_source": "Component wires: M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/). Shield and jacket mass are a geometric estimate from the same core-packing / braid-wall / jacket-wall model used for OD; MIL-DTL-27500 does not tabulate finished cable weight.",
     "od": "0.158in",
     "conductors": "7",
     "component_wire_specification": "MIL-DTL-81044/12",
@@ -13,16 +15,8 @@
   "tools": [
     "Cable cutter",
     "Wire stripper",
-    "Measuring tape",
     "Jacket slitting tool",
-    "Shield comb / pick",
-    "Shield termination kit"
-  ],
-  "build_notes": [
-    "Component wires are MIL-DTL-81044/12, 24 AWG, 19x36",
-    "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
-    "Shield is round, tin-coated copper at 85% minimum coverage",
-    "Overall diameter 0.158 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
+    "Shield comb / pick"
   ],
   "jacket": {
     "properties": {
@@ -52,6 +46,8 @@
         "white": {
           "conductor": true,
           "properties": {
+            "mass": "0.0022lbs/ft",
+            "mass_source": "M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)",
             "wire number": "1",
             "component_wire": "M81044/12-24",
             "gauge": "24AWG",
@@ -71,6 +67,8 @@
         "blue": {
           "conductor": true,
           "properties": {
+            "mass": "0.0022lbs/ft",
+            "mass_source": "M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)",
             "wire number": "2",
             "component_wire": "M81044/12-24",
             "gauge": "24AWG",
@@ -93,6 +91,8 @@
         "orange": {
           "conductor": true,
           "properties": {
+            "mass": "0.0022lbs/ft",
+            "mass_source": "M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)",
             "wire number": "3",
             "component_wire": "M81044/12-24",
             "gauge": "24AWG",
@@ -115,6 +115,8 @@
         "green": {
           "conductor": true,
           "properties": {
+            "mass": "0.0022lbs/ft",
+            "mass_source": "M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)",
             "wire number": "4",
             "component_wire": "M81044/12-24",
             "gauge": "24AWG",
@@ -137,6 +139,8 @@
         "red": {
           "conductor": true,
           "properties": {
+            "mass": "0.0022lbs/ft",
+            "mass_source": "M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)",
             "wire number": "5",
             "component_wire": "M81044/12-24",
             "gauge": "24AWG",
@@ -159,6 +163,8 @@
         "black": {
           "conductor": true,
           "properties": {
+            "mass": "0.0022lbs/ft",
+            "mass_source": "M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)",
             "wire number": "6",
             "component_wire": "M81044/12-24",
             "gauge": "24AWG",
@@ -181,6 +187,8 @@
         "yellow": {
           "conductor": true,
           "properties": {
+            "mass": "0.0022lbs/ft",
+            "mass_source": "M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)",
             "wire number": "7",
             "component_wire": "M81044/12-24",
             "gauge": "24AWG",

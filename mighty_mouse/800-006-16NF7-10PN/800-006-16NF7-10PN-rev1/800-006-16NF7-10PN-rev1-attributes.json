@@ -1,4 +1,6 @@
 {
+  "mass": "0.0170lbs",
+  "mass_source": "Glenair Series 800 cable-plug maximum weights, grams: https://www.glenair.com/mighty-mouse/series-800-un-thread-mating/pdf/connector-weights.pdf Table is aluminum. Style 16 is scaled +12% for the larger hex nut; stainless Z1 is scaled by density ratio 8.0/2.70.",
   "tools": [
     "M22520/2-01 crimp tool",
     "Glenair 809-005 positioner",

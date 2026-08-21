@@ -1,6 +1,8 @@
 {
   "specification": "MIL-DTL-27500",
   "properties": {
+    "mass": "0.0902lbs/ft",
+    "mass_source": "Component wires: M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf). Shield and jacket mass are a geometric estimate from the same core-packing / braid-wall / jacket-wall model used for OD; MIL-DTL-27500 does not tabulate finished cable weight.",
     "od": "0.294in",
     "conductors": "8",
     "component_wire_specification": "MIL-DTL-22759/16",
@@ -12,13 +14,7 @@
   "tools": [
     "Cable cutter",
     "Wire stripper",
-    "Measuring tape",
     "Jacket slitting tool"
-  ],
-  "build_notes": [
-    "Component wires are MIL-DTL-22759/16, 16 AWG, 19x29",
-    "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
-    "Overall diameter 0.294 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
   ],
   "jacket": {
     "properties": {
@@ -39,6 +35,8 @@
       "white": {
         "conductor": true,
         "properties": {
+          "mass": "0.0099lbs/ft",
+          "mass_source": "M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)",
           "wire number": "1",
           "component_wire": "M22759/16-16",
           "gauge": "16AWG",
@@ -58,6 +56,8 @@
       "blue": {
         "conductor": true,
         "properties": {
+          "mass": "0.0099lbs/ft",
+          "mass_source": "M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)",
           "wire number": "2",
           "component_wire": "M22759/16-16",
           "gauge": "16AWG",
@@ -80,6 +80,8 @@
       "orange": {
         "conductor": true,
         "properties": {
+          "mass": "0.0099lbs/ft",
+          "mass_source": "M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)",
           "wire number": "3",
           "component_wire": "M22759/16-16",
           "gauge": "16AWG",
@@ -102,6 +104,8 @@
       "green": {
         "conductor": true,
         "properties": {
+          "mass": "0.0099lbs/ft",
+          "mass_source": "M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)",
           "wire number": "4",
           "component_wire": "M22759/16-16",
           "gauge": "16AWG",
@@ -124,6 +128,8 @@
       "red": {
         "conductor": true,
         "properties": {
+          "mass": "0.0099lbs/ft",
+          "mass_source": "M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)",
           "wire number": "5",
           "component_wire": "M22759/16-16",
           "gauge": "16AWG",
@@ -146,6 +152,8 @@
       "black": {
         "conductor": true,
         "properties": {
+          "mass": "0.0099lbs/ft",
+          "mass_source": "M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)",
           "wire number": "6",
           "component_wire": "M22759/16-16",
           "gauge": "16AWG",
@@ -168,6 +176,8 @@
       "yellow": {
         "conductor": true,
         "properties": {
+          "mass": "0.0099lbs/ft",
+          "mass_source": "M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)",
           "wire number": "7",
           "component_wire": "M22759/16-16",
           "gauge": "16AWG",
@@ -190,6 +200,8 @@
       "violet": {
         "conductor": true,
         "properties": {
+          "mass": "0.0099lbs/ft",
+          "mass_source": "M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)",
           "wire number": "8",
           "component_wire": "M22759/16-16",
           "gauge": "16AWG",

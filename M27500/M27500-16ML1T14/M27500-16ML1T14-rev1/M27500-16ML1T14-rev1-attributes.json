@@ -1,6 +1,8 @@
 {
   "specification": "MIL-DTL-27500",
   "properties": {
+    "mass": "0.0160lbs/ft",
+    "mass_source": "Component wires: M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/). Shield and jacket mass are a geometric estimate from the same core-packing / braid-wall / jacket-wall model used for OD; MIL-DTL-27500 does not tabulate finished cable weight.",
     "od": "0.108in",
     "conductors": "1",
     "component_wire_specification": "MIL-DTL-81044/12",
@@ -13,16 +15,8 @@
   "tools": [
     "Cable cutter",
     "Wire stripper",
-    "Measuring tape",
     "Jacket slitting tool",
-    "Shield comb / pick",
-    "Shield termination kit"
-  ],
-  "build_notes": [
-    "Component wires are MIL-DTL-81044/12, 16 AWG, 19x29",
-    "Wire identification per MIL-DTL-27500 Table IIIA using the stripe method",
-    "Shield is round, tin-coated copper at 85% minimum coverage",
-    "Overall diameter 0.108 in is estimated from the component wire diameter; MIL-DTL-27500 does not tabulate finished cable OD"
+    "Shield comb / pick"
   ],
   "jacket": {
     "properties": {
@@ -52,6 +46,8 @@
         "white": {
           "conductor": true,
           "properties": {
+            "mass": "0.0092lbs/ft",
+            "mass_source": "M81044/12 slash-sheet max weight, lbs/1000 ft (Ryan Electronics, https://www.ryanelectronics.com/products/m8104412/)",
             "wire number": "1",
             "component_wire": "M81044/12-16",
             "gauge": "16AWG",
