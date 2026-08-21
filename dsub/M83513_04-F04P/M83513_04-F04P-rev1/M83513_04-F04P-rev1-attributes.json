@@ -4,6 +4,22 @@
   "tools": [],
   "build_notes": [],
   "csys_children": {
+    "backshell_mate_3d": {
+      "x": -1.102,
+      "y": 0.0,
+      "z": 0.0,
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0
+    },
+    "bundle_mate_3d": {
+      "x": -1.102,
+      "y": 0.0,
+      "z": 0.0,
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0
+    },
     "flagnote-1-leader_dest": {
       "angle": 0.0,
       "distance": 1.101968503937008,

@@ -1816,6 +1816,34 @@ def shift_stations(stations, origin_x):
     return [(x - origin_x, radius) for x, radius in stations]
 
 
+def csys_6dof_mm(x_mm, y_mm, z_mm, rx=0.0, ry=0.0, rz=0.0):
+    """Child csys pose in inches/degrees relative to the STEP (part) origin.
+
+    (x, y, z) locates the child origin. (rx, ry, rz) are intrinsic XYZ Euler
+    rotations of the child axes, so the pose fully constrains 6 DOF.
+    """
+    return {
+        "x": round(float(x_mm) / MM_PER_IN, 4),
+        "y": round(float(y_mm) / MM_PER_IN, 4),
+        "z": round(float(z_mm) / MM_PER_IN, 4),
+        "rx": round(float(rx), 4),
+        "ry": round(float(ry), 4),
+        "rz": round(float(rz), 4),
+    }
+
+
+def rear_accessory_csys_3d(shell_type, shell_size, contact_type):
+    """Rear accessory face in the STEP frame (inches), identity orientation.
+
+    Same plane as the STEP rear body face. +X toward the mating face, +Z at
+    the master key, matching the part origin so coinciding this csys
+    constrains all 6 DOF.
+    """
+    stations = envelope_stations(shell_type, shell_size)
+    origin_x = step_origin_x_mm(stations, contact_type, shell_type)
+    return csys_6dof_mm(stations[0][0] - origin_x, 0.0, 0.0)
+
+
 def pin_mating_cavity_stations(stations):
     """Fallback profile if OpenCascade is unavailable."""
     cavity = pin_mating_cavity(stations)
@@ -2137,6 +2165,8 @@ def _csys_overlay_svg(csys_children):
     arrow_size = 6
     lines = ['  <g id="output csys locations">']
     for csys_name, csys in csys_children.items():
+        if str(csys_name).endswith("_3d"):
+            continue
         x = float(csys.get("x", 0)) * PX_PER_IN
         y = float(csys.get("y", 0)) * PX_PER_IN
         angle_rad = math.radians(float(csys.get("angle", 0)))
@@ -2516,15 +2546,27 @@ def compile_part_attributes(part_configuration):
         tools.append(f"{CONTACT_SIZES.get(contact_size).get('crimp_tool')} crimp tool")
         tools.append(f"{CONTACT_SIZES.get(contact_size).get('extraction_tool')} extraction tool")
 
+    mate_3d = rear_accessory_csys_3d(
+        part_configuration.get("shell_type"),
+        part_configuration.get("insert_arrangement")[0],
+        part_configuration.get("contact_type"),
+    )
+    csys = {
+        "backshell_mate_3d": mate_3d,
+        "bundle_mate_3d": mate_3d,
+    }
+    csys.update(
+        flagnote_csys_children(
+            part_configuration.get("shell_type"),
+            part_configuration.get("insert_arrangement")[0],
+        )
+    )
     attributes = {
         "mass": f"{part_mass_lbs(part_configuration.get('shell_type'), part_configuration.get('finish'), insert_arrangement, part_configuration.get('contact_type')):.4f}lbs",
         "mass_source": MASS_SOURCE,
         "tools": tools,
         "build_notes": [],
-        "csys_children": flagnote_csys_children(
-            part_configuration.get("shell_type"),
-            part_configuration.get("insert_arrangement")[0],
-        ),
+        "csys_children": csys,
         "contacts": contacts,
         "shell_size": part_configuration.get("insert_arrangement")[0],
     }

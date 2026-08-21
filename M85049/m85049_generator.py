@@ -903,6 +903,54 @@ def write_part_step(rev_dir, part_number, orientation, shell_size, entry_size):
     raise ValueError(f"Unknown M85049 envelope kind {kind!r}")
 
 
+def csys_6dof_mm(x_mm, y_mm, z_mm, rx=0.0, ry=0.0, rz=0.0):
+    """Child csys pose in inches/degrees relative to the STEP (part) origin.
+
+    (x, y, z) locates the child origin. (rx, ry, rz) are intrinsic XYZ Euler
+    rotations of the child axes, so the pose fully constrains 6 DOF.
+    """
+    return {
+        "x": round(float(x_mm) / INCH_TO_MM, 4),
+        "y": round(float(y_mm) / INCH_TO_MM, 4),
+        "z": round(float(z_mm) / INCH_TO_MM, 4),
+        "rx": round(float(rx), 4),
+        "ry": round(float(ry), 4),
+        "rz": round(float(rz), 4),
+    }
+
+
+def bundle_mate_csys_3d(orientation, shell_size, entry_size):
+    """Cable-entry face in the STEP frame (inches).
+
+    Same plane as the STEP banding-platform free end. +X into the backshell
+    (toward the connector), +Z matching the part origin. Straight parts keep
+    identity orientation; 45°/90° rotate about Z so +X follows the entry axis.
+    """
+    kind, geom, _radii = backshell_envelope_mm(orientation, shell_size, entry_size)
+    if kind == "revolution":
+        face_x = float(geom[-1][0])
+        entry_x = float(geom[0][0])
+        return csys_6dof_mm(entry_x - face_x, 0.0, 0.0)
+    layout = step_utils._elbow_layout(
+        geom["entry"],
+        geom["corner"],
+        geom["angle_deg"],
+        geom["exit_length"],
+        geom["nut_length"],
+    )
+    fx, fy, fz = layout["p_face"]
+    ex, ey, ez = geom["entry"]
+    px, py, pz = ex - fx, ey - fy, ez - fz
+    ang = math.atan2(layout["uy"], layout["ux"])
+    ca, sa = math.cos(-ang), math.sin(-ang)
+    return csys_6dof_mm(
+        px * ca - py * sa,
+        px * sa + py * ca,
+        pz,
+        rz=math.degrees(-ang),
+    )
+
+
 
 def backshell_svg(part_number, orientation, shell_size, entry_size, finish=None):
     if orientation == "straight":
@@ -1400,6 +1448,7 @@ def compile_part_attributes(part_configuration):
     csys = {
         # Origin = right end of cable-side knurl; knurl/cable −X; body +X
         "connector": connector_csys(orientation, shell_size),
+        "bundle_mate_3d": bundle_mate_csys_3d(orientation, shell_size, entry_size),
     }
     csys.update(flagnote_csys_children(orientation, shell_size, entry_size))
 

@@ -761,6 +761,32 @@ PIN_CAVITY_DEPTH_MM = 0.15 * MM_PER_IN
 PIN_CAVITY_WALL_MM = 0.5
 
 
+def csys_6dof_mm(x_mm, y_mm, z_mm, rx=0.0, ry=0.0, rz=0.0):
+    """Child csys pose in inches/degrees relative to the STEP (part) origin.
+
+    (x, y, z) locates the child origin. (rx, ry, rz) are intrinsic XYZ Euler
+    rotations of the child axes, so the pose fully constrains 6 DOF.
+    """
+    return {
+        "x": round(float(x_mm) / MM_PER_IN, 4),
+        "y": round(float(y_mm) / MM_PER_IN, 4),
+        "z": round(float(z_mm) / MM_PER_IN, 4),
+        "rx": round(float(rx), 4),
+        "ry": round(float(ry), 4),
+        "rz": round(float(rz), 4),
+    }
+
+
+def cable_side_csys_3d(part_configuration):
+    """Cable-side face in the STEP frame (inches), identity orientation."""
+    from dsub_step_mating import step_origin_x_mm as origin_x_mm
+
+    segs = envelope_prisms_mm(part_configuration)
+    is_pin = str(part_configuration["gender"]).lower() == "plug"
+    origin_x = origin_x_mm(segs, is_pin, PIN_CAVITY_DEPTH_MM)
+    return csys_6dof_mm(-origin_x, 0.0, 0.0)
+
+
 def write_part_step(rev_dir, part_number, part_configuration):
     """Write STEP with mating-face origin; plugs get a shallow set-in cup."""
     from dsub_step_mating import write_mating_prism_step
@@ -865,12 +891,15 @@ def compile_part_attributes(part_configuration):
     else:
         tools = []
 
+    mate_3d = cable_side_csys_3d(part_configuration)
     return {
         "mass": f"{part_mass_lbs(part_configuration['connector_type'], part_configuration['gender'], shell_size, part_configuration['finish'], part_configuration.get('wire_type')):.4f}lbs",
         "mass_source": MASS_SOURCE,
         "tools": tools,
         "build_notes": [],
         "csys_children": {
+            "backshell_mate_3d": mate_3d,
+            "bundle_mate_3d": mate_3d,
             **flagnote_csys_children(
                 connector_depth_mm(
                     shell_size,
