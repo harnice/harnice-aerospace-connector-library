@@ -793,8 +793,9 @@ def envelope_prisms_mm(part_configuration):
 
 
 # Plug STEP set-in (~Micro-D mating engagement; Glenair D ≈ 0.184 in).
-# Origin at cup floor. Receptacles: solid face at the origin. Wall is thin
-# relative to the ~6.9 mm shell height (not the Neutrik XLR cup rim).
+# Origin is the cable-side face (same as the drawing). Receptacles: solid
+# mating face. Wall is thin relative to the ~6.9 mm shell height (not the
+# Neutrik XLR cup rim).
 PIN_CAVITY_DEPTH_MM = 0.15 * MM_PER_IN
 PIN_CAVITY_WALL_MM = 0.5
 
@@ -815,18 +816,13 @@ def csys_6dof_mm(x_mm, y_mm, z_mm, rx=0.0, ry=0.0, rz=0.0):
     }
 
 
-def cable_side_csys_3d(part_configuration):
+def cable_side_csys_3d(_part_configuration=None):
     """Cable-side face in the STEP frame (inches), identity orientation."""
-    from dsub_step_mating import step_origin_x_mm as origin_x_mm
-
-    segs = envelope_prisms_mm(part_configuration)
-    is_pin = str(part_configuration["gender"]).lower() == "plug"
-    origin_x = origin_x_mm(segs, is_pin, PIN_CAVITY_DEPTH_MM)
-    return csys_6dof_mm(-origin_x, 0.0, 0.0)
+    return csys_6dof_mm(0.0, 0.0, 0.0)
 
 
 def write_part_step(rev_dir, part_number, part_configuration):
-    """Write STEP with mating-face origin; plugs get a shallow set-in cup."""
+    """Write STEP with cable-side origin; plugs get a shallow set-in cup."""
     from dsub_step_mating import write_mating_prism_step
 
     path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-model.step")

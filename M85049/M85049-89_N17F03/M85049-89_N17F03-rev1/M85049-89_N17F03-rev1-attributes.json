@@ -11,19 +11,19 @@
     "Torque to 40 in-lbs"
   ],
   "csys_children": {
-    "bundle_mate_3d": {
-      "x": -2.001,
-      "y": 0.891,
-      "z": 0.0,
-      "rx": 0.0,
-      "ry": 0.0,
-      "rz": -45.0
-    },
     "connector": {
       "x": 1.694888527117068,
       "y": 0.7848885271170678,
       "angle": 0,
       "rotation": 45
+    },
+    "bundle_mate_3d": {
+      "x": -0.35,
+      "y": 0.0,
+      "z": 0.0,
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0
     },
     "leader_center": {
       "x": 0.8524,

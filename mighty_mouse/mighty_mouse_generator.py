@@ -532,8 +532,9 @@ INCH_TO_MM = 25.4
 MM_PER_IN = INCH_TO_MM
 
 # Pin STEP only: shallow scoop-proof cup (~Series 800 mating engagement).
-# Origin at the cup floor; rim at +PIN_CAVITY_DEPTH_MM. No keying / annulus
-# (Mighty Mouse plugs here have no backshell interface).
+# Part origin is the cable-side knurl (same as the drawing); the cup stays
+# at the mating face. No keying / annulus (Mighty Mouse plugs here have no
+# backshell interface).
 PIN_CAVITY_DEPTH_MM = 0.3 * MM_PER_IN
 PIN_CAVITY_WALL_MM = (19.0 - 15.75) / 2.0
 
@@ -570,14 +571,12 @@ def pin_mating_cavity(stations):
 def step_origin_x_mm(stations, contact_type):
     """X of the STEP origin in envelope coordinates.
 
-    Pin: cup floor. Socket: coplanar mating face.
+    Cable-side / drawing origin (x = 0). The knurl and cable overlap −X;
+    +X is toward the mating face. Pin cups stay at the mating face — they
+    do not move the part origin.
     """
-    x_face = stations[-1][0]
-    if str(contact_type).upper() == "P":
-        cavity = pin_mating_cavity(stations)
-        if cavity is not None:
-            return x_face - cavity["depth_mm"]
-    return x_face
+    del stations, contact_type
+    return 0.0
 
 
 def shift_stations(stations, origin_x):
@@ -674,7 +673,7 @@ def _write_mating_step(path, part_number, stations, contact_type):
 
 
 def write_part_step(rev_dir, part_number, shell_size, shell_style, contact_type="S"):
-    """Write STEP envelope; pins include a ~0.3 in mating-face cup."""
+    """Write STEP envelope at the cable-side origin; pins include a mating-face cup."""
     path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-model.step")
     gender = "pin" if str(contact_type).upper() == "P" else "socket"
     description = (
@@ -1049,6 +1048,11 @@ def main(step_only=False):
 
         if step_only:
             os.makedirs(rev_dir, exist_ok=True)
+            json_path = os.path.join(
+                rev_dir, f"{part_number}-rev{REVISION}-attributes.json"
+            )
+            with open(json_path, "w") as f:
+                json.dump(compile_part_attributes(part_configuration), f, indent=2)
             write_part_step(
                 rev_dir,
                 part_number,

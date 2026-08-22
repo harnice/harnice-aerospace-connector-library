@@ -1630,7 +1630,7 @@ def _diamond_hatch(x, y, w, h, color, spacing=6.5, stroke_width=0.85):
 #   https://www.milnec.com/mil-38999-sst/d38999-26-sst-datasheet.pdf
 # Origin is 0.25 in inboard of the rear accessory face, on the axis, so the
 # accessory threads overlap −X (same idea as the M85049 banding platform).
-# +X toward the mating face. STEP omits knurl texture.
+# +X toward the mating face. STEP uses this same cable-side origin.
 SHELL_ENVELOPE_MM = {
     "A": {"cc": 18.60, "dd": 21.79, "q_max": 21.8, "length": 31.34, "numeric": 9},
     "B": {"cc": 21.30, "dd": 24.99, "q_max": 25.0, "length": 31.34, "numeric": 11},
@@ -1656,14 +1656,15 @@ COUPLING_NUT_LENGTH_MM = 16.0
 #   https://www.milnec.com/mil-d38999-connectors/d38999-24-datasheet.pdf
 # Jam-nut thickness is not tabulated; 0.220 in is a drawing estimate.
 # Origin is 0.25 in inboard of the rear accessory face; +X toward the mating
-# face. STEP is a smooth revolved envelope (hex becomes ØU).
+# face. STEP uses this same cable-side origin (hex becomes ØU).
 JAM24_LENGTH_MM = 32.51
 JAM24_K_MM = 22.61
 JAM24_NUT_LENGTH_MM = 5.59
 # Mating-face STEP features (low-fi). Wall matches Neutrik male cup rim.
-# Pin (24 and 26): deep scoop-proof cup; origin at the cup floor.
+# Pin (24 and 26): deep scoop-proof cup at the mating face.
 # /24 socket: coplanar rim + center island with a 0.1 in annular groove.
 # /26 socket: flat coplanar barrel face (no annular groove).
+# Part origin is the cable-side / drawing origin (x = 0), not the cup.
 PIN_CAVITY_DEPTH_MM = 15.0
 PIN_CAVITY_WALL_MM = (19.0 - 15.75) / 2.0
 SOCKET_RING_DEPTH_MM = 0.1 * MM_PER_IN
@@ -1800,16 +1801,12 @@ def socket_mating_ring(stations):
 def step_origin_x_mm(stations, contact_type, shell_type="24"):
     """X of the STEP origin in envelope coordinates.
 
-    Pin (24 and 26): cup floor (rim of the outer/inner ring at +depth).
-    Socket: coplanar mating face (rim / center island plane).
+    Cable-side / drawing origin (x = 0). Accessory threads and the rear
+    body overlap −X; +X is toward the mating face. Pin cups stay at the
+    mating face — they do not move the part origin.
     """
-    del shell_type  # face treatment is by contact type; kept for call-site clarity
-    x_face = stations[-1][0]
-    if str(contact_type).upper() == "P":
-        cavity = pin_mating_cavity(stations)
-        if cavity is not None:
-            return x_face - cavity["depth_mm"]
-    return x_face
+    del stations, contact_type, shell_type
+    return 0.0
 
 
 def shift_stations(stations, origin_x):
@@ -1902,7 +1899,7 @@ def _ocp_tube(origin, direction, r_inner, r_outer, height):
 
 
 def _plug26_layout(stations):
-    """Barrel / coupling-nut layout for a /26 plug after origin shift.
+    """Barrel / coupling-nut layout for a /26 plug.
 
     stations are the outer envelope: rear body (CC) then nut (DD) to face.
     Section sketch: open annulus under the outer ring (red L), short key bump
