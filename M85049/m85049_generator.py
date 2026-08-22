@@ -1485,12 +1485,16 @@ def build_part(part_number, rev_dir):
         os.chdir(cwd)
 
 
-def main(step_only=False, use_cli=False):
+def main(step_only=False, use_cli=False, dry_run=False):
     state.set_rev(REVISION)
     state.set_project_type("part")
 
     configs = list(iter_part_configurations())
     total = len(configs)
+
+    if dry_run:
+        print(f"{total} legal M85049 configurations in the permutation space.")
+        return
 
     if not step_only:
         cache_run_constant_lookups()
@@ -1596,7 +1600,4 @@ def main(step_only=False, use_cli=False):
 
 
 if __name__ == "__main__":
-    main(
-        step_only="--step-only" in sys.argv,
-        use_cli="--cli" in sys.argv,
-    )
+    main()
