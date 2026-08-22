@@ -1,0 +1,47 @@
+{
+  "specification": "MIL-DTL-22759/33",
+  "family": "M22759",
+  "series": "/33",
+  "mfg": "mil spec",
+  "datasheet": "https://www.glenair.com/guardian-conduit-system/pdf/wire-diameter-lookup-tables.pdf",
+  "properties": {
+    "mass": "0.0007lbs/ft",
+    "mass_source": "M22759/33 slash-sheet weight, lbs/1000 ft (Glenair wire-diameter lookup tables, https://www.glenair.com/guardian-conduit-system/pdf/wire-diameter-lookup-tables.pdf)",
+    "od": "0.024in",
+    "conductors": "1",
+    "gauge": "30AWG",
+    "insulation": "crosslinked modified ETFE",
+    "conductor material": "silver-coated high-strength copper alloy",
+    "temperature rating": "200C",
+    "voltage rating": "600V",
+    "color code": "94",
+    "color": "white/yellow"
+  },
+  "tools": [
+    "Wire cutter",
+    "Wire stripper"
+  ],
+  "build_notes": [],
+  "white/yellow": {
+    "conductor": true,
+    "properties": {
+      "mass": "0.0007lbs/ft",
+      "mass_source": "M22759/33 slash-sheet weight, lbs/1000 ft (Glenair wire-diameter lookup tables, https://www.glenair.com/guardian-conduit-system/pdf/wire-diameter-lookup-tables.pdf)",
+      "gauge": "30AWG",
+      "construction": "7x38",
+      "material": "silver-coated high-strength copper alloy",
+      "insulation material": "crosslinked modified ETFE",
+      "od": "0.024in",
+      "resistance": "117.4ohm/1000ft",
+      "temperature rating": "200C",
+      "voltage rating": "600V"
+    },
+    "appearance": {
+      "base_color": "white",
+      "outline_color": "black",
+      "parallelstripe": [
+        "yellow"
+      ]
+    }
+  }
+}

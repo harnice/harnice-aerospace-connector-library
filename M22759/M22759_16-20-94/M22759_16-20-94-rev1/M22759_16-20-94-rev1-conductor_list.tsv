@@ -1,0 +1,2 @@
+container	identifier	appearance	construction	gauge	insulation material	mass	mass_source	material	od	resistance	temperature rating	voltage rating
+	white/yellow	{'base_color':'white','outline_color':'black','parallelstripe':['yellow']}	19x32	20AWG	extruded ETFE, medium wall	0.0054lbs/ft	M22759/16 slash-sheet max weight, lbs/1000 ft (Glenair, https://cdn.glenair.com/wire-and-cable/pdf/b/m22759-16.pdf)	tin-coated copper	0.060in	9.88ohm/1000ft	150C	600V

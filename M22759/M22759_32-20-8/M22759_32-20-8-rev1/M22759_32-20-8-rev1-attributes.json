@@ -1,0 +1,43 @@
+{
+  "specification": "MIL-DTL-22759/32",
+  "family": "M22759",
+  "series": "/32",
+  "mfg": "mil spec",
+  "datasheet": "https://www.glenair.com/wire-and-cable/pdf/mil-star/gs22759-32.pdf",
+  "properties": {
+    "mass": "0.0043lbs/ft",
+    "mass_source": "M22759/32 slash-sheet max weight, lbs/1000 ft (Glenair GS22759-32, https://www.glenair.com/wire-and-cable/pdf/mil-star/gs22759-32.pdf)",
+    "od": "0.050in",
+    "conductors": "1",
+    "gauge": "20AWG",
+    "insulation": "crosslinked modified ETFE, light wall",
+    "conductor material": "tin-coated copper",
+    "temperature rating": "150C",
+    "voltage rating": "600V",
+    "color code": "8",
+    "color": "gray"
+  },
+  "tools": [
+    "Wire cutter",
+    "Wire stripper"
+  ],
+  "build_notes": [],
+  "gray": {
+    "conductor": true,
+    "properties": {
+      "mass": "0.0043lbs/ft",
+      "mass_source": "M22759/32 slash-sheet max weight, lbs/1000 ft (Glenair GS22759-32, https://www.glenair.com/wire-and-cable/pdf/mil-star/gs22759-32.pdf)",
+      "gauge": "20AWG",
+      "construction": "19x32",
+      "material": "tin-coated copper",
+      "insulation material": "crosslinked modified ETFE, light wall",
+      "od": "0.050in",
+      "resistance": "9.88ohm/1000ft",
+      "temperature rating": "150C",
+      "voltage rating": "600V"
+    },
+    "appearance": {
+      "base_color": "gray"
+    }
+  }
+}
