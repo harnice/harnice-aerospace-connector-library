@@ -1,0 +1,2 @@
+container	identifier	appearance	construction	gauge	insulation material	mass	mass_source	material	od	resistance	temperature rating	voltage rating
+	white	{'base_color':'white','outline_color':'black'}	19x38	26AWG	extruded PTFE, medium weight	0.0019lbs/ft	M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)	silver-coated copper	0.038in	38.4ohm/1000ft	200C	600V

@@ -1,0 +1,45 @@
+{
+  "specification": "MIL-DTL-22759/11",
+  "family": "M22759",
+  "series": "/11",
+  "mfg": "mil spec",
+  "datasheet": "https://www.ryanelectronics.com/products/m2275911/",
+  "properties": {
+    "mass": "0.0655lbs/ft",
+    "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
+    "od": "0.202in",
+    "conductors": "1",
+    "gauge": "8AWG",
+    "insulation": "extruded PTFE, medium weight",
+    "conductor material": "silver-coated copper",
+    "temperature rating": "200C",
+    "voltage rating": "600V",
+    "color code": "9",
+    "color": "white"
+  },
+  "tools": [
+    "Wire cutter",
+    "Wire stripper",
+    "Thermal wire stripper"
+  ],
+  "build_notes": [],
+  "white": {
+    "conductor": true,
+    "properties": {
+      "mass": "0.0655lbs/ft",
+      "mass_source": "M22759/11 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires / Ryan Electronics, https://www.ryanelectronics.com/products/m2275911/)",
+      "gauge": "8AWG",
+      "construction": "133x29",
+      "material": "silver-coated copper",
+      "insulation material": "extruded PTFE, medium weight",
+      "od": "0.202in",
+      "resistance": "0.658ohm/1000ft",
+      "temperature rating": "200C",
+      "voltage rating": "600V"
+    },
+    "appearance": {
+      "base_color": "white",
+      "outline_color": "black"
+    }
+  }
+}

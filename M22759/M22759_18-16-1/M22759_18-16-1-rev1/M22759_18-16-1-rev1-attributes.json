@@ -1,0 +1,43 @@
+{
+  "specification": "MIL-DTL-22759/18",
+  "family": "M22759",
+  "series": "/18",
+  "mfg": "mil spec",
+  "datasheet": "https://www.glenair.com/wire-and-cable/m22759-wires/pdf/m22759-wires.pdf",
+  "properties": {
+    "mass": "0.0088lbs/ft",
+    "mass_source": "M22759/18 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires catalog, https://www.glenair.com/wire-and-cable/m22759-wires/pdf/m22759-wires.pdf)",
+    "od": "0.070in",
+    "conductors": "1",
+    "gauge": "16AWG",
+    "insulation": "extruded ETFE, thin wall",
+    "conductor material": "tin-coated copper",
+    "temperature rating": "150C",
+    "voltage rating": "600V",
+    "color code": "1",
+    "color": "brown"
+  },
+  "tools": [
+    "Wire cutter",
+    "Wire stripper"
+  ],
+  "build_notes": [],
+  "brown": {
+    "conductor": true,
+    "properties": {
+      "mass": "0.0088lbs/ft",
+      "mass_source": "M22759/18 slash-sheet max weight, lbs/1000 ft (Glenair M22759 wires catalog, https://www.glenair.com/wire-and-cable/m22759-wires/pdf/m22759-wires.pdf)",
+      "gauge": "16AWG",
+      "construction": "19x29",
+      "material": "tin-coated copper",
+      "insulation material": "extruded ETFE, thin wall",
+      "od": "0.070in",
+      "resistance": "4.81ohm/1000ft",
+      "temperature rating": "150C",
+      "voltage rating": "600V"
+    },
+    "appearance": {
+      "base_color": "brown"
+    }
+  }
+}
