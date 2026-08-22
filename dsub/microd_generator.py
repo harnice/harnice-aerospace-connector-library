@@ -69,11 +69,23 @@ reordered subset of Glenair's A–J. Numeric matches for a 21-position plug:
 
     Amphenol A  = Glenair A   overall length with mounting ears (27.56 mm)
     Amphenol B  = Glenair B   shell width along the pin row (21.97 mm)
-    Amphenol C  = Glenair C   overall mating-axis depth (16.08 mm)
+    Amphenol C  = Glenair C   insulator / interface width along the pin row
+                              (16.08 mm). Same series as MIL-DTL-83513/1H
+                              Figure 1 column B and ITT MDM "B". Not a depth.
     Amphenol D  = Glenair J   shell height, short axis of the D (6.86 mm)
     Amphenol E  = Glenair E   flange height (7.87 mm)
     Amphenol F  = Glenair H   (size-scaling length; not used in the envelope)
     Amphenol G  = Glenair D   mating-shroud / front-shell depth (4.67 mm)
+
+    Mating-axis lengths are unlabeled Glenair letters F/G (constant on
+    every 9–100 row), plus the printed flange:
+      Glenair G Max  .416 / .429 in  = 10.57 / 10.90 mm  overall depth
+      Glenair F      .183 / .195 in  =  4.65 /  4.95 mm  rear-side helper
+      flange         .093 ± .005 in  =  2.36 ±  0.13 mm
+    ITT MDM solder-cup side view independently calls these out as
+    ".416 (10.57) MAX" / ".429 (10.90) MAX" overall and ".093 (2.36) REF"
+    flange. The ".200 (5.08) MAX" solder-pot tick is a cup/potting
+    feature, not an extra stack segment.
 
 Earlier comments that called Amphenol B the "short axis" were wrong: B is
 the long axis of the D-shell. The STEP envelope uses B×D (our letters)
@@ -106,9 +118,11 @@ Results — pass ( |Δ| ≤ 0.05 mm ) unless noted:
     Size 100 Receptacle was WRONG (10.01 vs Glenair 8.46) — corrected
     to 8.46 (the old 10.01 was Glenair E mis-filed into G).
 
-Envelope impact of the shell-100 fix: receptacle overall depth and
-mating-shroud depth now follow Glenair C/D. Regenerate M83513_*100*
-STEPs after pulling this change.
+Envelope impact of the shell-100 fix: receptacle shroud follows Glenair
+D. Do not use Glenair C as overall depth — C tracks pin-row width
+(8.46 mm at 9P → 36.86 mm at 100S). Using C − flange − shroud as the
+cable-side insulator made M83513_*H* drawings grow a ~27 mm black
+block; the real overall depth is Glenair G (10.57 / 10.90 mm).
 
 Shell 69: Amphenol-catalog-only; not in Glenair /01–/04 QPL letters A–H.
 No Glenair row to compare.
@@ -117,7 +131,9 @@ LETTER MEANINGS (this module's Amphenol-derived keys)
 -------------------------------------------------------
     A - overall length (MAX), along the pin row, including mounting ears
     B - D-shell width along the pin row (Glenair B / MIL face width)
-    C - overall mating-axis depth, Plug vs Receptacle (Glenair C)
+    C - insulator / interface width along the pin row (Glenair C /
+        MIL-DTL-83513/1H B / ITT B). Gender-split; scales with insert.
+        Not a mating-axis depth — do not feed it to cable_side_mm.
     D - D-shell height, short axis (Glenair J) — constant 6.86 mm for 9–37
     E - flange height (Glenair E)
     F - Glenair H (size-scaling length; not used in the STEP envelope)
@@ -369,9 +385,14 @@ delete_pngs = True
 
 PX_PER_IN = 96.0
 MM_PER_IN = 25.4
-# Flange thickness is not a confirmed A-G letter. 1.00 mm is a drawing-only
-# estimate so the side silhouette has a step.
-FLANGE_THICKNESS_MM = 1.00
+# Glenair L-4 / L-6 and ITT MDM solder-cup side view: ".093 ± .005
+# (2.36 ± 0.13)". Not an A–G letter; printed as a raw callout.
+FLANGE_THICKNESS_MM = 2.36
+# Glenair G Max / ITT ".416 MAX" / ".429 MAX". Constant overall
+# mating-axis length for every QPL 9–100 layout. Module letter G is
+# Glenair D (shroud), so these live as named constants.
+OVERALL_DEPTH_PLUG_MM = 10.57
+OVERALL_DEPTH_RCPT_MM = 10.90
 
 # Official QPL insert letters. 69 is catalog-only (no MIL-DTL-83513/01-04 letter).
 INSERT_LETTERS = {
@@ -567,11 +588,15 @@ def mating_shroud_mm(shell_size, gender):
 
 
 def connector_depth_mm(shell_size, connector_type, gender):
-    # Amphenol C = Glenair C (overall mating-axis length). Grows with
-    # shell size; Plug vs Receptacle. Same metal-shell envelope for
-    # solder-cup and pigtail families.
-    del connector_type
-    return get_dimension(shell_size, "C", gender=gender)
+    # Glenair G Max (not module letter G): constant overall mating-axis
+    # length. Same metal-shell envelope for solder-cup and pigtail.
+    del shell_size, connector_type
+    g = gender.strip().lower()
+    if g == "plug":
+        return OVERALL_DEPTH_PLUG_MM
+    if g in ("receptacle", "rcpt", "socket"):
+        return OVERALL_DEPTH_RCPT_MM
+    raise ValueError(f"Unknown gender {gender!r}. Use 'Plug' or 'Receptacle'.")
 
 
 def cable_side_mm(shell_size, connector_type, gender):
