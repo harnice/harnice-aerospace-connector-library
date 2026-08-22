@@ -17,6 +17,7 @@ import argparse
 import csv
 import importlib.util
 import json
+import math
 import os
 import subprocess
 import sys
@@ -282,6 +283,63 @@ def load_json(path: Path):
         return json.load(handle)
 
 
+def values_equal(left, right, rel_tol=1e-9, abs_tol=1e-12) -> bool:
+    """Compare generator output to committed JSON across platforms.
+
+    Flagnote polar coordinates use sin/cos/atan2. macOS libm and glibc
+    disagree in the last bits, so exact dict equality fails in CI on
+    SKUs that were written on a Mac (and vice versa).
+    """
+    if isinstance(left, dict) and isinstance(right, dict):
+        if left.keys() != right.keys():
+            return False
+        return all(
+            values_equal(left[key], right[key], rel_tol, abs_tol) for key in left
+        )
+    if isinstance(left, list) and isinstance(right, list):
+        if len(left) != len(right):
+            return False
+        return all(
+            values_equal(a, b, rel_tol, abs_tol) for a, b in zip(left, right)
+        )
+    if isinstance(left, bool) or isinstance(right, bool):
+        return left == right
+    if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+        return math.isclose(
+            float(left), float(right), rel_tol=rel_tol, abs_tol=abs_tol
+        )
+    return left == right
+
+
+def first_values_diff(left, right, path="$") -> str | None:
+    if isinstance(left, dict) and isinstance(right, dict):
+        extra = sorted(set(left) - set(right))
+        missing = sorted(set(right) - set(left))
+        if extra or missing:
+            bits = []
+            if extra:
+                bits.append("only in generator: " + ", ".join(extra[:8]))
+            if missing:
+                bits.append("only on disk: " + ", ".join(missing[:8]))
+            return f"{path}: {'; '.join(bits)}"
+        for key in left:
+            found = first_values_diff(left[key], right[key], f"{path}.{key}")
+            if found:
+                return found
+        return None
+    if isinstance(left, list) and isinstance(right, list):
+        if len(left) != len(right):
+            return f"{path}: length {len(left)} vs {len(right)}"
+        for index, (a, b) in enumerate(zip(left, right)):
+            found = first_values_diff(a, b, f"{path}[{index}]")
+            if found:
+                return found
+        return None
+    if values_equal(left, right):
+        return None
+    return f"{path}: generator {left!r} vs disk {right!r}"
+
+
 def catalog_csv_expected(family: Family, module):
     if family.name == "M22759":
         rows = [
@@ -419,8 +477,15 @@ def cmd_check(families: list[Family]) -> int:
             rev_dir = family.family_dir / part_number / f"{part_number}-rev{revision}"
             attributes_path = rev_dir / f"{part_number}-rev{revision}-attributes.json"
             generated_attributes = expected_attributes(family, module, cfg)
-            if load_json(attributes_path) != generated_attributes:
+            disk_attributes = load_json(attributes_path)
+            if not values_equal(generated_attributes, disk_attributes):
                 stale_attributes.append(part_number)
+                if len(stale_attributes) == 1:
+                    print(
+                        "  first attributes diff "
+                        f"{part_number}: "
+                        f"{first_values_diff(generated_attributes, disk_attributes)}"
+                    )
             if family.kind == "part":
                 svg_path = rev_dir / f"{part_number}-rev{revision}-drawing.svg"
                 generated_svg = expected_svg(
