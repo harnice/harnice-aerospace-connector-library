@@ -1,0 +1,35 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    name: check family catalogs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out aerospace library
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Harnice
+        run: pip install "git+https://github.com/harnice/Harnice.git"
+
+      - name: List families
+        run: python generate.py --list
+
+      - name: Count catalog SKUs
+        run: python generate.py --dry-run
+
+      - name: Require committed SKUs to match the generators
+        run: python generate.py --check
