@@ -4,18 +4,12 @@ If you would like to add part families to this library, either submit a PR yours
 
 ## Generating the library
 
-Each family has its own emitter (`{family}_generator.py`). `generate.py` at the repo root is the one command that can run all of them, count their catalogs, or check that the committed SKU folders still match.
+Each family emitter writes its entire catalog. `generate.py` calls every emitter.
 
 ```bash
-python generate.py --list
-python generate.py --dry-run
-python generate.py --check
-python generate.py --family D38999 --step-only
-python generate.py                         # full generate, every family
+python generate.py                 # entire library
+python D38999/d38999_generator.py  # one family
+python check.py                    # CI merge gate
 ```
 
-`--step-only` writes attributes, drawings, and STEP envelopes without a Harnice product build. Cable families treat that flag as `--no-build`.
-
-`--check` is the merge gate. It recomputes every SKU from the family Python (attributes, drawing envelope, catalog CSV) and compares that to the committed files. It does not write anything, so a local `python generate.py --check` and the CI job are the same check. If they disagree with the generators, the job fails.
-
-`main` requires the **check family catalogs** status check. CI on pull requests and on `main` installs [Harnice](https://github.com/harnice/Harnice) and runs `python generate.py --check`.
+`check.py` recomputes every SKU from the family Python and fails if the committed files disagree. `main` requires the **check family catalogs** status check. CI installs [Harnice](https://github.com/harnice/Harnice) and runs `python check.py`.

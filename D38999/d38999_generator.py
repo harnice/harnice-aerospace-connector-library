@@ -2799,21 +2799,4 @@ def main(
     print("Finished rendering all parts in family.")
 
 if __name__ == "__main__":
-    shell_types = ["24", "26"]
-    if "--24-only" in sys.argv:
-        shell_types = ["24"]
-    elif "--26-only" in sys.argv:
-        shell_types = ["26"]
-    contact_types = ["P", "S"]
-    if "--pins-only" in sys.argv:
-        contact_types = ["P"]
-    elif "--sockets-only" in sys.argv:
-        contact_types = ["S"]
-    main(
-        step_only="--step-only" in sys.argv,
-        svg_only="--svg-only" in sys.argv,
-        shell_types=shell_types,
-        contact_types=contact_types,
-        use_cli="--cli" in sys.argv,
-        dry_run="--dry-run" in sys.argv,
-    )
+    main()

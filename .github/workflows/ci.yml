@@ -25,11 +25,5 @@ jobs:
       - name: Install Harnice
         run: pip install "git+https://github.com/harnice/Harnice.git"
 
-      - name: List families
-        run: python generate.py --list
-
-      - name: Count catalog SKUs
-        run: python generate.py --dry-run
-
       - name: Require committed SKUs to match the generators
-        run: python generate.py --check
+        run: python check.py

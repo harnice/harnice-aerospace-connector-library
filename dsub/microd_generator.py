@@ -1101,7 +1101,4 @@ def main(step_only=False, dry_run=False):
 
 
 if __name__ == "__main__":
-    main(
-        step_only="--step-only" in sys.argv,
-        dry_run="--dry-run" in sys.argv,
-    )
+    main()
