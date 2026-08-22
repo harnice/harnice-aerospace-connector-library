@@ -6,7 +6,7 @@ import sys
 
 from harnice import fileio, state
 from harnice.lists import rev_history
-import harnice.products.part as part
+import harnice.project_types.part as part
 
 
 def _load_step_utils():
@@ -1541,7 +1541,7 @@ def build_part(part_number, rev_dir):
 
 def main(step_only=False, use_cli=False):
     state.set_rev(REVISION)
-    state.set_product("part")
+    state.set_project_type("part")
 
     configs = list(iter_part_configurations())
     total = len(configs)
@@ -1578,7 +1578,7 @@ def main(step_only=False, use_cli=False):
             continue
 
         revision_history_content_dict = {
-            "product": state.product,
+            "project_type": state.project_type,
             "mfg": "mil spec",
             "pn": part_number,
             "rev": REVISION,

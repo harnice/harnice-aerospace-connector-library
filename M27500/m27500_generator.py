@@ -8,7 +8,7 @@ import sys
 
 from harnice import fileio, state
 from harnice.lists import rev_history
-from harnice.products import cable
+from harnice.project_types import cable
 
 REVISION = "1"
 DATE_STARTED = "8/17/26"
@@ -718,7 +718,7 @@ def conductor_color_name(colors):
 
     This is the conductor's identifier. MIL-DTL-27500 numbers the wires in the
     cable, but a harnice cable identifies each conductor by its color (see the
-    conductor keys in harnice.products.cable), and the color is what the
+    conductor keys in harnice.project_types.cable), and the color is what the
     technician looking at a stripped cable end actually sees. The wire number is
     kept as a property so the Table III ordering is not lost.
 
@@ -1023,7 +1023,7 @@ def overall_temperature_c(symbol, shield_code, jacket_code):
 # ===========================================================================
 # attributes.json construction
 # ===========================================================================
-# harnice.products.cable.build walks attributes.json for any dict with
+# harnice.project_types.cable.build walks attributes.json for any dict with
 # "conductor": true and records (container, identifier) from the two
 # enclosing keys. Nesting the wires under a "conductors" group inside the
 # shield/jacket stackup therefore yields container "conductors" and
@@ -1401,7 +1401,7 @@ def build_cable(part_number, rev_dir):
 def write_revision_history(part_dir, part_number):
     rev_history.part_family_append(
         {
-            "product": state.product,
+            "project_type": state.project_type,
             "mfg": "mil spec",
             "pn": part_number,
             "rev": REVISION,
@@ -1417,7 +1417,7 @@ def write_revision_history(part_dir, part_number):
 
 def main(configurations=None, no_build=False, dry_run=False, use_cli=False, csv_only=False):
     state.set_rev(REVISION)
-    state.set_product("cable")
+    state.set_project_type("cable")
 
     configurations = list(configurations if configurations is not None else iter_cable_configurations())
     total = len(configurations)
@@ -1481,7 +1481,7 @@ def main(configurations=None, no_build=False, dry_run=False, use_cli=False, csv_
 
 def parse_args(argv):
     parser = argparse.ArgumentParser(
-        description="Generate MIL-DTL-27500 cables as harnice cable products."
+        description="Generate MIL-DTL-27500 cables as harnice cable project types."
     )
     parser.add_argument(
         "--dry-run",
