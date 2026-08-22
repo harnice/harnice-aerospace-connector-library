@@ -1,13 +1,14 @@
 {
   "mass": "0.0086lbs",
   "mass_source": "ITT Cannon / Glenair Micro-D metal-shell weights, grams, and ITT wire grams/inch for pigtails: https://www.milnec.com/pdf/mil-dtl-83513/m83513-catalog-specs.pdf Stainless finish P adds the published stainless-steel adder.",
+  "envelope_source": "Overall mating-axis depth is Glenair G Max (.416 in / 10.57 mm plug, .429 in / 10.90 mm receptacle), constant on every 9\u2013100 QPL row; flange is the L-4 / L-6 and ITT MDM callout .093 in / 2.36 mm; shroud is Glenair D (module letter G). Glenair C is the insulator width along the pin row (MIL-DTL-83513/1H Figure 1 column B), not a depth. https://www.glenair.com/micro-d/micro-d-connectors-and-hardware/pdf/1-and-2.pdf https://www.glenair.com/micro-d/micro-d-connectors-and-hardware/pdf/3-and-4.pdf https://www.airelectro.com/downloads/mil-dtl-83513_01-AEI.pdf https://www.milnec.com/pdf/mil-dtl-83513/m83513-catalog-specs.pdf https://www.doeeet.com/home/-/catalog/download/document/MIL-DTL-83513-1?d=984c4882-9c90-4630-b104-8814dc1d7918",
   "tools": [
     "Soldering iron"
   ],
   "build_notes": [],
   "csys_children": {
     "backshell_mate_3d": {
-      "x": -0.7339,
+      "x": -0.2661,
       "y": 0.0,
       "z": 0.0,
       "rx": 0.0,
@@ -15,7 +16,7 @@
       "rz": 0.0
     },
     "bundle_mate_3d": {
-      "x": -0.7339,
+      "x": -0.2661,
       "y": 0.0,
       "z": 0.0,
       "rx": 0.0,
@@ -24,7 +25,7 @@
     },
     "flagnote-1-leader_dest": {
       "angle": 0.0,
-      "distance": 0.8838582677165354,
+      "distance": 0.4161417322834646,
       "rotation": 0
     },
     "flagnote-1": {
@@ -33,8 +34,8 @@
       "rotation": 0
     },
     "flagnote-2-leader_dest": {
-      "angle": 2.1874057373825853,
-      "distance": 0.8845027780498085,
+      "angle": 14.998872355430768,
+      "distance": 0.4308193512490205,
       "rotation": 0
     },
     "flagnote-2": {
@@ -43,8 +44,8 @@
       "rotation": 0
     },
     "flagnote-3-leader_dest": {
-      "angle": -2.1874057373825853,
-      "distance": 0.8845027780498085,
+      "angle": -14.998872355430768,
+      "distance": 0.4308193512490205,
       "rotation": 0
     },
     "flagnote-3": {
@@ -53,8 +54,8 @@
       "rotation": 0
     },
     "flagnote-4-leader_dest": {
-      "angle": 4.368453639023692,
-      "distance": 0.8864334973807626,
+      "angle": 28.184907506603608,
+      "distance": 0.4721222612828792,
       "rotation": 0
     },
     "flagnote-4": {
@@ -63,8 +64,8 @@
       "rotation": 0
     },
     "flagnote-5-leader_dest": {
-      "angle": -4.368453639023692,
-      "distance": 0.8864334973807626,
+      "angle": -28.184907506603608,
+      "distance": 0.4721222612828792,
       "rotation": 0
     },
     "flagnote-5": {
@@ -73,8 +74,8 @@
       "rotation": 0
     },
     "flagnote-6-leader_dest": {
-      "angle": 6.536896052484329,
-      "distance": 0.8896420516777859,
+      "angle": 38.79177425403605,
+      "distance": 0.5339066303321021,
       "rotation": 0
     },
     "flagnote-6": {
@@ -83,8 +84,8 @@
       "rotation": 0
     },
     "flagnote-7-leader_dest": {
-      "angle": -6.536896052484329,
-      "distance": 0.8896420516777859,
+      "angle": -38.79177425403605,
+      "distance": 0.5339066303321021,
       "rotation": 0
     },
     "flagnote-7": {
@@ -93,8 +94,8 @@
       "rotation": 0
     },
     "flagnote-8-leader_dest": {
-      "angle": 8.686700961385204,
-      "distance": 0.8941146844125409,
+      "angle": 46.98250375836719,
+      "distance": 0.6099802409519417,
       "rotation": 0
     },
     "flagnote-8": {
@@ -103,13 +104,33 @@
       "rotation": 0
     },
     "flagnote-9-leader_dest": {
-      "angle": -8.686700961385204,
-      "distance": 0.8941146844125409,
+      "angle": -46.98250375836719,
+      "distance": 0.6099802409519417,
       "rotation": 0
     },
     "flagnote-9": {
       "angle": -59.99999999999999,
       "distance": 3.0000000000000004,
+      "rotation": 0
+    },
+    "flagnote-10-leader_dest": {
+      "angle": 53.25980395380212,
+      "distance": 0.6956710737960046,
+      "rotation": 0
+    },
+    "flagnote-10": {
+      "angle": 75.0,
+      "distance": 3.0,
+      "rotation": 0
+    },
+    "flagnote-11-leader_dest": {
+      "angle": -53.25980395380212,
+      "distance": 0.6956710737960046,
+      "rotation": 0
+    },
+    "flagnote-11": {
+      "angle": -75.0,
+      "distance": 3.0,
       "rotation": 0
     }
   },

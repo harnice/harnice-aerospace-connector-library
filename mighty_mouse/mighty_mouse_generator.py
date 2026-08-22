@@ -1069,7 +1069,7 @@ def main(step_only=False):
             "desc": "",
             "status": "",
             "datestarted": DATE_STARTED,
-            "library_repo": "https://github.com/harnice/harnice-aerospace-connector-library",
+            "library_repo": "https://github.com/harnice/harnice-aerospace-library",
             "library_subpath": "mighty_mouse",
         }
         revision_history_csv_path = os.path.join(

@@ -2600,7 +2600,7 @@ def write_revision_history_if_missing(part_dir, part_number):
             "desc": "",
             "status": "",
             "datestarted": DATE_STARTED,
-            "library_repo": "https://github.com/harnice/harnice-aerospace-connector-library",
+            "library_repo": "https://github.com/harnice/harnice-aerospace-library",
             "library_subpath": "D38999",
         },
         revision_history_csv_path,
@@ -2726,7 +2726,7 @@ def main(
             "desc": "",
             "status": "",
             "datestarted": DATE_STARTED,
-            "library_repo": "https://github.com/harnice/harnice-aerospace-connector-library",
+            "library_repo": "https://github.com/harnice/harnice-aerospace-library",
             "library_subpath": "D38999"
         }
         revision_history_csv_path = os.path.join(
