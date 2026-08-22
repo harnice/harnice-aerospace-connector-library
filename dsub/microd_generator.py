@@ -50,9 +50,11 @@ CROSS-VALIDATION AGAINST MIL-DTL-83513/1H AND GLENAIR M83513/01–/02
 ---------------------------------------------------------------------
 Official slash-sheet context (letter names differ from Amphenol's A–G):
   MIL-DTL-83513/1H w/Amendment 1 (14 December 2011), Figure 1 — QPL
-  plug metal-shell solder-cup geometry. No public stable URL; DLA ASSIST
-  / DoD document server. Used only to confirm that Amphenol A/B/C match
-  official A / face-width / overall-depth numbers at 9 and 100 positions.
+  plug metal-shell solder-cup geometry. DLA ASSIST / DoD document server
+  (no public stable URL). Figure 1 table columns A / B / C / D are
+  along-the-row face dimensions (A overall with ears, B insulator width,
+  D shell width). They are not mating-axis depths. DLA copy:
+  https://www.doeeet.com/home/-/catalog/download/document/MIL-DTL-83513-1?d=984c4882-9c90-4630-b104-8814dc1d7918
 
 Glenair QPL sheets (same figure letters A–J as the military drawing;
 downloaded 2026-08-19, U.S. CAGE 06324):
@@ -77,15 +79,19 @@ reordered subset of Glenair's A–J. Numeric matches for a 21-position plug:
     Amphenol F  = Glenair H   (size-scaling length; not used in the envelope)
     Amphenol G  = Glenair D   mating-shroud / front-shell depth (4.67 mm)
 
-    Mating-axis lengths are unlabeled Glenair letters F/G (constant on
-    every 9–100 row), plus the printed flange:
+    Mating-axis lengths are the unlabeled Glenair letters F/G (constant on
+    every 9–100 row) plus the printed flange on L-4 / L-6:
       Glenair G Max  .416 / .429 in  = 10.57 / 10.90 mm  overall depth
       Glenair F      .183 / .195 in  =  4.65 /  4.95 mm  rear-side helper
       flange         .093 ± .005 in  =  2.36 ±  0.13 mm
-    ITT MDM solder-cup side view independently calls these out as
-    ".416 (10.57) MAX" / ".429 (10.90) MAX" overall and ".093 (2.36) REF"
-    flange. The ".200 (5.08) MAX" solder-pot tick is a cup/potting
-    feature, not an extra stack segment.
+    ITT Cannon MDM solder-cup side view (catalog p. 234) independently
+    calls the same overall and flange:
+      ".416 (10.57) MAX" plug / ".429 (10.90) MAX" receptacle
+      ".093 (2.36) REF" flange
+      ".200 (5.08) MAX" solder-pot tick (cup/potting feature, not a
+      third stack segment)
+    ITT: https://www.milnec.com/pdf/mil-dtl-83513/m83513-catalog-specs.pdf
+    Glenair L-4 reprint: https://www.airelectro.com/downloads/mil-dtl-83513_01-AEI.pdf
 
 Earlier comments that called Amphenol B the "short axis" were wrong: B is
 the long axis of the D-shell. The STEP envelope uses B×D (our letters)
@@ -122,7 +128,7 @@ Envelope impact of the shell-100 fix: receptacle shroud follows Glenair
 D. Do not use Glenair C as overall depth — C tracks pin-row width
 (8.46 mm at 9P → 36.86 mm at 100S). Using C − flange − shroud as the
 cable-side insulator made M83513_*H* drawings grow a ~27 mm black
-block; the real overall depth is Glenair G (10.57 / 10.90 mm).
+block; the real overall depth is Glenair G Max (10.57 / 10.90 mm).
 
 Shell 69: Amphenol-catalog-only; not in Glenair /01–/04 QPL letters A–H.
 No Glenair row to compare.
@@ -132,8 +138,8 @@ LETTER MEANINGS (this module's Amphenol-derived keys)
     A - overall length (MAX), along the pin row, including mounting ears
     B - D-shell width along the pin row (Glenair B / MIL face width)
     C - insulator / interface width along the pin row (Glenair C /
-        MIL-DTL-83513/1H B / ITT B). Gender-split; scales with insert.
-        Not a mating-axis depth — do not feed it to cable_side_mm.
+        MIL-DTL-83513/1H Figure 1 column B / ITT MDM B). Gender-split;
+        scales with insert. Not a mating-axis depth.
     D - D-shell height, short axis (Glenair J) — constant 6.86 mm for 9–37
     E - flange height (Glenair E)
     F - Glenair H (size-scaling length; not used in the STEP envelope)
@@ -385,12 +391,16 @@ delete_pngs = True
 
 PX_PER_IN = 96.0
 MM_PER_IN = 25.4
-# Glenair L-4 / L-6 and ITT MDM solder-cup side view: ".093 ± .005
-# (2.36 ± 0.13)". Not an A–G letter; printed as a raw callout.
+# Glenair L-4 / L-6 side-view callout ".093 ± .005 (2.36 ± 0.13)" and
+# ITT MDM ".093 (2.36) REF". Not an A–G letter.
+#   https://www.glenair.com/micro-d/micro-d-connectors-and-hardware/pdf/1-and-2.pdf
+#   https://www.milnec.com/pdf/mil-dtl-83513/m83513-catalog-specs.pdf
 FLANGE_THICKNESS_MM = 2.36
-# Glenair G Max / ITT ".416 MAX" / ".429 MAX". Constant overall
-# mating-axis length for every QPL 9–100 layout. Module letter G is
-# Glenair D (shroud), so these live as named constants.
+# Glenair G Max (table column G, every 9–100 row) / ITT ".416 MAX" /
+# ".429 MAX". Constant overall mating-axis length. Module letter G is
+# Glenair D (shroud), so these are named constants, not get_dimension("G").
+#   Glenair L-4 9P G Max .416 10.57; 9S G Max .429 10.90 (same at 100).
+#   ITT MDM p. 234 solder-cup side view, same pair.
 OVERALL_DEPTH_PLUG_MM = 10.57
 OVERALL_DEPTH_RCPT_MM = 10.90
 
@@ -588,8 +598,9 @@ def mating_shroud_mm(shell_size, gender):
 
 
 def connector_depth_mm(shell_size, connector_type, gender):
-    # Glenair G Max (not module letter G): constant overall mating-axis
-    # length. Same metal-shell envelope for solder-cup and pigtail.
+    # Glenair G Max / ITT .416/.429 MAX — constant overall mating-axis
+    # length, solder-cup and pigtail. Not module letter C (Glenair C is
+    # the size-scaling insulator width) and not module letter G (shroud).
     del shell_size, connector_type
     g = gender.strip().lower()
     if g == "plug":
@@ -610,8 +621,8 @@ def cable_side_mm(shell_size, connector_type, gender):
 
 def microd_connector_svg(part_number, part_configuration):
     """
-    Side silhouette along the mating axis (origin at the cable side, +X
-    toward the mating face; same convention as D38999 and M24308).
+    Long-side silhouette along the mating axis (origin at the cable side,
+    +X toward the mating face; same convention as D38999 and M24308).
 
     Stack-up: insulator (cable) | mounting flange | mating shroud.
     Vertical is A (ears) / B (body) — the long side of the D against the
@@ -845,6 +856,21 @@ MASS_SOURCE = (
     "https://www.milnec.com/pdf/mil-dtl-83513/m83513-catalog-specs.pdf "
     "Stainless finish P adds the published stainless-steel adder."
 )
+# Cable-side / overall-depth / flange stack (not Amphenol/Glenair C).
+ENVELOPE_SOURCE = (
+    "Overall mating-axis depth is Glenair G Max (.416 in / 10.57 mm plug, "
+    ".429 in / 10.90 mm receptacle), constant on every 9–100 QPL row; "
+    "flange is the L-4 / L-6 and ITT MDM callout .093 in / 2.36 mm; "
+    "shroud is Glenair D (module letter G). Glenair C is the insulator "
+    "width along the pin row (MIL-DTL-83513/1H Figure 1 column B), not "
+    "a depth. "
+    "https://www.glenair.com/micro-d/micro-d-connectors-and-hardware/pdf/1-and-2.pdf "
+    "https://www.glenair.com/micro-d/micro-d-connectors-and-hardware/pdf/3-and-4.pdf "
+    "https://www.airelectro.com/downloads/mil-dtl-83513_01-AEI.pdf "
+    "https://www.milnec.com/pdf/mil-dtl-83513/m83513-catalog-specs.pdf "
+    "https://www.doeeet.com/home/-/catalog/download/document/MIL-DTL-83513-1"
+    "?d=984c4882-9c90-4630-b104-8814dc1d7918"
+)
 _MICROD_SOLDER_G = {
     9: {"P": 1.7, "S": 1.7},
     15: {"P": 2.3, "S": 2.2},
@@ -922,6 +948,7 @@ def compile_part_attributes(part_configuration):
     return {
         "mass": f"{part_mass_lbs(part_configuration['connector_type'], part_configuration['gender'], shell_size, part_configuration['finish'], part_configuration.get('wire_type')):.4f}lbs",
         "mass_source": MASS_SOURCE,
+        "envelope_source": ENVELOPE_SOURCE,
         "tools": tools,
         "build_notes": [],
         "csys_children": {
@@ -934,7 +961,7 @@ def compile_part_attributes(part_configuration):
                     part_configuration["gender"],
                 )
                 / MM_PER_IN,
-                get_dimension(shell_size, "D") / 2.0,
+                get_dimension(shell_size, "B") / 2.0,
             ),
         },
         "contacts": contacts,
@@ -993,7 +1020,7 @@ def make_part(part_configuration):
         "desc": "",
         "status": "",
         "datestarted": DATE_STARTED,
-        "library_repo": "https://github.com/harnice/harnice-aerospace-connector-library",
+        "library_repo": "https://github.com/harnice/harnice-aerospace-library",
         "library_subpath": "dsub",
     }
     revision_history_csv_path = os.path.join(

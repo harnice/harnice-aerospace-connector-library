@@ -1408,7 +1408,7 @@ def write_revision_history(part_dir, part_number):
             "desc": "",
             "status": "",
             "datestarted": DATE_STARTED,
-            "library_repo": "https://github.com/harnice/harnice-aerospace-connector-library",
+            "library_repo": "https://github.com/harnice/harnice-aerospace-library",
             "library_subpath": "M27500",
         },
         os.path.join(part_dir, f"{part_number}-revision_history.tsv"),
