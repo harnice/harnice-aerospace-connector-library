@@ -12,4 +12,4 @@ python D38999/d38999_generator.py  # one family
 python check.py                    # CI merge gate
 ```
 
-`check.py` runs `generate_all_in_repo.py` and fails if git sees a diff against the tree being merged. `main` requires the **check family catalogs** status check. CI installs [Harnice](https://github.com/harnice/Harnice) and runs `python check.py`.
+`check.py` runs `generate_all_in_repo.py` and fails if git sees a diff against the tree being merged. That CI job is disabled because a full library generate is too slow.
