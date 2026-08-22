@@ -94,8 +94,9 @@ reordered subset of Glenair's A–J. Numeric matches for a 21-position plug:
     Glenair L-4 reprint: https://www.airelectro.com/downloads/mil-dtl-83513_01-AEI.pdf
 
 Earlier comments that called Amphenol B the "short axis" were wrong: B is
-the long axis of the D-shell. The STEP/SVG envelope must use B×D (our
-letters) for the shell and A×E for the flange.
+the long axis of the D-shell. The STEP envelope uses B×D (our letters)
+for the shell and A×E for the flange. The flat SVG is the long-side
+silhouette (A/B vertical; D/E into the page), matching M24308.
 
 GLENAIR CROSS-CHECK (2026-08-19) — every QPL layout
 ----------------------------------------------------
@@ -620,16 +621,17 @@ def cable_side_mm(shell_size, connector_type, gender):
 
 def microd_connector_svg(part_number, part_configuration):
     """
-    Side silhouette along the mating axis (origin at the cable side, +X
-    toward the mating face; same convention as D38999).
+    Long-side silhouette along the mating axis (origin at the cable side,
+    +X toward the mating face; same convention as D38999 and M24308).
 
     Stack-up: insulator (cable) | mounting flange | mating shroud.
-    Vertical: Amphenol E (flange / Glenair E) and D (shell / Glenair J).
+    Vertical is A (ears) / B (body) — the long side of the D against the
+    page. D/E (short axis) is into the page and not drawn.
     """
     shell_size = part_configuration["shell_size"]
     gender = part_configuration["gender"]
-    flange_h = get_dimension(shell_size, "E")
-    body_h = get_dimension(shell_size, "D")
+    flange_h = get_dimension(shell_size, "A")
+    body_h = get_dimension(shell_size, "B")
     cable_px = _px_mm(
         cable_side_mm(shell_size, part_configuration["connector_type"], gender)
     )
@@ -959,7 +961,7 @@ def compile_part_attributes(part_configuration):
                     part_configuration["gender"],
                 )
                 / MM_PER_IN,
-                get_dimension(shell_size, "D") / 2.0,
+                get_dimension(shell_size, "B") / 2.0,
             ),
         },
         "contacts": contacts,
