@@ -599,14 +599,14 @@ def csys_6dof_mm(x_mm, y_mm, z_mm, rx=0.0, ry=0.0, rz=0.0):
     }
 
 
-def rear_accessory_csys_3d(shell_size, shell_style, contact_type):
-    """Cable-entry / banding-platform face in the STEP frame (inches).
+def mate_csys_3d(shell_size, shell_style, contact_type):
+    """Mating face in the STEP frame (inches), identity orientation.
 
-    Identity orientation: +X toward the mating face, matching the part origin.
+    Origin is the cable-side knurl; this output sits on the mating face.
     """
     stations = envelope_stations(shell_size, shell_style)
     origin_x = step_origin_x_mm(stations, contact_type)
-    return csys_6dof_mm(stations[0][0] - origin_x, 0.0, 0.0)
+    return csys_6dof_mm(stations[-1][0] - origin_x, 0.0, 0.0)
 
 
 def pin_mating_cavity_stations(stations):
@@ -971,8 +971,7 @@ def compile_part_attributes(part_configuration):
 
     tmin, tmax = COUPLING_TORQUE_IN_LBS[shell_size]
     csys = {
-        # 800-006 has an integral banding platform, not a backshell interface.
-        "bundle_mate_3d": rear_accessory_csys_3d(
+        "3d-mate": mate_csys_3d(
             shell_size, shell_style, part_configuration["contact_type"]
         ),
         "connector": connector_csys(),

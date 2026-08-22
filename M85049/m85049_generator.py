@@ -872,18 +872,29 @@ def csys_6dof_mm(x_mm, y_mm, z_mm, rx=0.0, ry=0.0, rz=0.0):
     }
 
 
-def bundle_mate_csys_3d(orientation, shell_size, entry_size):
-    """Cable-entry face in the STEP frame (inches).
+def connector_csys_3d(orientation, shell_size, entry_size):
+    """Connector coupling face in the STEP frame (inches).
 
-    Same plane as the banding-platform free end. +X into the backshell
-    (toward the connector), +Z matching the part origin. Straight and
-    angled parts keep identity orientation: the entry axis is already +X.
+    Origin is the cable-side knurl. +X of this output follows the coupling
+    axis toward the connector (rz follows the 45°/90° elbow).
     """
     kind, geom, _radii = backshell_envelope_mm(orientation, shell_size, entry_size)
     if kind == "revolution":
-        return csys_6dof_mm(float(geom[0][0]), 0.0, 0.0)
-    ex, ey, ez = geom["entry"]
-    return csys_6dof_mm(ex, ey, ez)
+        return csys_6dof_mm(float(geom[-1][0]), 0.0, 0.0)
+    layout = step_utils._elbow_layout(
+        geom["entry"],
+        geom["corner"],
+        geom["angle_deg"],
+        geom["exit_length"],
+        geom["nut_length"],
+    )
+    fx, fy, fz = layout["p_face"]
+    return csys_6dof_mm(
+        fx,
+        fy,
+        fz,
+        rz=math.degrees(math.atan2(layout["uy"], layout["ux"])),
+    )
 
 
 
@@ -1382,8 +1393,8 @@ def compile_part_attributes(part_configuration):
 
     csys = {
         # Origin = right end of cable-side knurl; knurl/cable −X; body +X
+        "3d-connector": connector_csys_3d(orientation, shell_size, entry_size),
         "connector": connector_csys(orientation, shell_size),
-        "bundle_mate_3d": bundle_mate_csys_3d(orientation, shell_size, entry_size),
     }
     csys.update(flagnote_csys_children(orientation, shell_size, entry_size))
 

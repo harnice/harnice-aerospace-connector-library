@@ -582,22 +582,20 @@ def part_mass_lbs(gender):
 def compile_part_attributes(part_configuration):
     gender = part_configuration["gender"]
     length_mm = connector_length_mm(gender)
-    mate_3d = {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0,
-        "rx": 0.0,
-        "ry": 0.0,
-        "rz": 0.0,
-    }
     return {
         "mass": f"{part_mass_lbs(gender):.4f}lbs",
         "mass_source": MASS_SOURCE,
         "tools": ["Phillips/slot screwdriver"],
         "build_notes": [],
         "csys_children": {
-            "backshell_mate_3d": mate_3d,
-            "bundle_mate_3d": mate_3d,
+            "3d-mate": {
+                "x": round(length_mm / MM_PER_IN, 4),
+                "y": 0.0,
+                "z": 0.0,
+                "rx": 0.0,
+                "ry": 0.0,
+                "rz": 0.0,
+            },
             **flagnote_csys_children(
                 length_mm / MM_PER_IN,
                 BODY_WIDTH_MM / 2.0,

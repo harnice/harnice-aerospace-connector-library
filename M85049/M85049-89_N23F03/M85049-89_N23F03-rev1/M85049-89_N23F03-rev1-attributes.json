@@ -11,19 +11,19 @@
     "Torque to 80 in-lbs"
   ],
   "csys_children": {
+    "3d-connector": {
+      "x": 1.8073,
+      "y": 0.8273,
+      "z": 0.0,
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 45.0
+    },
     "connector": {
       "x": 1.8073149339882608,
       "y": 0.8273149339882605,
       "angle": 0,
       "rotation": 45
-    },
-    "bundle_mate_3d": {
-      "x": -0.35,
-      "y": 0.0,
-      "z": 0.0,
-      "rx": 0.0,
-      "ry": 0.0,
-      "rz": 0.0
     },
     "leader_center": {
       "x": 0.907,

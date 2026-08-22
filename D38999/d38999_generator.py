@@ -1829,16 +1829,15 @@ def csys_6dof_mm(x_mm, y_mm, z_mm, rx=0.0, ry=0.0, rz=0.0):
     }
 
 
-def rear_accessory_csys_3d(shell_type, shell_size, contact_type):
-    """Rear accessory face in the STEP frame (inches), identity orientation.
+def mate_csys_3d(shell_type, shell_size, contact_type):
+    """Mating face in the STEP frame (inches), identity orientation.
 
-    Same plane as the STEP rear body face. +X toward the mating face, +Z at
-    the master key, matching the part origin so coinciding this csys
-    constrains all 6 DOF.
+    Origin is the cable side; this output sits on the mating face. +X
+    continues toward the mate, +Z at the master key.
     """
     stations = envelope_stations(shell_type, shell_size)
     origin_x = step_origin_x_mm(stations, contact_type, shell_type)
-    return csys_6dof_mm(stations[0][0] - origin_x, 0.0, 0.0)
+    return csys_6dof_mm(stations[-1][0] - origin_x, 0.0, 0.0)
 
 
 def pin_mating_cavity_stations(stations):
@@ -2543,14 +2542,12 @@ def compile_part_attributes(part_configuration):
         tools.append(f"{CONTACT_SIZES.get(contact_size).get('crimp_tool')} crimp tool")
         tools.append(f"{CONTACT_SIZES.get(contact_size).get('extraction_tool')} extraction tool")
 
-    mate_3d = rear_accessory_csys_3d(
-        part_configuration.get("shell_type"),
-        part_configuration.get("insert_arrangement")[0],
-        part_configuration.get("contact_type"),
-    )
     csys = {
-        "backshell_mate_3d": mate_3d,
-        "bundle_mate_3d": mate_3d,
+        "3d-mate": mate_csys_3d(
+            part_configuration.get("shell_type"),
+            part_configuration.get("insert_arrangement")[0],
+            part_configuration.get("contact_type"),
+        ),
     }
     csys.update(
         flagnote_csys_children(

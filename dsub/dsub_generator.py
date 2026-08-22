@@ -1648,9 +1648,17 @@ def csys_6dof_mm(x_mm, y_mm, z_mm, rx=0.0, ry=0.0, rz=0.0):
     }
 
 
-def cable_side_csys_3d(_variant=None):
-    """Cable-side face in the STEP frame (inches), identity orientation."""
-    return csys_6dof_mm(0.0, 0.0, 0.0)
+def mate_csys_3d(variant):
+    """Mating face in the STEP frame (inches), identity orientation.
+
+    Origin is the cable-side face; this output sits on the mating face.
+    """
+    from dsub_step_mating import face_x_mm, step_origin_x_mm as origin_x_mm
+
+    segs = envelope_prisms_mm(variant)
+    is_pin = str(variant.gender).lower() == "plug"
+    origin_x = origin_x_mm(segs, is_pin, PIN_CAVITY_DEPTH_MM)
+    return csys_6dof_mm(face_x_mm(segs) - origin_x, 0.0, 0.0)
 
 
 def write_part_step(rev_dir, part_number, variant):
@@ -1721,15 +1729,13 @@ def compile_part_attributes(part_configuration):
     else:
         tools = ["Soldering iron"]
 
-    mate_3d = cable_side_csys_3d(variant)
     attributes = {
         "mass": f"{part_mass_lbs(variant.gender, variant.density, variant.shell_no, variant.pin_count, part_configuration['finish']):.4f}lbs",
         "mass_source": MASS_SOURCE,
         "tools": tools,
         "build_notes": [],
         "csys_children": {
-            "backshell_mate_3d": mate_3d,
-            "bundle_mate_3d": mate_3d,
+            "3d-mate": mate_csys_3d(variant),
             **flagnote_csys_children(
                 connector_depth_mm(variant) / MM_PER_IN,
                 _mid(variant.dims["B"]) / 2.0,

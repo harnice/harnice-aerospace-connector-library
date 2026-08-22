@@ -6,16 +6,8 @@
   ],
   "build_notes": [],
   "csys_children": {
-    "backshell_mate_3d": {
-      "x": 0.0,
-      "y": 0.0,
-      "z": 0.0,
-      "rx": 0.0,
-      "ry": 0.0,
-      "rz": 0.0
-    },
-    "bundle_mate_3d": {
-      "x": 0.0,
+    "3d-mate": {
+      "x": 0.3902,
       "y": 0.0,
       "z": 0.0,
       "rx": 0.0,
