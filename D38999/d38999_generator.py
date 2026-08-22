@@ -6,7 +6,7 @@ import sys
 
 from harnice.lists import rev_history
 from harnice import fileio, state
-import harnice.products.part as part
+import harnice.project_types.part as part
 
 
 def _load_step_utils():
@@ -2593,7 +2593,7 @@ def write_revision_history_if_missing(part_dir, part_number):
         return
     rev_history.part_family_append(
         {
-            "product": state.product,
+            "project_type": state.project_type,
             "mfg": "mil spec",
             "pn": part_number,
             "rev": REVISION,
@@ -2649,7 +2649,7 @@ def main(
     use_cli=False,
 ):
     state.set_rev(REVISION)
-    state.set_product("part")
+    state.set_project_type("part")
 
     if not (step_only or svg_only):
         cache_run_constant_lookups()
@@ -2719,7 +2719,7 @@ def main(
 
         # UPDATE THE REVISION HISTORY FILE
         revision_history_content_dict = {
-            "product": state.product,
+            "project_type": state.project_type,
             "mfg": "mil spec",
             "pn": part_number,
             "rev": REVISION,

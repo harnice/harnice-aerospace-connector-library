@@ -685,7 +685,7 @@ def make_part(part_configuration):
     os.makedirs(part_dir, exist_ok=True)
 
     revision_history_content_dict = {
-        "product": state.product,
+        "project_type": state.project_type,
         "mfg": "Omega",
         "pn": part_number,
         "rev": REVISION,
@@ -743,7 +743,7 @@ def make_part(part_configuration):
 
 def main(step_only=False, csv_only=False):
     state.set_rev(REVISION)
-    state.set_product("part")
+    state.set_project_type("part")
 
     csv_path = write_catalog_csv()
     print(f"Wrote catalog: {csv_path}")

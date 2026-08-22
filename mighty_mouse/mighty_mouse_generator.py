@@ -1028,7 +1028,7 @@ def _progress_bar(done, total, width=25):
 
 def main(step_only=False):
     state.set_rev(REVISION)
-    state.set_product("part")
+    state.set_project_type("part")
 
     configs = list(iter_part_configurations())
     total = len(configs)
@@ -1062,7 +1062,7 @@ def main(step_only=False):
         os.makedirs(part_dir, exist_ok=True)
 
         revision_history_content_dict = {
-            "product": state.product,
+            "project_type": state.project_type,
             "mfg": "Glenair",
             "pn": part_number,
             "rev": REVISION,
