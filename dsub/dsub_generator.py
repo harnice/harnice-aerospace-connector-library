@@ -1816,7 +1816,9 @@ def write_catalog_csv(path=None):
     rows = [catalog_row(cfg) for cfg in iter_part_configurations()]
     rows.sort(key=lambda r: (int(r["slash_sheet"]), int(r["dash"]), r["finish"]))
     with open(path, "w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=CATALOG_COLUMNS)
+        writer = csv.DictWriter(
+            handle, fieldnames=CATALOG_COLUMNS, lineterminator="\n"
+        )
         writer.writeheader()
         writer.writerows(rows)
     return path
