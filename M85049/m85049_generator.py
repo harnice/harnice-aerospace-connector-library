@@ -1585,7 +1585,7 @@ def main(step_only=False, use_cli=False):
             "desc": "",
             "status": "",
             "datestarted": DATE_STARTED,
-            "library_repo": "https://github.com/harnice/harnice-aerospace-connector-library",
+            "library_repo": "https://github.com/harnice/harnice-aerospace-library",
             "library_subpath": "M85049",
         }
         revision_history_csv_path = os.path.join(

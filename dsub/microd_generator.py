@@ -966,7 +966,7 @@ def make_part(part_configuration):
         "desc": "",
         "status": "",
         "datestarted": DATE_STARTED,
-        "library_repo": "https://github.com/harnice/harnice-aerospace-connector-library",
+        "library_repo": "https://github.com/harnice/harnice-aerospace-library",
         "library_subpath": "dsub",
     }
     revision_history_csv_path = os.path.join(
