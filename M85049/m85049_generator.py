@@ -80,8 +80,8 @@ PX_PER_IN = 96.0
 # drawing / Milnec L Max = 1.35 (34.3 mm). Banding platform length is not
 # tabulated on the Glenair /88–90 sheet; 0.35 in is an estimate for
 # drawing/csys silhouette only.
-# STEP models are shifted so the connector mating face is at (0,0,0) with +X
-# toward the connector; drawings keep the knurl-end origin above.
+# STEP models use the same knurl-end origin as the drawings: cable −X,
+# body +X toward the connector.
 STRAIGHT_BODY_IN = 1.35
 BAND_PLATFORM_IN = 0.35
 
@@ -838,68 +838,21 @@ def backshell_envelope_mm(orientation, shell_size, entry_size):
     raise ValueError(f"Unknown orientation '{orientation}'")
 
 
-def _ocp_move_connector_face_to_origin(shape, face_xyz, axis_xy):
-    """Translate ``face_xyz`` to the origin and align ``axis_xy`` with +X.
-
-    After this, the connector mating face is at (0,0,0) and +X points along the
-    coupling axis toward the connector (backshell body lies in −X).
-    """
-    from OCP.BRepBuilderAPI import BRepBuilderAPI_Transform
-    from OCP.gp import gp_Ax1, gp_Dir, gp_Pnt, gp_Trsf, gp_Vec
-
-    fx, fy, fz = float(face_xyz[0]), float(face_xyz[1]), float(face_xyz[2])
-    ux, uy = float(axis_xy[0]), float(axis_xy[1])
-    trsf = gp_Trsf()
-    trsf.SetTranslation(gp_Vec(-fx, -fy, -fz))
-    shape = BRepBuilderAPI_Transform(shape, trsf, True).Shape()
-    angle = math.atan2(uy, ux)
-    if abs(angle) > 1e-9:
-        rot = gp_Trsf()
-        rot.SetRotation(gp_Ax1(gp_Pnt(0.0, 0.0, 0.0), gp_Dir(0.0, 0.0, 1.0)), -angle)
-        shape = BRepBuilderAPI_Transform(shape, rot, True).Shape()
-    return shape
-
-
 def write_part_step(rev_dir, part_number, orientation, shell_size, entry_size):
-    """Write STEP with origin on the connector mating face (+X toward connector)."""
+    """Write STEP with origin at the cable-side knurl (+X toward the connector)."""
     kind, geom, _radii = backshell_envelope_mm(orientation, shell_size, entry_size)
     path = os.path.join(rev_dir, f"{part_number}-rev{REVISION}-model.step")
-    description = f"M85049/{orientation} low-fidelity envelope (connector-face origin)"
+    description = f"M85049/{orientation} low-fidelity envelope (cable-side origin)"
     if kind == "revolution":
-        face_x = float(geom[-1][0])
-        stations = [(x - face_x, radius) for x, radius in geom]
         step_utils.write_revolution_step(
-            path, part_number, stations, description=description
+            path, part_number, geom, description=description
         )
         return path
     if kind == "elbow":
-        layout = step_utils._elbow_layout(
-            geom["entry"],
-            geom["corner"],
-            geom["angle_deg"],
-            geom["exit_length"],
-            geom["nut_length"],
+        step_utils.write_elbow_step(
+            path, part_number, description=description, **geom
         )
-        try:
-            shape = step_utils._ocp_elbow_solid(
-                geom["entry"],
-                geom["r_entry"],
-                geom["r_body"],
-                geom["r_nut"],
-                geom["nut_length"],
-                layout,
-            )
-            shape = _ocp_move_connector_face_to_origin(
-                shape, layout["p_face"], (layout["ux"], layout["uy"])
-            )
-            step_utils._ocp_write_shape(shape, path, part_number)
-            return path
-        except ImportError:
-            # Fallback mesh path still uses the knurl-frame elbow writer.
-            step_utils.write_elbow_step(
-                path, part_number, description=description, **geom
-            )
-            return path
+        return path
     raise ValueError(f"Unknown M85049 envelope kind {kind!r}")
 
 
@@ -919,18 +872,15 @@ def csys_6dof_mm(x_mm, y_mm, z_mm, rx=0.0, ry=0.0, rz=0.0):
     }
 
 
-def bundle_mate_csys_3d(orientation, shell_size, entry_size):
-    """Cable-entry face in the STEP frame (inches).
+def connector_csys_3d(orientation, shell_size, entry_size):
+    """Connector coupling face in the STEP frame (inches).
 
-    Same plane as the STEP banding-platform free end. +X into the backshell
-    (toward the connector), +Z matching the part origin. Straight parts keep
-    identity orientation; 45°/90° rotate about Z so +X follows the entry axis.
+    Origin is the cable-side knurl. +X of this output follows the coupling
+    axis toward the connector (rz follows the 45°/90° elbow).
     """
     kind, geom, _radii = backshell_envelope_mm(orientation, shell_size, entry_size)
     if kind == "revolution":
-        face_x = float(geom[-1][0])
-        entry_x = float(geom[0][0])
-        return csys_6dof_mm(entry_x - face_x, 0.0, 0.0)
+        return csys_6dof_mm(float(geom[-1][0]), 0.0, 0.0)
     layout = step_utils._elbow_layout(
         geom["entry"],
         geom["corner"],
@@ -939,15 +889,11 @@ def bundle_mate_csys_3d(orientation, shell_size, entry_size):
         geom["nut_length"],
     )
     fx, fy, fz = layout["p_face"]
-    ex, ey, ez = geom["entry"]
-    px, py, pz = ex - fx, ey - fy, ez - fz
-    ang = math.atan2(layout["uy"], layout["ux"])
-    ca, sa = math.cos(-ang), math.sin(-ang)
     return csys_6dof_mm(
-        px * ca - py * sa,
-        px * sa + py * ca,
-        pz,
-        rz=math.degrees(-ang),
+        fx,
+        fy,
+        fz,
+        rz=math.degrees(math.atan2(layout["uy"], layout["ux"])),
     )
 
 
@@ -1447,8 +1393,8 @@ def compile_part_attributes(part_configuration):
 
     csys = {
         # Origin = right end of cable-side knurl; knurl/cable −X; body +X
+        "3d-connector": connector_csys_3d(orientation, shell_size, entry_size),
         "connector": connector_csys(orientation, shell_size),
-        "bundle_mate_3d": bundle_mate_csys_3d(orientation, shell_size, entry_size),
     }
     csys.update(flagnote_csys_children(orientation, shell_size, entry_size))
 
@@ -1567,6 +1513,11 @@ def main(step_only=False, use_cli=False):
 
         if step_only:
             os.makedirs(rev_dir, exist_ok=True)
+            json_path = os.path.join(
+                rev_dir, f"{part_number}-rev{REVISION}-attributes.json"
+            )
+            with open(json_path, "w") as f:
+                json.dump(compile_part_attributes(part_configuration), f, indent=2)
             write_part_step(
                 rev_dir,
                 part_number,

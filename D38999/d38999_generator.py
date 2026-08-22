@@ -1630,7 +1630,7 @@ def _diamond_hatch(x, y, w, h, color, spacing=6.5, stroke_width=0.85):
 #   https://www.milnec.com/mil-38999-sst/d38999-26-sst-datasheet.pdf
 # Origin is 0.25 in inboard of the rear accessory face, on the axis, so the
 # accessory threads overlap −X (same idea as the M85049 banding platform).
-# +X toward the mating face. STEP omits knurl texture.
+# +X toward the mating face. STEP uses this same cable-side origin.
 SHELL_ENVELOPE_MM = {
     "A": {"cc": 18.60, "dd": 21.79, "q_max": 21.8, "length": 31.34, "numeric": 9},
     "B": {"cc": 21.30, "dd": 24.99, "q_max": 25.0, "length": 31.34, "numeric": 11},
@@ -1656,14 +1656,15 @@ COUPLING_NUT_LENGTH_MM = 16.0
 #   https://www.milnec.com/mil-d38999-connectors/d38999-24-datasheet.pdf
 # Jam-nut thickness is not tabulated; 0.220 in is a drawing estimate.
 # Origin is 0.25 in inboard of the rear accessory face; +X toward the mating
-# face. STEP is a smooth revolved envelope (hex becomes ØU).
+# face. STEP uses this same cable-side origin (hex becomes ØU).
 JAM24_LENGTH_MM = 32.51
 JAM24_K_MM = 22.61
 JAM24_NUT_LENGTH_MM = 5.59
 # Mating-face STEP features (low-fi). Wall matches Neutrik male cup rim.
-# Pin (24 and 26): deep scoop-proof cup; origin at the cup floor.
+# Pin (24 and 26): deep scoop-proof cup at the mating face.
 # /24 socket: coplanar rim + center island with a 0.1 in annular groove.
 # /26 socket: flat coplanar barrel face (no annular groove).
+# Part origin is the cable-side / drawing origin (x = 0), not the cup.
 PIN_CAVITY_DEPTH_MM = 15.0
 PIN_CAVITY_WALL_MM = (19.0 - 15.75) / 2.0
 SOCKET_RING_DEPTH_MM = 0.1 * MM_PER_IN
@@ -1800,16 +1801,12 @@ def socket_mating_ring(stations):
 def step_origin_x_mm(stations, contact_type, shell_type="24"):
     """X of the STEP origin in envelope coordinates.
 
-    Pin (24 and 26): cup floor (rim of the outer/inner ring at +depth).
-    Socket: coplanar mating face (rim / center island plane).
+    Cable-side / drawing origin (x = 0). Accessory threads and the rear
+    body overlap −X; +X is toward the mating face. Pin cups stay at the
+    mating face — they do not move the part origin.
     """
-    del shell_type  # face treatment is by contact type; kept for call-site clarity
-    x_face = stations[-1][0]
-    if str(contact_type).upper() == "P":
-        cavity = pin_mating_cavity(stations)
-        if cavity is not None:
-            return x_face - cavity["depth_mm"]
-    return x_face
+    del stations, contact_type, shell_type
+    return 0.0
 
 
 def shift_stations(stations, origin_x):
@@ -1832,16 +1829,15 @@ def csys_6dof_mm(x_mm, y_mm, z_mm, rx=0.0, ry=0.0, rz=0.0):
     }
 
 
-def rear_accessory_csys_3d(shell_type, shell_size, contact_type):
-    """Rear accessory face in the STEP frame (inches), identity orientation.
+def mate_csys_3d(shell_type, shell_size, contact_type):
+    """Mating face in the STEP frame (inches), identity orientation.
 
-    Same plane as the STEP rear body face. +X toward the mating face, +Z at
-    the master key, matching the part origin so coinciding this csys
-    constrains all 6 DOF.
+    Origin is the cable side; this output sits on the mating face. +X
+    continues toward the mate, +Z at the master key.
     """
     stations = envelope_stations(shell_type, shell_size)
     origin_x = step_origin_x_mm(stations, contact_type, shell_type)
-    return csys_6dof_mm(stations[0][0] - origin_x, 0.0, 0.0)
+    return csys_6dof_mm(stations[-1][0] - origin_x, 0.0, 0.0)
 
 
 def pin_mating_cavity_stations(stations):
@@ -1902,7 +1898,7 @@ def _ocp_tube(origin, direction, r_inner, r_outer, height):
 
 
 def _plug26_layout(stations):
-    """Barrel / coupling-nut layout for a /26 plug after origin shift.
+    """Barrel / coupling-nut layout for a /26 plug.
 
     stations are the outer envelope: rear body (CC) then nut (DD) to face.
     Section sketch: open annulus under the outer ring (red L), short key bump
@@ -2546,14 +2542,12 @@ def compile_part_attributes(part_configuration):
         tools.append(f"{CONTACT_SIZES.get(contact_size).get('crimp_tool')} crimp tool")
         tools.append(f"{CONTACT_SIZES.get(contact_size).get('extraction_tool')} extraction tool")
 
-    mate_3d = rear_accessory_csys_3d(
-        part_configuration.get("shell_type"),
-        part_configuration.get("insert_arrangement")[0],
-        part_configuration.get("contact_type"),
-    )
     csys = {
-        "backshell_mate_3d": mate_3d,
-        "bundle_mate_3d": mate_3d,
+        "3d-mate": mate_csys_3d(
+            part_configuration.get("shell_type"),
+            part_configuration.get("insert_arrangement")[0],
+            part_configuration.get("contact_type"),
+        ),
     }
     csys.update(
         flagnote_csys_children(

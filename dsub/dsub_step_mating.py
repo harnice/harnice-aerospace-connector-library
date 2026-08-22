@@ -1,4 +1,4 @@
-"""STEP mating-face origin and pin set-in for D-sub / Micro-D envelopes."""
+"""STEP cable-side origin and pin set-in for D-sub / Micro-D envelopes."""
 
 from __future__ import annotations
 
@@ -13,12 +13,19 @@ def face_x_mm(segments):
     return max(float(x1) for _x0, x1, _yz in segments)
 
 
+def cable_side_x_mm(segments):
+    """Rear / cable-side face of the envelope (first prism start)."""
+    return min(float(x0) for x0, _x1, _yz in segments)
+
+
 def step_origin_x_mm(segments, is_pin, cavity_depth_mm):
-    """Pin: cup floor. Receptacle/socket: coplanar mating face."""
-    x_face = face_x_mm(segments)
-    if is_pin:
-        return x_face - float(cavity_depth_mm)
-    return x_face
+    """X of the STEP (part) origin in envelope coordinates.
+
+    Always the cable-side face. Pin cups stay at the mating face — they do
+    not move the part origin.
+    """
+    del is_pin, cavity_depth_mm
+    return cable_side_x_mm(segments)
 
 
 def _inset_yz(yz, wall_mm):
@@ -52,7 +59,7 @@ def write_mating_prism_step(
     cavity_wall_mm,
     description,
 ):
-    """Write prism envelope with mating-face origin; plugs get a set-in cup."""
+    """Write prism envelope with cable-side origin; plugs get a set-in cup."""
     origin_x = step_origin_x_mm(segments, is_pin, cavity_depth_mm)
     shifted = shift_segments(segments, origin_x)
     try:

@@ -11,8 +11,8 @@
     "Torque coupling nut to 20-24 in-lbs during harness installation"
   ],
   "csys_children": {
-    "bundle_mate_3d": {
-      "x": -0.55,
+    "3d-mate": {
+      "x": 0.65,
       "y": 0.0,
       "z": 0.0,
       "rx": 0.0,

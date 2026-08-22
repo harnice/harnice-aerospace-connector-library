@@ -11,13 +11,13 @@
     "Torque to 40 in-lbs"
   ],
   "csys_children": {
-    "bundle_mate_3d": {
-      "x": -1.875,
-      "y": 1.733,
+    "3d-connector": {
+      "x": 1.383,
+      "y": 1.875,
       "z": 0.0,
       "rx": 0.0,
       "ry": 0.0,
-      "rz": -90.0
+      "rz": 90.0
     },
     "connector": {
       "x": 1.383,
